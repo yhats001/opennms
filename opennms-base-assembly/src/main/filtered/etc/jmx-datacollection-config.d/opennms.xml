@@ -66,6 +66,7 @@
          <mbean name="OpenNMS.Trapd" objectname="OpenNMS:Name=Trapd">
             <attrib name="TrapsDiscarded" alias="TrapsDiscarded" type="counter"/>
             <attrib name="TrapsErrored" alias="TrapsErrored" type="counter"/>
+            <attrib name="VUnknownTrapsReceived" alias="TrapsUnknown" type="counter"/>
             <attrib name="V1TrapsReceived" alias="V1TrapsReceived" type="counter"/>
             <attrib name="V2cTrapsReceived" alias="V2cTrapsReceived" type="counter"/>
             <attrib name="V3TrapsReceived" alias="V3TrapsReceived" type="counter"/>
@@ -83,7 +84,7 @@
             <attrib name="UnknownNoticesInterrupted" alias="UnknowNoticeInterr" type="counter"/>
          </mbean>
          <mbean name="OpenNMS.Manager" objectname="OpenNMS:Name=Manager">
-            <attrib name="onmsUptime" alias="Uptime" type="gauge"/>
+            <attrib name="Uptime" alias="ONMSUptime" type="gauge"/>
          </mbean>
          <mbean name="org.opennms.core.ipc.sink.kafka.heartbeat" resource-type="kafkaLag" objectname="org.opennms.core.ipc.sink.kafka:name=*.Lag">
             <attrib name="Value" alias="Lag" type="gauge"/>
@@ -152,6 +153,7 @@
             <attrib name="Count" alias="FlowPerst" type="counter"/>
             <attrib name="OneMinuteRate" alias="FlowPerst1m" type="gauge"/>
             <attrib name="FiveMinuteRate" alias="FlowPerst5m" type="gauge"/>
+            <attrib name="FifteenMinuteRate" alias="FlowPerst15m" type="gauge"/>
          </mbean>
          <mbean name="org.opennms.netmgt.flows.flowsPerLog" objectname="org.opennms.netmgt.flows:name=flowsPerLog">
             <attrib name="50thPercentile" alias="FlowFlwsPerLog50" type="gauge"/>
@@ -171,6 +173,8 @@
             <attrib name="999thPercentile" alias="FlowLogConv999" type="gauge"/>
             <attrib name="OneMinuteRate" alias="FlowLogConv1m" type="gauge"/>
             <attrib name="FiveMinuteRate" alias="FlowLogConv5m" type="gauge"/>
+            <attrib name="FifteenMinuteRate" alias="FlowLogConv15m" type="gauge"/>
+
          </mbean>
          <mbean name="org.opennms.netmgt.flows.logEnrichment" objectname="org.opennms.netmgt.flows:name=logEnrichment">
             <attrib name="50thPercentile" alias="FlowLogEnrich50" type="gauge"/>
@@ -181,6 +185,8 @@
             <attrib name="999thPercentile" alias="FlowLogEnrich999" type="gauge"/>
             <attrib name="OneMinuteRate" alias="FlowLogEnrich1m" type="gauge"/>
             <attrib name="FiveMinuteRate" alias="FlowLogEnrich5m" type="gauge"/>
+            <attrib name="FifteenMinuteRate" alias="FlowLogEnrich15m" type="gauge"/>
+
          </mbean>
          <mbean name="org.opennms.netmgt.flows.logPersisting" objectname="org.opennms.netmgt.flows:name=logPersisting">
             <attrib name="50thPercentile" alias="FlowLogPerst50" type="gauge"/>
@@ -191,6 +197,8 @@
             <attrib name="999thPercentile" alias="FlowLogPerst999" type="gauge"/>
             <attrib name="OneMinuteRate" alias="FlowLogPerst1m" type="gauge"/>
             <attrib name="FiveMinuteRate" alias="FlowLogPerst5m" type="gauge"/>
+            <attrib name="FifteenMinuteRate" alias="FlowLogPerst15m" type="gauge"/>
+
          </mbean>
 
 <!-- Sink Producer Metrics -->
@@ -235,6 +243,7 @@
             <attrib name="99thPercentile" alias="MessageSize99" type="gauge"/>
             <attrib name="999thPercentile" alias="MessageSize999" type="gauge"/>
          </mbean>
+
       </mbeans>
     </jmx-collection>
 </jmx-datacollection-config>
