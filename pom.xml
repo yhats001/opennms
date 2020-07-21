@@ -1184,7 +1184,9 @@
       Add target/endorsed as an endorsed API directory in case projects require it.
     -->
     <argLineMemory>-Xmx1g</argLineMemory>
-    <argLine>${argLineMemory} -Djava.security.egd=/dev/./urandom -Djava.endorsed.dirs=${basedir}/target/endorsed -Dpoller.logfile=/tmp/remote-poller.log</argLine>
+    <argLineGC>-XX:+UseParallelGC</argLineGC>
+
+    <argLine>${argLineMemory} ${argLineGC} -Djava.security.egd=/dev/./urandom -Djava.endorsed.dirs=${basedir}/target/endorsed -Dpoller.logfile=/tmp/remote-poller.log</argLine>
     <skipITs>true</skipITs>
 
     <!--
