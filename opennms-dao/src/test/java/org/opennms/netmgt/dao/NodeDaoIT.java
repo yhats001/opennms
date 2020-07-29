@@ -202,7 +202,7 @@ public class NodeDaoIT implements InitializingBean {
     public void testCreate() throws InterruptedException {
 
         OnmsNode node = new OnmsNode(m_locationDao.getDefaultLocation(), "MyFirstNode");
-        node.getAssetRecord().setDisplayCategory("MyCategory");
+        node.setAsset("displayCategory", "MyCategory");
         PathElement p = new PathElement("192.168.7.7", "ICMP");
         node.setPathElement(p);
 
@@ -214,10 +214,10 @@ public class NodeDaoIT implements InitializingBean {
         assertEquals(7, nodes.size());
         System.out.println("AFTER GETNODES");
         for (OnmsNode retrieved : nodes) {
-            System.out.println("category for "+retrieved.getId()+" = "+retrieved.getAssetRecord().getDisplayCategory());
+            System.out.println("category for "+retrieved.getId()+" = "+retrieved.getAsset("displayCategory"));
             if (node.getId().intValue() == 5) {
                 assertEquals("MyFirstNode", retrieved.getLabel());
-                assertEquals("MyCategory", retrieved.getAssetRecord().getDisplayCategory());
+                assertEquals("MyCategory", retrieved.getAsset("displayCategory"));
                 assertEquals("192.168.7.7", retrieved.getPathElement().getIpAddress());
 
             }
@@ -561,13 +561,15 @@ public class NodeDaoIT implements InitializingBean {
     @Transactional
     public void testCB() {
         CriteriaBuilder cb = new CriteriaBuilder(OnmsNode.class);
-        cb.alias("assetRecord", "asset").match("any").ilike("label", "%ode%").ilike("sysDescription", "%abc%").ilike("asset.comment", "%xyz%");
+        //cb.alias("assetRecord", "asset").match("any").ilike("label", "%ode%").ilike("sysDescription", "%abc%").ilike("asset.comment", "%xyz%");
+        cb.alias("metaData", "m").match("any").ilike("label", "%ode%").ilike("sysDescription", "%abc%").eq("m.context", OnmsNode.NODE_ASSET_CONTEXT).eq("m.key", "comment").ilike("m.value", "%xyz%");
         List<OnmsNode> nodes = m_nodeDao.findMatching(cb.toCriteria());
         System.err.println("Nodes found: "+nodes.size());
         assertEquals(6, nodes.size());
         
         cb = new CriteriaBuilder(OnmsNode.class);
-        cb.alias("assetRecord", "asset").match("any").ilike("label", "%alt%").ilike("sysDescription", "%abc%").ilike("asset.comment", "%xyz%");
+        //cb.alias("assetRecord", "asset").match("any").ilike("label", "%alt%").ilike("sysDescription", "%abc%").ilike("asset.comment", "%xyz%");
+        cb.alias("metaData", "m").match("any").ilike("label", "%alt%").ilike("sysDescription", "%abc%").eq("m.context", OnmsNode.NODE_ASSET_CONTEXT).eq("m.key", "comment").ilike("m.value", "%xyz%");
         nodes = m_nodeDao.findMatching(cb.toCriteria());
         System.err.println("Nodes found: "+nodes.size());
         assertEquals(2, nodes.size());
@@ -618,8 +620,7 @@ public class NodeDaoIT implements InitializingBean {
         OnmsNode n = getNodeDao().get(m_populator.getNode6().getId());
         assertNotNull(n);
         assertEquals(3, n.getIpInterfaces().size());
-        assertNotNull(n.getAssetRecord());
-        assertEquals("category1", n.getAssetRecord().getDisplayCategory());
+        assertEquals("category1", n.getAsset("displayCategory"));
     }
 
     /**

@@ -59,7 +59,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SecondaryTable;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -115,6 +114,7 @@ import com.google.common.base.MoreObjects;
 public class OnmsNode extends OnmsEntity implements Serializable, Comparable<OnmsNode> {
     private static final long serialVersionUID = 5326410037533354861L;
     private static final Logger LOG = LoggerFactory.getLogger(OnmsNode.class);
+    public static final String NODE_ASSET_CONTEXT = "assets";
 
     /** identifier field */
     private Integer m_id;
@@ -181,9 +181,6 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
     /** persistent field */
     private OnmsMonitoringLocation m_location;
-
-    /** persistent field */
-    private OnmsAssetRecord m_assetRecord;
 
     /** persistent field */
     private Set<OnmsIpInterface> m_ipInterfaces = new LinkedHashSet<>();
@@ -815,33 +812,6 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      */
     public void setLocation(OnmsMonitoringLocation location) {
         m_location = location;
-    }
-
-    /**
-     * The assert record associated with this node
-     *
-     * @return a {@link org.opennms.netmgt.model.OnmsAssetRecord} object.
-     */
-    @OneToOne(mappedBy="node", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-    @XmlElement(name="assetRecord")
-    public OnmsAssetRecord getAssetRecord() {
-        if (m_assetRecord == null) {
-            m_assetRecord = new OnmsAssetRecord();
-            m_assetRecord.setNode(this);
-        }
-        return m_assetRecord;
-    }
-
-    /**
-     * <p>setAssetRecord</p>
-     *
-     * @param asset a {@link org.opennms.netmgt.model.OnmsAssetRecord} object.
-     */
-    public void setAssetRecord(OnmsAssetRecord asset) {
-        m_assetRecord = asset;
-        if (m_assetRecord != null) {
-            m_assetRecord.setNode(this);
-        }
     }
 
     /**
@@ -1590,7 +1560,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * @param scannedNode a {@link org.opennms.netmgt.model.OnmsNode} object.
      */
     public void mergeAssets(OnmsNode scannedNode) {
-        this.getAssetRecord().mergeRecord(scannedNode.getAssetRecord());
+        // TODO: this.getAssetRecord().mergeRecord(scannedNode.getAssetRecord());
     }
 
     /**
@@ -1610,9 +1580,10 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * @param scannedNode a {@link org.opennms.netmgt.model.OnmsNode} object.
      */
     public void replaceCurrentAssetRecord(OnmsNode scannedNode) {
-        scannedNode.getAssetRecord().setId(this.getAssetRecord().getId());
-        scannedNode.setId(this.m_id);  //just in case
-        this.setAssetRecord(scannedNode.getAssetRecord());
+        // TODO: Fix this
+        // scannedNode.getAssetRecord().setId(this.getAssetRecord().getId());
+        // scannedNode.setId(this.m_id);  //just in case
+        // this.setAssetRecord(scannedNode.getAssetRecord());
     }
 
     /**
@@ -1654,4 +1625,15 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
         return (getInterfaceWithAddress(addr) != null);
     }
 
+    public String getAsset(final String key) {
+        final Optional<OnmsMetaData> onmsMetaData = findMetaDataForContextAndKey(NODE_ASSET_CONTEXT, key);
+        if (onmsMetaData.isPresent()) {
+            return onmsMetaData.get().getValue();
+        }
+        return null;
+    }
+
+    public void setAsset(final String key, final String value) {
+        addMetaData(NODE_ASSET_CONTEXT, key, value);
+    }
 }

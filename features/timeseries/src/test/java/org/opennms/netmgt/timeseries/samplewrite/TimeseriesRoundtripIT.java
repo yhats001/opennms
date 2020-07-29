@@ -76,13 +76,11 @@ import org.opennms.netmgt.collection.support.builder.DeferredGenericTypeResource
 import org.opennms.netmgt.collection.support.builder.GenericTypeResource;
 import org.opennms.netmgt.collection.support.builder.InterfaceLevelResource;
 import org.opennms.netmgt.collection.support.builder.NodeLevelResource;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.CategoryDao;
 import org.opennms.netmgt.dao.api.IpInterfaceDao;
 import org.opennms.netmgt.dao.api.MonitoringLocationDao;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.SnmpInterfaceDao;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
 import org.opennms.netmgt.model.OnmsIpInterface;
 import org.opennms.netmgt.model.OnmsNode;
@@ -120,9 +118,6 @@ public class TimeseriesRoundtripIT {
 
     @Autowired
     private CategoryDao categoryDao;
-
-    @Autowired
-    private AssetRecordDao assetDao;
 
     @Autowired
     private SnmpInterfaceDao snmpInterfaceDao;
@@ -275,10 +270,7 @@ public class TimeseriesRoundtripIT {
         node.setSysObjectId("abc");
         node.addCategory(category);
 
-        OnmsAssetRecord assets = new OnmsAssetRecord();
-        assets.setVendor("myVendor");
-        assetDao.save(assets);
-        node.setAssetRecord(assets);
+        node.setAsset("vendor", "myVendor");
 
         int nodeId = nodeDao.save(node);
         nodeDao.flush();

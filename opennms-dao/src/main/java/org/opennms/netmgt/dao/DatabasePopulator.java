@@ -38,7 +38,6 @@ import java.util.Map;
 import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.dao.api.AcknowledgmentDao;
 import org.opennms.netmgt.dao.api.AlarmDao;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.CategoryDao;
 import org.opennms.netmgt.dao.api.DistPollerDao;
 import org.opennms.netmgt.dao.api.EventDao;
@@ -142,7 +141,6 @@ public class DatabasePopulator {
     private SnmpInterfaceDao m_snmpInterfaceDao;
     private MonitoredServiceDao m_monitoredServiceDao;
     private ServiceTypeDao m_serviceTypeDao;
-    private AssetRecordDao m_assetRecordDao;
     private CategoryDao m_categoryDao;
     private OutageDao m_outageDao;
     private EventDao m_eventDao;
@@ -519,7 +517,7 @@ public class DatabasePopulator {
 
     private OnmsNode buildNode5(final NetworkBuilder builder) {
         //This node purposely doesn't have a foreignId style assetNumber
-        builder.addNode("alternate-node1").setType(NodeType.ACTIVE).getAssetRecord().setAssetNumber("5");
+        builder.addNode("alternate-node1").setType(NodeType.ACTIVE).setAsset("assetNumber", "5");
         builder.addCategory(getCategory("DEV_AC"));
         builder.addCategory(getCategory("Switches"));
         builder.addInterface("10.1.1.1").setIsManaged("M").setIsSnmpPrimary("P");
@@ -535,7 +533,7 @@ public class DatabasePopulator {
 
     private OnmsNode buildNode6(final NetworkBuilder builder) {
         //This node purposely doesn't have a assetNumber and is used by a test to check the category
-        builder.addNode("alternate-node2").setType(NodeType.ACTIVE).getAssetRecord().setDisplayCategory("category1");
+        builder.addNode("alternate-node2").setType(NodeType.ACTIVE).setAsset("displayCategory", "category1");
         builder.addCategory(getCategory("DEV_AC"));
         builder.addInterface("10.1.2.1").setIsManaged("M").setIsSnmpPrimary("P");
         builder.addService(getService("ICMP"));
@@ -619,17 +617,6 @@ public class DatabasePopulator {
     public void setAlarmDao(final AlarmDao alarmDao) {
         m_alarmDao = alarmDao;
     }
-
-
-    public AssetRecordDao getAssetRecordDao() {
-        return m_assetRecordDao;
-    }
-
-
-    public void setAssetRecordDao(final AssetRecordDao assetRecordDao) {
-        m_assetRecordDao = assetRecordDao;
-    }
-
 
     public CategoryDao getCategoryDao() {
         return m_categoryDao;

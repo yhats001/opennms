@@ -184,7 +184,7 @@ public class EnhancedLinkdMockDataPopulator {
         setNode4(node4, new LldpElement(node4, "node4ChassisId", "node4SysName", LldpChassisIdSubType.LLDP_CHASSISID_SUBTYPE_LOCAL));
 
         //This node purposely doesn't have a foreignId style assetNumber
-        builder.addNode("alternate-node1").setType(OnmsNode.NodeType.ACTIVE).getAssetRecord().setAssetNumber("5");
+        builder.addNode("alternate-node1").setType(OnmsNode.NodeType.ACTIVE).setAsset("assetNumber", "5");
         builder.addInterface("10.1.1.1").setIsManaged("M").setIsSnmpPrimary("P");
         builder.addService(icmp);
         builder.addService(snmp);
@@ -197,7 +197,7 @@ public class EnhancedLinkdMockDataPopulator {
         setNode5(node5,new LldpElement(node5, "node5ChassisId", "node5SysName", LldpChassisIdSubType.LLDP_CHASSISID_SUBTYPE_LOCAL));
 
         //This node purposely doesn't have a assetNumber and is used by a test to check the category
-        builder.addNode("alternate-node2").setType(OnmsNode.NodeType.ACTIVE).getAssetRecord().setDisplayCategory("category1");
+        builder.addNode("alternate-node2").setType(OnmsNode.NodeType.ACTIVE).setAsset("displayCategory","category1");
         builder.addInterface("10.1.2.1").setIsManaged("M").setIsSnmpPrimary("P");
         builder.addService(icmp);
         builder.addService(snmp);
@@ -209,7 +209,7 @@ public class EnhancedLinkdMockDataPopulator {
         OnmsNode node6 = builder.getCurrentNode();
         setNode6(node6,new LldpElement(node6, "node6ChassisId", "node6SysName", LldpChassisIdSubType.LLDP_CHASSISID_SUBTYPE_LOCAL));
 
-        builder.addNode("alternate-node3").setType(OnmsNode.NodeType.ACTIVE).getAssetRecord().setDisplayCategory("category1");
+        builder.addNode("alternate-node3").setType(OnmsNode.NodeType.ACTIVE).setAsset("setAsset(\"assetNumber\"", "category1");
         builder.addInterface("10.1.3.1").setIsManaged("M").setIsSnmpPrimary("P");
         builder.addService(icmp);
         builder.addService(snmp);
@@ -221,7 +221,7 @@ public class EnhancedLinkdMockDataPopulator {
         OnmsNode node7 = builder.getCurrentNode();
         setNode7(node7,        new LldpElement(node7, "node7ChassisId", "node7SysName", LldpChassisIdSubType.LLDP_CHASSISID_SUBTYPE_LOCAL));
 
-        builder.addNode("alternate-node4").setType(OnmsNode.NodeType.ACTIVE).getAssetRecord().setDisplayCategory("category1");
+        builder.addNode("alternate-node4").setType(OnmsNode.NodeType.ACTIVE).setAsset("displayCategory", "category1");
         builder.addInterface("10.1.4.1").setIsManaged("M").setIsSnmpPrimary("P");
         builder.addService(icmp);
         builder.addService(snmp);

@@ -40,9 +40,6 @@ import org.opennms.netmgt.model.OnmsNode.NodeType;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.PropertyAccessorFactory;
 
 /**
  * <p>NetworkBuilder class.</p>
@@ -57,8 +54,6 @@ public class NetworkBuilder {
 
     OnmsNode m_currentNode;
 
-    BeanWrapper m_assetBean;
-
     OnmsIpInterface m_currentIf;
 
     OnmsSnmpInterface m_currentSnmpIf;
@@ -69,11 +64,6 @@ public class NetworkBuilder {
 
     private Map<String, OnmsCategory> m_categoryCache = new HashMap<String, OnmsCategory>();
 
-    /**
-     * <p>Constructor for NetworkBuilder.</p>
-     *
-     * @param distPoller a {@link org.opennms.netmgt.model.OnmsDistPoller} object.
-     */
     public NetworkBuilder(final OnmsDistPoller distPoller) {
         // org.opennms.netmgt.dao.api.MonitoringLocationDao.DEFAULT_MONITORING_LOCATION_ID
         m_location = new OnmsMonitoringLocation("Default", "Default");
@@ -81,11 +71,6 @@ public class NetworkBuilder {
         m_distPoller = distPoller;
     }
 
-    /**
-     * <p>Constructor for NetworkBuilder.</p>
-     *
-     * @param distPollerId a {@link java.lang.String} object.
-     */
     public NetworkBuilder() {
         // org.opennms.netmgt.dao.api.MonitoringLocationDao.DEFAULT_MONITORING_LOCATION_ID
         m_location = new OnmsMonitoringLocation("Default", "Default");
@@ -106,15 +91,8 @@ public class NetworkBuilder {
         return m_distPoller;
     }
 
-    /**
-     * <p>addNode</p>
-     *
-     * @param label a {@link java.lang.String} object.
-     * @return a {@link org.opennms.netmgt.model.NetworkBuilder.NodeBuilder} object.
-     */
     public NodeBuilder addNode(String label) {
         m_currentNode = new OnmsNode(m_location, label);
-        m_assetBean = PropertyAccessorFactory.forBeanPropertyAccess(m_currentNode.getAssetRecord());
         return new NodeBuilder(m_currentNode);
     }
 
@@ -155,8 +133,9 @@ public class NetworkBuilder {
             return this;
         }
 
-        public OnmsAssetRecord getAssetRecord() {
-            return m_node.getAssetRecord();
+        public NodeBuilder setAsset(final String key, final String value) {
+            m_node.setAsset(key, value);
+            return this;
         }
 
         public NodeBuilder setLabelSource(final NodeLabelSource labelSource) {
@@ -179,8 +158,6 @@ public class NetworkBuilder {
             m_node.setSysName(nodesysname);
             return this;
         }
-
-
     }
 
     public InterfaceBuilder addInterface(final String ipAddr) {
@@ -243,25 +220,12 @@ public class NetworkBuilder {
         }
     }
 
-    /**
-     * <p>addInterface</p>
-     *
-     * @param ipAddr a {@link java.lang.String} object.
-     * @param snmpInterface a {@link org.opennms.netmgt.model.OnmsSnmpInterface} object.
-     * @return a {@link org.opennms.netmgt.model.NetworkBuilder.InterfaceBuilder} object.
-     */
     public InterfaceBuilder addInterface(final String ipAddr, final OnmsSnmpInterface snmpInterface) {
         m_currentIf = new OnmsIpInterface(addr(ipAddr), m_currentNode);
         m_currentIf.setSnmpInterface(snmpInterface);
         return new InterfaceBuilder(m_currentIf);
     }
 
-    /**
-     * <p>addSnmpInterface</p>
-     * @param ifIndex a int.
-     *
-     * @return a {@link org.opennms.netmgt.model.SnmpInterfaceBuilder} object.
-     */
     public SnmpInterfaceBuilder addSnmpInterface(final int ifIndex) {
         final OnmsSnmpInterface snmp = new OnmsSnmpInterface(m_currentNode, ifIndex);
         if (m_currentIf != null) snmp.getIpInterfaces().add(m_currentIf);
@@ -270,12 +234,6 @@ public class NetworkBuilder {
         return snmpInterfaceBuilder;
     }
 
-    /**
-     * <p>addService</p>
-     *
-     * @param serviceType a {@link org.opennms.netmgt.model.OnmsServiceType} object.
-     * @return a {@link org.opennms.netmgt.model.OnmsMonitoredService} object.
-     */
     public OnmsMonitoredService addService(final OnmsServiceType serviceType) {
         m_serviceTypeCache.put(serviceType.getName(), serviceType);
         if (m_currentIf != null) {
@@ -295,82 +253,38 @@ public class NetworkBuilder {
         return null;
     }
 
-    /**
-     * <p>setDisplayCategory</p>
-     *
-     * @param displayCategory a {@link java.lang.String} object.
-     */
     public void setDisplayCategory(final String displayCategory) {
-        m_currentNode.getAssetRecord().setDisplayCategory(displayCategory);
+        m_currentNode.setAsset("displayCategory", displayCategory);
     }
 
-    /**
-     * <p>setBuilding</p>
-     *
-     * @param building a {@link java.lang.String} object.
-     */
     public void setBuilding(final String building) {
-        m_currentNode.getAssetRecord().setBuilding(building);
+        m_currentNode.setAsset("building", building);
     }
 
-    /**
-     * <p>getCurrentNode</p>
-     *
-     * @return a {@link org.opennms.netmgt.model.OnmsNode} object.
-     */
     public OnmsNode getCurrentNode() {
         return m_currentNode;
     }
 
-    /**
-     * <p>addCategory</p>
-     *
-     * @param cat a {@link org.opennms.netmgt.model.OnmsCategory} object.
-     */
     public void addCategory(final OnmsCategory cat) {
         m_categoryCache.put(cat.getName(), cat);
         m_currentNode.addCategory(cat);
     }
 
-    /**
-     * <p>addCategory</p>
-     *
-     * @param categoryName a {@link java.lang.String} object.
-     */
     public void addCategory(final String categoryName) {
         addCategory(getCategory(categoryName));
     }
 
-    /**
-     * <p>clearInterface</p>
-     */
     public void clearInterface() {
         m_currentIf = null;
         m_currentMonSvc = null;
     }
 
-    /**
-     * <p>addService</p>
-     *
-     * @param serviceName a {@link java.lang.String} object.
-     * @return a {@link org.opennms.netmgt.model.OnmsMonitoredService} object.
-     */
     public OnmsMonitoredService addService(final String serviceName) {
         return addService(getServiceType(serviceName));
     }
 
-    /**
-     * <p>setAssetAttribute</p>
-     *
-     * @param name a {@link java.lang.String} object.
-     * @param value a {@link java.lang.String} object.
-     */
     public void setAssetAttribute(final String name, final String value) {
-        try {
-            m_assetBean.setPropertyValue(name, value);
-        } catch (final BeansException e) {
-            LOG.warn("Could not set property '{}' on asset '{}'", value, name, e);
-        }
+        m_currentNode.setAsset(name, value);
     }
 
     public void setNodeMetaDataEntry(final String context, final String key, final String value) {
