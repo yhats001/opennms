@@ -42,20 +42,19 @@ import java.util.Map;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.bsf.util.IOUtils;
+import org.opennms.core.spring.BeanUtils;
+import org.opennms.netmgt.config.NotificationManager;
+import org.opennms.netmgt.dao.api.NodeDao;
+import org.opennms.netmgt.model.OnmsCategory;
+import org.opennms.netmgt.model.OnmsNode;
+import org.opennms.netmgt.model.notifd.Argument;
+import org.opennms.netmgt.model.notifd.NotificationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.opennms.core.spring.BeanUtils;
-import org.opennms.netmgt.config.NotificationManager;
-import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsAssetRecord;
-import org.opennms.netmgt.model.OnmsCategory;
-import org.opennms.netmgt.model.OnmsNode;
-import org.opennms.netmgt.model.notifd.Argument;
-import org.opennms.netmgt.model.notifd.NotificationStrategy;
 
 /**
  * @author <A HREF="mailto:jeffg@opennms.org">Jeff Gehlbach</A>
@@ -178,7 +177,6 @@ public class BSFNotificationStrategy implements NotificationStrategy {
         }
 
         OnmsNode node = null;
-        OnmsAssetRecord assets = null;
         final List<String> categories = new ArrayList<>();
         String nodeLabel = null;
         String foreignSource = null;
@@ -210,7 +208,6 @@ public class BSFNotificationStrategy implements NotificationStrategy {
                     LOG.error("Could not find a node with id: {}", theNodeId);
                 } else {
                     nodeLabel = node.getLabel();
-                    assets = node.getAssetRecord();
                     foreignSource = node.getForeignSource();
                     foreignId = node.getForeignId();
                 }
@@ -227,7 +224,6 @@ public class BSFNotificationStrategy implements NotificationStrategy {
         s_bsfManager.declareBean("node_label", nodeLabel, String.class);
         s_bsfManager.declareBean("foreign_source", foreignSource, String.class);
         s_bsfManager.declareBean("foreign_id", foreignId, String.class);
-        s_bsfManager.declareBean("node_assets", assets, OnmsAssetRecord.class);
         s_bsfManager.declareBean("node_categories", categories, List.class);
         s_bsfManager.declareBean("node", node, OnmsNode.class);
 

@@ -37,15 +37,12 @@ import static org.junit.Assert.assertTrue;
 import static org.opennms.core.utils.InetAddressUtils.addr;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -72,7 +69,6 @@ import org.opennms.core.test.snmp.annotations.JUnitSnmpAgents;
 import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.config.SnmpPeerFactory;
 import org.opennms.netmgt.dao.DatabasePopulator;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.CategoryDao;
 import org.opennms.netmgt.dao.api.DistPollerDao;
 import org.opennms.netmgt.dao.api.IpInterfaceDao;
@@ -90,10 +86,8 @@ import org.opennms.netmgt.mock.MockNetwork;
 import org.opennms.netmgt.mock.MockNode;
 import org.opennms.netmgt.mock.MockVisitorAdapter;
 import org.opennms.netmgt.model.NetworkBuilder;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
 import org.opennms.netmgt.model.OnmsDistPoller;
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsIpInterface;
 import org.opennms.netmgt.model.OnmsMonitoringSystem;
 import org.opennms.netmgt.model.OnmsNode;
@@ -110,9 +104,9 @@ import org.opennms.netmgt.provision.persist.MockForeignSourceRepository;
 import org.opennms.netmgt.provision.persist.OnmsAssetRequisition;
 import org.opennms.netmgt.provision.persist.OnmsInterfaceMetaDataRequisition;
 import org.opennms.netmgt.provision.persist.OnmsIpInterfaceRequisition;
-import org.opennms.netmgt.provision.persist.OnmsNodeMetaDataRequisition;
 import org.opennms.netmgt.provision.persist.OnmsMonitoredServiceRequisition;
 import org.opennms.netmgt.provision.persist.OnmsNodeCategoryRequisition;
+import org.opennms.netmgt.provision.persist.OnmsNodeMetaDataRequisition;
 import org.opennms.netmgt.provision.persist.OnmsNodeRequisition;
 import org.opennms.netmgt.provision.persist.OnmsServiceCategoryRequisition;
 import org.opennms.netmgt.provision.persist.OnmsServiceMetaDataRequisition;
@@ -132,10 +126,11 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.UrlResource;
-import com.google.common.base.MoreObjects;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
+
+import com.google.common.base.MoreObjects;
 
 /**
  * Unit test for ModelImport application.
@@ -188,9 +183,6 @@ public class ProvisionerIT extends ProvisioningITCase implements InitializingBea
 
     @Autowired
     private DistPollerDao m_distPollerDao;
-
-    @Autowired
-    private AssetRecordDao m_assetRecordDao;
 
     @Autowired
     private ResourceLoader m_resourceLoader;
@@ -468,15 +460,6 @@ public class ProvisionerIT extends ProvisioningITCase implements InitializingBea
         final OnmsNode scannedNode = getNodeDao().findAll().get(0);
         assertEquals("TestCategory", scannedNode.getCategories().iterator().next().getName());
 
-    }
-
-    @Test(timeout=300000)
-    public void testFindQuery() throws Exception {
-        importFromResource("classpath:/tec_dump.xml.smalltest", Boolean.TRUE.toString());
-
-        for (final OnmsAssetRecord assetRecord : getAssetRecordDao().findAll()) {
-            LOG.debug("Building = {}", assetRecord.getBuilding());
-        }
     }
 
     @Test(timeout=300000)
@@ -1215,10 +1198,6 @@ public class ProvisionerIT extends ProvisioningITCase implements InitializingBea
         return m_serviceTypeDao;
     }
 
-    private AssetRecordDao getAssetRecordDao() {
-        return m_assetRecordDao;
-    }
-
     /**
      * This test first bulk imports 10 nodes then runs update with 1 node missing
      * from the import file.
@@ -1264,9 +1243,9 @@ public class ProvisionerIT extends ProvisioningITCase implements InitializingBea
     public void testAssets() throws Exception {
         importFromResource("classpath:/tec_dump.xml", Boolean.TRUE.toString());
         final OnmsNode n = getNodeDao().findByForeignId("empty", "4243");
-        assertEquals("Asset Record: Manufacturer",     "Dell",                   n.getAssetRecord().getManufacturer());
-        assertEquals("Asset Record: Operating System", "Windows Pi",             n.getAssetRecord().getOperatingSystem());
-        assertEquals("Asset Record: Description",      "Large and/or In Charge", n.getAssetRecord().getDescription());
+        assertEquals("Asset Record: Manufacturer",     "Dell",                   n.getAsset("manufacturer"));
+        assertEquals("Asset Record: Operating System", "Windows Pi",             n.getAsset("operatingSystem"));
+        assertEquals("Asset Record: Description",      "Large and/or In Charge", n.getAsset("description"));
     }
 
     //Scheduler tests
@@ -1559,37 +1538,31 @@ public class ProvisionerIT extends ProvisioningITCase implements InitializingBea
         final NodeDao nodeDao = getNodeDao();
 
         OnmsNode node = nodeDao.findByForeignId("empty", "4243");
-        nodeDao.initialize(node.getAssetRecord());
-        nodeDao.initialize(node.getAssetRecord().getGeolocation());
 
-        OnmsGeolocation geolocation = new OnmsGeolocation();
-        geolocation.setAddress1("220 Chatham Business Dr.");
-        geolocation.setCity("Pittsboro");
-        geolocation.setState("NC");
-        geolocation.setZip("27312");
-        geolocation.setLatitude(35.715723);
-        geolocation.setLongitude(-79.162261);
-        node.getAssetRecord().setGeolocation(geolocation);
+        node.setAsset("address1","220 Chatham Business Dr.");
+        node.setAsset("city","Pittsboro");
+        node.setAsset("state","NC");
+        node.setAsset("zip","27312");
+        node.setAsset("latitude","35.715723");
+        node.setAsset("longitude","-79.162261");
         nodeDao.saveOrUpdate(node);
         nodeDao.flush();
 
         node = nodeDao.findByForeignId("empty", "4243");
-        geolocation = node.getAssetRecord().getGeolocation();
 
-        assertNotNull(geolocation.getLatitude());
-        assertNotNull(geolocation.getLongitude());
-        assertEquals(Float.valueOf(35.715723f).doubleValue(),  geolocation.getLatitude().doubleValue(),  0.1d);
-        assertEquals(Float.valueOf(-79.162261f).doubleValue(), geolocation.getLongitude().doubleValue(), 0.1d);
+        assertNotNull(node.getAsset("latitude"));
+        assertNotNull(node.getAsset("longitude"));
+        assertEquals(Float.valueOf(35.715723f).doubleValue(),  Double.valueOf(node.getAsset("latitude")),  0.1d);
+        assertEquals(Float.valueOf(-79.162261f).doubleValue(), Double.valueOf(node.getAsset("longitude")), 0.1d);
 
         System.err.println("=================================================================BLEARGH");
         importFromResource("classpath:/tec_dump.xml", Boolean.TRUE.toString());
         node = nodeDao.findByForeignId("empty", "4243");
-        geolocation = node.getAssetRecord().getGeolocation();
 
         // Ensure it is reset
-        assertNull(geolocation.asAddressString());
-        assertNull(geolocation.getLatitude());
-        assertNull(geolocation.getLongitude());
+        assertNull(node.getGeoLocationAsAddressString());
+        assertNull(node.getAsset("latitude"));
+        assertNull(node.getAsset("longitude"));
     }
 
     @Test(timeout=300000)

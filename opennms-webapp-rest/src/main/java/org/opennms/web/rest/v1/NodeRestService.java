@@ -65,7 +65,6 @@ import org.opennms.netmgt.events.api.EventProxyException;
 import org.opennms.netmgt.filter.api.FilterDao;
 import org.opennms.netmgt.model.OnmsCategory;
 import org.opennms.netmgt.model.OnmsCategoryCollection;
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsNodeList;
 import org.opennms.netmgt.model.events.EventBuilder;
@@ -216,9 +215,10 @@ public class NodeRestService extends OnmsRestService {
             }
 
             // see NMS-9855
-            if (node.getAssetRecord() != null && node.getAssetRecord().getNode() == null) {
-                node.getAssetRecord().setNode(node);
-            }
+            // TODO: hopefully nothing to do here anymore
+            // if (node.getAssetRecord() != null && node.getAssetRecord().getNode() == null) {
+            //   node.getAssetRecord().setNode(node);
+            // }
 
             LOG.debug("addNode: Adding node {}", node);
             m_nodeDao.save(node);
@@ -245,10 +245,7 @@ public class NodeRestService extends OnmsRestService {
         try {
             final OnmsNode node = m_nodeDao.get(nodeCriteria);
             if (node == null) throw getException(Status.BAD_REQUEST, "Node {} was not found.", nodeCriteria);
-            if (node.getAssetRecord().getGeolocation() == null) {
-                node.getAssetRecord().setGeolocation(new OnmsGeolocation());
-            }
-    
+
             LOG.debug("updateNode: updating node {}", node);
     
             boolean modified = false;

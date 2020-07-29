@@ -36,7 +36,6 @@ import org.junit.Assert;
 import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.dao.api.AcknowledgmentDao;
 import org.opennms.netmgt.dao.api.AlarmDao;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.CategoryDao;
 import org.opennms.netmgt.dao.api.DistPollerDao;
 import org.opennms.netmgt.dao.api.EventDao;
@@ -97,7 +96,6 @@ public class AvailabilityDatabasePopulator {
     private SnmpInterfaceDao m_snmpInterfaceDao;
     private MonitoredServiceDao m_monitoredServiceDao;
     private ServiceTypeDao m_serviceTypeDao;
-    private AssetRecordDao m_assetRecordDao;
     private CategoryDao m_categoryDao;
     private OutageDao m_outageDao;
     private EventDao m_eventDao;
@@ -293,17 +291,6 @@ public class AvailabilityDatabasePopulator {
         m_alarmDao = alarmDao;
     }
 
-
-    public AssetRecordDao getAssetRecordDao() {
-        return m_assetRecordDao;
-    }
-
-
-    public void setAssetRecordDao(AssetRecordDao assetRecordDao) {
-        m_assetRecordDao = assetRecordDao;
-    }
-
-    
     public CategoryDao getCategoryDao() {
         return m_categoryDao;
     }

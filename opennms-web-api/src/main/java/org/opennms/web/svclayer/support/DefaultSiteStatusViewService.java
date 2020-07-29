@@ -158,7 +158,7 @@ public class DefaultSiteStatusViewService implements SiteStatusViewService {
         OnmsNode node = m_nodeDao.load(nodeId);
         
         //TODO this is a hack.  need to use reflection to get the right column instead of building.
-        return createAggregateStatuses(createAggregateStatusView(viewName), node.getAssetRecord().getBuilding());
+        return createAggregateStatuses(createAggregateStatusView(viewName), node.getAsset("building"));
     }
 
 

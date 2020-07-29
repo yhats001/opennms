@@ -32,11 +32,10 @@ package org.opennms.web.rest.v1;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.ServletContext;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -92,8 +91,8 @@ public class AssetRecordResourceIT extends AbstractSpringJerseyRestTestCase {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 databasePopulator.populateDatabase();
-                databasePopulator.getNode1().getAssetRecord().setLastModifiedBy("oldUser");
-                databasePopulator.getNode1().getAssetRecord().setLastModifiedDate(yesterday);
+                databasePopulator.getNode1().setAsset("lastModifiedBy", "oldUser");
+                databasePopulator.getNode1().setAsset("lastModifiedDate", DateFormat.getDateTimeInstance().format(yesterday));
                 databasePopulator.getNodeDao().flush();
             }
         });
@@ -117,9 +116,9 @@ public class AssetRecordResourceIT extends AbstractSpringJerseyRestTestCase {
         setUser(username, new String[]{});
         sendRequest(PUT, "/nodes/1/assetRecord", params, 204);
 
-        assertEquals(username, databasePopulator.getNode1().getAssetRecord().getLastModifiedBy());
+        assertEquals(username, databasePopulator.getNode1().getAsset("lastModifiedBy"));
         assertTrue("lastModifiedDate should be within the last second"
-                , databasePopulator.getNode1().getAssetRecord().getLastModifiedDate().after(new Date(System.currentTimeMillis()-1000)));
+                , DateFormat.getDateInstance().parse(databasePopulator.getNode1().getAsset("lastModifiedDate")).after(new Date(System.currentTimeMillis()-1000)));
     }
 
 }

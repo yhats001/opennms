@@ -56,7 +56,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getGeolocation().getCountry();
+            return node -> node.getAsset("country");
         }
     }),
 
@@ -80,7 +80,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getGeolocation().getAddress1();
+            return node -> node.getAsset("address1");
         }
     }),
 
@@ -104,7 +104,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getGeolocation().getAddress2();
+            return node -> node.getAsset("address2");
         }
     }),
 
@@ -128,7 +128,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getGeolocation().getCity();
+            return node -> node.getAsset("city");
         }
     }),
 
@@ -152,7 +152,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getGeolocation().getZip();
+            return node -> node.getAsset("zip");
         }
     }),
 
@@ -176,7 +176,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getGeolocation().getState();
+            return node -> node.getAsset("state");
         }
     }),
 
@@ -201,8 +201,7 @@ public enum Layers {
         @Override
         public ItemProvider<String> getItemProvider() {
             return node -> {
-                Double latitude = node.getAssetRecord().getGeolocation().getLatitude();
-                return latitude == null ? null : latitude.toString();
+                return node.getAsset("latitude");
             };
         }
     }),
@@ -228,8 +227,7 @@ public enum Layers {
         @Override
         public ItemProvider<String> getItemProvider() {
             return node -> {
-                Double longitude = node.getAssetRecord().getGeolocation().getLongitude();
-                return longitude == null ? null : longitude.toString();
+                return node.getAsset("longitude");
             };
         }
     }),
@@ -254,7 +252,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getBuilding();
+            return node -> node.getAsset("building");
         }
     }),
 
@@ -278,7 +276,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getRegion();
+            return node -> node.getAsset("region");
         }
     }),
 
@@ -302,7 +300,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getDivision();
+            return node -> node.getAsset("division");
         }
     }),
 
@@ -326,7 +324,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getDepartment();
+            return node -> node.getAsset("department");
         }
     }),
 
@@ -350,7 +348,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getFloor();
+            return node -> node.getAsset("floor");
         }
     }),
 
@@ -374,7 +372,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getRoom();
+            return node -> node.getAsset("room");
         }
     }),
 
@@ -397,7 +395,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getRack();
+            return node -> node.getAsset("rack");
         }
     }),
 
@@ -420,7 +418,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getSlot();
+            return node -> node.getAsset("slot");
         }
     }),
 
@@ -443,7 +441,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getPort();
+            return node -> node.getAsset("port");
         }
     }),
 
@@ -466,7 +464,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getCircuitId();
+            return node -> node.getAsset("circuitId");
         }
     }),
 
@@ -489,7 +487,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getCategory();
+            return node -> node.getAsset("category");
         }
     }),
 
@@ -512,7 +510,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getDisplayCategory();
+            return node -> node.getAsset("displayCategory");
         }
     }),
 
@@ -535,7 +533,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getNotifyCategory();
+            return node -> node.getAsset("notifyCategory");
         }
     }),
 
@@ -558,7 +556,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getPollerCategory();
+            return node -> node.getAsset("pollerCategory");
         }
     }),
 
@@ -581,7 +579,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getThresholdCategory();
+            return node -> node.getAsset("thresholdCategory");
         }
     }),
 
@@ -604,7 +602,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getManagedObjectType();
+            return node -> node.getAsset("managedObjectType");
         }
     }),
 
@@ -627,7 +625,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getManagedObjectInstance();
+            return node -> node.getAsset("managedObjectInstance");
         }
     }),
 
@@ -650,7 +648,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getManufacturer();
+            return node -> node.getAsset("manufacturer");
         }
     }),
 
@@ -673,7 +671,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getVendor();
+            return node -> node.getAsset("vendor");
         }
     }),
 
@@ -696,7 +694,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getModelNumber();
+            return node -> node.getAsset("modelNumber");
         }
     }),
 
@@ -719,7 +717,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getDescription();
+            return node -> node.getAsset("description");
         }
     }),
 
@@ -742,7 +740,7 @@ public enum Layers {
 
         @Override
         public ItemProvider<String> getItemProvider() {
-            return node -> node.getAssetRecord().getOperatingSystem();
+            return node -> node.getAsset("operatingSystem");
         }
     }),
 

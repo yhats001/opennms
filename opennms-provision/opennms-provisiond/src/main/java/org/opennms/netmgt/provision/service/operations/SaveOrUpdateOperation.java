@@ -44,9 +44,6 @@ import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.opennms.netmgt.provision.service.ProvisionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.PropertyAccessorFactory;
 
 import com.google.common.base.Strings;
 
@@ -75,8 +72,8 @@ public abstract class SaveOrUpdateOperation extends ImportOperation {
         m_node.setType(NodeType.ACTIVE);
         m_node.setForeignSource(foreignSource);
         m_node.setForeignId(foreignId);
-        m_node.getAssetRecord().setBuilding(building);
-        m_node.getAssetRecord().setCity(city);
+        m_node.setAsset("buidling", building);
+        m_node.setAsset("city", city);
         m_rescanExisting = rescanExisting;
     }
 
@@ -192,12 +189,7 @@ public abstract class SaveOrUpdateOperation extends ImportOperation {
      * @param value a {@link java.lang.String} object.
      */
     public void foundAsset(final String name, final String value) {
-        final BeanWrapper w = PropertyAccessorFactory.forBeanPropertyAccess(m_node.getAssetRecord());
-        try {
-            w.setPropertyValue(name, value);
-        } catch (final BeansException e) {
-            LOG.warn("Could not set property on object of type {}: {}", m_node.getClass().getName(), name, e);
-        }
+        m_node.setAsset(name, value);
     }
 
     public void foundNodeMetaData(String context, String key, String value) {

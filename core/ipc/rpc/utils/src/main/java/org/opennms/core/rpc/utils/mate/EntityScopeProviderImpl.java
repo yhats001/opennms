@@ -28,7 +28,6 @@
 
 package org.opennms.core.rpc.utils.mate;
 
-import static org.opennms.core.rpc.utils.mate.EntityScopeProvider.Contexts.ASSET;
 import static org.opennms.core.rpc.utils.mate.EntityScopeProvider.Contexts.INTERFACE;
 import static org.opennms.core.rpc.utils.mate.EntityScopeProvider.Contexts.NODE;
 import static org.opennms.core.rpc.utils.mate.EntityScopeProvider.Contexts.SERVICE;
@@ -36,7 +35,6 @@ import static org.opennms.core.rpc.utils.mate.EntityScopeProvider.Contexts.SERVI
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -106,69 +104,6 @@ public class EntityScopeProviderImpl implements EntityScopeProvider {
                     .map(NODE, "location", (n) -> Optional.ofNullable(n.getLocation().getLocationName()))
                     .map(NODE, "area", (n) -> Optional.ofNullable(n.getLocation().getMonitoringArea()));
             scopes.add(nodeScope);
-
-            if (node.getAssetRecord() != null) {
-                Scope assetScope = new ObjectScope<>(node.getAssetRecord())
-                        .map(ASSET, "category", (a) -> Optional.ofNullable(a.getCategory()))
-                        .map(ASSET, "vendor", (a) -> Optional.ofNullable(a.getVendor()))
-                        .map(ASSET, "manufacturer", (a) -> Optional.ofNullable(a.getManufacturer()))
-                        .map(ASSET, "vendor", (a) -> Optional.ofNullable(a.getVendor()))
-                        .map(ASSET, "model-number", (a) -> Optional.ofNullable(a.getModelNumber()))
-                        .map(ASSET, "serial-number", (a) -> Optional.ofNullable(a.getSerialNumber()))
-                        .map(ASSET, "description", (a) -> Optional.ofNullable(a.getDescription()))
-                        .map(ASSET, "circuit-id", (a) -> Optional.ofNullable(a.getCircuitId()))
-                        .map(ASSET, "asset-number", (a) -> Optional.ofNullable(a.getAssetNumber()))
-                        .map(ASSET, "operating-system", (a) -> Optional.ofNullable(a.getOperatingSystem()))
-                        .map(ASSET, "rack", (a) -> Optional.ofNullable(a.getRack()))
-                        .map(ASSET, "slot", (a) -> Optional.ofNullable(a.getSlot()))
-                        .map(ASSET, "port", (a) -> Optional.ofNullable(a.getPort()))
-                        .map(ASSET, "region", (a) -> Optional.ofNullable(a.getRegion()))
-                        .map(ASSET, "division", (a) -> Optional.ofNullable(a.getDivision()))
-                        .map(ASSET, "department", (a) -> Optional.ofNullable(a.getDepartment()))
-                        .map(ASSET, "building", (a) -> Optional.ofNullable(a.getBuilding()))
-                        .map(ASSET, "floor", (a) -> Optional.ofNullable(a.getFloor()))
-                        .map(ASSET, "room", (a) -> Optional.ofNullable(a.getRoom()))
-                        .map(ASSET, "vendor-phone", (a) -> Optional.ofNullable(a.getVendorPhone()))
-                        .map(ASSET, "vendor-fax", (a) -> Optional.ofNullable(a.getVendorFax()))
-                        .map(ASSET, "vendor-asset-number", (a) -> Optional.ofNullable(a.getVendorAssetNumber()))
-                        .map(ASSET, "username", (a) -> Optional.ofNullable(a.getUsername()))
-                        .map(ASSET, "password", (a) -> Optional.ofNullable(a.getPassword()))
-                        .map(ASSET, "enable", (a) -> Optional.ofNullable(a.getEnable()))
-                        .map(ASSET, "connection", (a) -> Optional.ofNullable(a.getConnection()))
-                        .map(ASSET, "autoenable", (a) -> Optional.ofNullable(a.getAutoenable()))
-                        .map(ASSET, "last-modified-by", (a) -> Optional.ofNullable(a.getLastModifiedBy()))
-                        .map(ASSET, "last-modified-date", (a) -> Optional.ofNullable(a.getLastModifiedDate()).map(Date::toString))
-                        .map(ASSET, "date-installed", (a) -> Optional.ofNullable(a.getDateInstalled()))
-                        .map(ASSET, "lease", (a) -> Optional.ofNullable(a.getLease()))
-                        .map(ASSET, "lease-expires", (a) -> Optional.ofNullable(a.getLeaseExpires()))
-                        .map(ASSET, "support-phone", (a) -> Optional.ofNullable(a.getSupportPhone()))
-                        .map(ASSET, "maintcontract", (a) -> Optional.ofNullable(a.getMaintcontract()))
-                        .map(ASSET, "maint-contract-expiration", (a) -> Optional.ofNullable(a.getMaintContractExpiration()))
-                        .map(ASSET, "display-category", (a) -> Optional.ofNullable(a.getDisplayCategory()))
-                        .map(ASSET, "notify-category", (a) -> Optional.ofNullable(a.getNotifyCategory()))
-                        .map(ASSET, "poller-category", (a) -> Optional.ofNullable(a.getPollerCategory()))
-                        .map(ASSET, "threshold-category", (a) -> Optional.ofNullable(a.getThresholdCategory()))
-                        .map(ASSET, "comment", (a) -> Optional.ofNullable(a.getComment()))
-                        .map(ASSET, "cpu", (a) -> Optional.ofNullable(a.getCpu()))
-                        .map(ASSET, "ram", (a) -> Optional.ofNullable(a.getRam()))
-                        .map(ASSET, "storagectrl", (a) -> Optional.ofNullable(a.getStoragectrl()))
-                        .map(ASSET, "hdd1", (a) -> Optional.ofNullable(a.getHdd1()))
-                        .map(ASSET, "hdd2", (a) -> Optional.ofNullable(a.getHdd2()))
-                        .map(ASSET, "hdd3", (a) -> Optional.ofNullable(a.getHdd3()))
-                        .map(ASSET, "hdd4", (a) -> Optional.ofNullable(a.getHdd4()))
-                        .map(ASSET, "hdd5", (a) -> Optional.ofNullable(a.getHdd5()))
-                        .map(ASSET, "hdd6", (a) -> Optional.ofNullable(a.getHdd6()))
-                        .map(ASSET, "numpowersupplies", (a) -> Optional.ofNullable(a.getNumpowersupplies()))
-                        .map(ASSET, "inputpower", (a) -> Optional.ofNullable(a.getInputpower()))
-                        .map(ASSET, "additionalhardware", (a) -> Optional.ofNullable(a.getAdditionalhardware()))
-                        .map(ASSET, "admin", (a) -> Optional.ofNullable(a.getAdmin()))
-                        .map(ASSET, "snmpcommunity", (a) -> Optional.ofNullable(a.getSnmpcommunity()))
-                        .map(ASSET, "rackunitheight", (a) -> Optional.ofNullable(a.getRackunitheight()))
-                        .map(ASSET, "managed-object-type", (a) -> Optional.ofNullable(a.getManagedObjectType()))
-                        .map(ASSET, "managed-object-instance", (a) -> Optional.ofNullable(a.getManagedObjectInstance()))
-                        .map(ASSET, "geolocation", (a) -> Optional.ofNullable(a.getGeolocation()).map(Object::toString));
-                scopes.add(assetScope);
-            }
 
             return new FallbackScope(scopes);
         });

@@ -41,7 +41,6 @@ import org.opennms.netmgt.model.OnmsNode.NodeType;
 import org.opennms.netmgt.provision.persist.requisition.RequisitionAsset;
 import org.opennms.netmgt.provision.persist.requisition.RequisitionCategory;
 import org.opennms.netmgt.provision.persist.requisition.RequisitionInterface;
-import org.opennms.netmgt.provision.persist.requisition.RequisitionMetaData;
 import org.opennms.netmgt.provision.persist.requisition.RequisitionNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,8 +199,8 @@ public class OnmsNodeRequisition {
             nodeBldr.setForeignSource(nodeReq.getForeignSource());
             nodeBldr.setForeignId(nodeReq.getForeignId());
             nodeBldr.setLocation(nodeReq.getLocation());
-            nodeBldr.getAssetRecord().setBuilding(nodeReq.getBuilding());
-            nodeBldr.getAssetRecord().getGeolocation().setCity(nodeReq.getCity());
+            nodeBldr.setAsset("building", nodeReq.getBuilding());
+            nodeBldr.setAsset("city", nodeReq.getCity());
         }
     }
     

@@ -28,14 +28,10 @@
 
 package org.opennms.netmgt.model;
 
-import java.beans.PropertyDescriptor;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -47,15 +43,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.PropertyAccessorFactory;
 
 import com.google.common.base.MoreObjects;
 
@@ -375,8 +367,6 @@ public class OnmsAssetRecord implements Serializable {
     private String m_managedObjectType;
 
     private String m_managedObjectInstance;
-
-    private OnmsGeolocation m_geolocation = new OnmsGeolocation();
 
     /**
      * default constructor
@@ -712,16 +702,6 @@ public class OnmsAssetRecord implements Serializable {
      */
     public void setDepartment(final String department) {
         m_department = department;
-    }
-
-    @Embedded
-    @XmlTransient
-    public OnmsGeolocation getGeolocation() {
-        return m_geolocation;
-    }
-
-    public void setGeolocation(final OnmsGeolocation geolocation) {
-        m_geolocation = geolocation;
     }
 
     /**
@@ -1529,135 +1509,6 @@ public class OnmsAssetRecord implements Serializable {
     }
 
     /**
-     * PROXY METHOD: do not delete until {@link OnmsGeolocation} is truly a separate table, or projection mapping will fail.
-     */
-    @Transient
-    @Deprecated
-    @XmlElement
-    public String getAddress1() {
-        return m_geolocation == null ? null : m_geolocation.getAddress1();
-    }
-
-    @Deprecated
-    public void setAddress1(final String address1) {
-        if (m_geolocation != null)
-            m_geolocation.setAddress1(address1);
-    }
-
-    /**
-     * PROXY METHOD: do not delete until {@link OnmsGeolocation} is truly a separate table, or projection mapping will fail.
-     */
-    @Transient
-    @Deprecated
-    @XmlElement
-    public String getAddress2() {
-        return m_geolocation == null ? null : m_geolocation.getAddress2();
-    }
-
-    @Deprecated
-    public void setAddress2(final String address2) {
-        if (m_geolocation != null)
-            m_geolocation.setAddress2(address2);
-    }
-
-    /**
-     * PROXY METHOD: do not delete until {@link OnmsGeolocation} is truly a separate table, or projection mapping will fail.
-     */
-    @Transient
-    @Deprecated
-    @XmlElement
-    public String getCity() {
-        return m_geolocation == null ? null : m_geolocation.getCity();
-    }
-
-    @Deprecated
-    public void setCity(final String city) {
-        if (m_geolocation != null)
-            m_geolocation.setCity(city);
-    }
-
-    /**
-     * PROXY METHOD: do not delete until {@link OnmsGeolocation} is truly a separate table, or projection mapping will fail.
-     */
-    @Transient
-    @Deprecated
-    @XmlElement
-    public String getState() {
-        return m_geolocation == null ? null : m_geolocation.getState();
-    }
-
-    @Deprecated
-    public void setState(final String state) {
-        if (m_geolocation != null)
-            m_geolocation.setState(state);
-    }
-
-    /**
-     * PROXY METHOD: do not delete until {@link OnmsGeolocation} is truly a separate table, or projection mapping will fail.
-     */
-    @Transient
-    @Deprecated
-    @XmlElement
-    public String getZip() {
-        return m_geolocation == null ? null : m_geolocation.getZip();
-    }
-
-    @Deprecated
-    public void setZip(final String zip) {
-        if (m_geolocation != null)
-            m_geolocation.setZip(zip);
-    }
-
-    /**
-     * PROXY METHOD: do not delete until {@link OnmsGeolocation} is truly a separate table, or projection mapping will fail.
-     */
-    @Transient
-    @Deprecated
-    @XmlElement
-    public String getCountry() {
-        return m_geolocation == null ? null : m_geolocation.getCountry();
-    }
-
-    @Deprecated
-    public void setCountry(final String country) {
-        if (m_geolocation != null)
-            m_geolocation.setCountry(country);
-    }
-
-    /**
-     * PROXY METHOD: do not delete until {@link OnmsGeolocation} is truly a separate table, or projection mapping will fail.
-     */
-    @Transient
-    @Deprecated
-    @XmlElement
-    public Double getLongitude() {
-        return m_geolocation == null ? null : m_geolocation.getLongitude();
-    }
-
-    @Deprecated
-    public void setLongitude(final Double longitude) {
-        if (m_geolocation != null)
-            m_geolocation.setLongitude(longitude);
-    }
-
-    /**
-     * PROXY METHOD: do not delete until {@link OnmsGeolocation} is truly a separate table, or projection mapping will fail.
-     */
-    @Transient
-    @Deprecated
-    @XmlElement
-    public Double getLatitude() {
-        return m_geolocation == null ? null : m_geolocation.getLatitude();
-    }
-
-    @Deprecated
-    public void setLatitude(final Double latitude) {
-        if (m_geolocation != null)
-            m_geolocation.setLatitude(latitude);
-    }
-
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -1678,14 +1529,14 @@ public class OnmsAssetRecord implements Serializable {
         .add("region", getRegion())
         .add("division", getDivision())
         .add("department", getDepartment())
-        .add("address1", m_geolocation == null ? null : m_geolocation.getAddress1())
-        .add("address2", m_geolocation == null ? null : m_geolocation.getAddress2())
-        .add("city", m_geolocation == null ? null : m_geolocation.getCity())
-        .add("state", m_geolocation == null ? null : m_geolocation.getState())
-        .add("zip", m_geolocation == null ? null : m_geolocation.getZip())
-        .add("country", m_geolocation == null ? null : m_geolocation.getCountry())
-        .add("longitude", m_geolocation == null ? null : m_geolocation.getLongitude())
-        .add("latitude", m_geolocation == null ? null : m_geolocation.getLatitude())
+//        .add("address1", m_geolocation == null ? null : m_geolocation.getAddress1())
+//        .add("address2", m_geolocation == null ? null : m_geolocation.getAddress2())
+//        .add("city", m_geolocation == null ? null : m_geolocation.getCity())
+//        .add("state", m_geolocation == null ? null : m_geolocation.getState())
+//        .add("zip", m_geolocation == null ? null : m_geolocation.getZip())
+//        .add("country", m_geolocation == null ? null : m_geolocation.getCountry())
+//        .add("longitude", m_geolocation == null ? null : m_geolocation.getLongitude())
+//        .add("latitude", m_geolocation == null ? null : m_geolocation.getLatitude())
         .add("building", getBuilding())
         .add("floor", getFloor())
         .add("room", getRoom())
@@ -1767,7 +1618,7 @@ public class OnmsAssetRecord implements Serializable {
      * @param newRecord a {@link org.opennms.netmgt.model.OnmsAssetRecord} object.
      */
     public void mergeRecord(OnmsAssetRecord newRecord) {
-
+/*
         if (!this.equals(newRecord)) {
             return;
         }
@@ -1811,5 +1662,6 @@ public class OnmsAssetRecord implements Serializable {
 
         toGeolocation.mergeGeolocation(fromGeolocation);
         setGeolocation(toGeolocation);
+ */
     }
 }

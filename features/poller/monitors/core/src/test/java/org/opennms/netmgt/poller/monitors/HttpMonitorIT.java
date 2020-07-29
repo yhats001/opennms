@@ -39,8 +39,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -54,10 +54,9 @@ import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.config.poller.Parameter;
 import org.opennms.netmgt.dao.mock.MockMonitoringLocationDao;
 import org.opennms.netmgt.dao.mock.MockNodeDao;
-import org.opennms.netmgt.model.OnmsNode;
-import org.opennms.netmgt.model.OnmsAssetRecord;
-import org.opennms.netmgt.model.OnmsSnmpInterface;
 import org.opennms.netmgt.model.OnmsIpInterface;
+import org.opennms.netmgt.model.OnmsNode;
+import org.opennms.netmgt.model.OnmsSnmpInterface;
 import org.opennms.netmgt.model.PrimaryType;
 import org.opennms.netmgt.poller.MonitoredService;
 import org.opennms.netmgt.poller.PollStatus;
@@ -67,9 +66,9 @@ import org.opennms.netmgt.poller.mock.MonitorTestUtils;
 import org.opennms.netmgt.utils.DnsUtils;
 import org.opennms.test.JUnitConfigurationEnvironment;
 import org.opennms.test.mock.MockUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 @RunWith(OpenNMSJUnit4ClassRunner.class)
@@ -683,9 +682,8 @@ public class HttpMonitorIT {
         node.setForeignSource("AlienSource");
         node.setForeignId("31338");
         node.setId(m_nodeDao.getNextNodeId());
-        OnmsAssetRecord oar = node.getAssetRecord();
-        oar.setUsername("peterman");
-        oar.setPassword("nine");
+        node.setAsset("username", "peterman");
+        node.setAsset("password", "nine");
 
         OnmsSnmpInterface snmpInterface = new OnmsSnmpInterface(node, 2);
         snmpInterface.setId(2);
@@ -736,8 +734,7 @@ public class HttpMonitorIT {
         node.setForeignSource("AlienSource");
         node.setForeignId("31339");
         node.setId(m_nodeDao.getNextNodeId());
-        OnmsAssetRecord oar = node.getAssetRecord();
-        oar.setCity("NMS2702");
+        node.setAsset("city","NMS2702");
 
         OnmsSnmpInterface snmpInterface = new OnmsSnmpInterface(node, 3);
         snmpInterface.setId(3);
@@ -790,9 +787,8 @@ public class HttpMonitorIT {
         node.setForeignSource("AlienSource");
         node.setForeignId("31340");
         node.setId(m_nodeDao.getNextNodeId());
-        OnmsAssetRecord oar = node.getAssetRecord();
-        oar.setUsername("nimda");
-        oar.setPassword("@dm1n");
+        node.setAsset("username","nimda");
+        node.setAsset("password","@dm1n");
 
         OnmsSnmpInterface snmpInterface = new OnmsSnmpInterface(node, 4);
         snmpInterface.setId(4);

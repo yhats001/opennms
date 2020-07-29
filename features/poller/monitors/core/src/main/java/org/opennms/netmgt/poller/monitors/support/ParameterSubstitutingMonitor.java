@@ -29,28 +29,23 @@
 package org.opennms.netmgt.poller.monitors.support;
 
 import java.beans.BeanInfo;
-import java.beans.Introspector;
 import java.beans.IntrospectionException;
+import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
 import java.util.HashMap;
-import java.util.regex.Pattern;
+import java.util.Map;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.opennms.core.spring.BeanUtils;
 import org.opennms.core.utils.ParameterMap;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsAssetRecord;
+import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.poller.MonitoredService;
 import org.opennms.netmgt.poller.support.AbstractServiceMonitor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -152,10 +147,8 @@ public abstract class ParameterSubstitutingMonitor extends AbstractServiceMonito
                     LOG.debug("attempting to add node asset property {}", m.group(1));
                     OnmsNode node = nodeDao.get().get(svc.getNodeId());
                     if (node != null) {
-                        BeanWrapper wrapper = new BeanWrapperImpl(node.getAssetRecord());
-                        Object obj = wrapper.getPropertyValue(m.group(1));
-                        if (obj != null) {
-                            sb.append(obj.toString());
+                        if (node.getAsset(m.group(1)) != null) {
+                            sb.append(node.getAsset(m.group(1)));
                         }
                     }
             }

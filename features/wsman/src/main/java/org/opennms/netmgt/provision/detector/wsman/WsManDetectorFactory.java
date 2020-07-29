@@ -103,8 +103,8 @@ public class WsManDetectorFactory extends GenericServiceDetectorFactory<WsManDet
 
         LOG.debug("Updating vendor and modelNumber assets on node[{}] with '{}' and '{}'",
                 nodeId, productVendor, productVersion);
-        node.getAssetRecord().setVendor(productVendor);
-        node.getAssetRecord().setModelNumber(productVersion);
+        node.setAsset("vendor",productVendor);
+        node.setAsset("modelNumber", productVersion);
         m_nodeDao.update(node);
     }
 }

@@ -45,7 +45,6 @@ import org.opennms.core.criteria.Order;
 import org.opennms.core.criteria.restrictions.EqRestriction;
 import org.opennms.core.criteria.restrictions.LikeRestriction;
 import org.opennms.core.utils.InetAddressUtils;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.HwEntityDao;
 import org.opennms.netmgt.dao.api.IpInterfaceDao;
 import org.opennms.netmgt.dao.api.NodeDao;
@@ -66,10 +65,7 @@ public class EventUtilDaoImpl extends AbstractEventUtil {
 
 	@Autowired
 	private NodeDao nodeDao;
-	
-	@Autowired
-	private AssetRecordDao assetRecordDao;
-	
+
 	@Autowired
 	private IpInterfaceDao ipInterfaceDao;
 
@@ -144,12 +140,7 @@ public class EventUtilDaoImpl extends AbstractEventUtil {
         }
         final String assetField = matcher.group(1).toLowerCase();
 
-        OnmsAssetRecord assetRecord = assetRecordDao.findByNodeId((int)nodeId);
-        if (assetRecord == null) {
-            return null;
-        }
-
-        return getStringPropertyByName(assetField, assetRecord, assetDescriptorsByName);
+        return nodeDao.get((int)nodeId).getAsset(assetField);
     }
 
     @Override

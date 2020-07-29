@@ -149,8 +149,8 @@ public class InvalidRequisitionDataIT extends ProvisioningITCase implements Init
         // should still import the node, just skip the asset field
         assertEquals(1, m_nodeDao.countAll());
         OnmsNode node = m_nodeDao.get(m_nodeDao.getNodeIds().iterator().next());
-        assertEquals("yellow human", node.getAssetRecord().getDescription());
-        assertNull(node.getAssetRecord().getPollerCategory());
+        assertEquals("yellow human", node.getAsset("description"));
+        assertNull(node.getAsset("pollerCategory"));
     }
 
     /**
@@ -182,8 +182,8 @@ public class InvalidRequisitionDataIT extends ProvisioningITCase implements Init
         // should still import the node, just skip the asset field
         assertEquals(1, m_nodeDao.countAll());
         OnmsNode node = m_nodeDao.get(m_nodeDao.getNodeIds().iterator().next());
-        assertEquals("yellow human", node.getAssetRecord().getDescription());
-        assertEquals("123456", node.getAssetRecord().getMaintcontract());
+        assertEquals("yellow human", node.getAsset("description"));
+        assertEquals("123456", node.getAsset("maintContract"));
     }
 
     @Test

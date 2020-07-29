@@ -93,7 +93,7 @@ public class DefaultSiteStatusServiceTest {
         
         OnmsNode node = new OnmsNode();
         node.setId(1);
-        node.getAssetRecord().setBuilding("HQ");
+        node.setAsset("building", "HQ");
         List<OnmsNode> nodes = new ArrayList<>();
         nodes.add(node);
         

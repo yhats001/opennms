@@ -34,13 +34,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.mockito.Mockito;
 import org.opennms.core.cache.CacheConfigBuilder;
 import org.opennms.core.soa.support.DefaultServiceRegistry;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.CategoryDao;
 import org.opennms.netmgt.dao.api.InterfaceToNodeCache;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.OnmsDao;
 import org.opennms.netmgt.dao.mock.AbstractMockDao;
-import org.opennms.netmgt.dao.mock.MockAssetRecordDao;
 import org.opennms.netmgt.dao.mock.MockCategoryDao;
 import org.opennms.netmgt.dao.mock.MockInterfaceToNodeCache;
 import org.opennms.netmgt.dao.mock.MockNodeDao;
@@ -57,7 +55,6 @@ public class MockDocumentEnricherFactory {
 
     private final NodeDao nodeDao;
     private final InterfaceToNodeCache interfaceToNodeCache;
-    private final MockAssetRecordDao assetRecordDao;
     private final MockCategoryDao categoryDao;
     private final DocumentEnricher enricher;
     private final ClassificationEngine classificationEngine;
@@ -67,7 +64,6 @@ public class MockDocumentEnricherFactory {
     public MockDocumentEnricherFactory() {
         nodeDao = createNodeDao();
         interfaceToNodeCache = new MockInterfaceToNodeCache();
-        assetRecordDao = new MockAssetRecordDao();
         categoryDao = new MockCategoryDao();
 
         classificationEngine = new DefaultClassificationEngine(() -> Lists.newArrayList(
@@ -86,10 +82,8 @@ public class MockDocumentEnricherFactory {
 
         // Required for mock node dao
         addServiceRegistry(nodeDao);
-        addServiceRegistry(assetRecordDao);
         addServiceRegistry(categoryDao);
         DefaultServiceRegistry.INSTANCE.register(nodeDao, NodeDao.class);
-        DefaultServiceRegistry.INSTANCE.register(assetRecordDao, AssetRecordDao.class);
         DefaultServiceRegistry.INSTANCE.register(categoryDao, CategoryDao.class);
     }
 

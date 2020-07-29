@@ -38,9 +38,7 @@ import org.opennms.core.cache.Cache;
 import org.opennms.core.cache.CacheBuilder;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.SessionUtils;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,37 +142,31 @@ public class NodeCacheImpl implements NodeCache {
                 if (parent.getForeignId() !=null)body.put("parent-foreignid", parent.getForeignId());
             }
 
-            //assetRecord.
-            OnmsAssetRecord assetRecord= node.getAssetRecord() ;
-            if(assetRecord!=null){
-
-                //geolocation
-                OnmsGeolocation gl = assetRecord.getGeolocation();
-                if (gl !=null){
-                        if (gl.getLatitude() !=null)body.put("asset-latitude",  gl.getLatitude().toString());
-                        if (gl.getLongitude()!=null)body.put("asset-longitude", gl.getLongitude().toString());
-                }
-
-                //assetRecord
-                if (assetRecord.getRegion() !=null && ! "".equals(assetRecord.getRegion())) body.put("asset-region", assetRecord.getRegion());
-                if (assetRecord.getBuilding() !=null && ! "".equals(assetRecord.getBuilding())) body.put("asset-building", assetRecord.getBuilding());
-                if (assetRecord.getFloor() !=null && ! "".equals(assetRecord.getFloor())) body.put("asset-floor",  assetRecord.getFloor());
-                if (assetRecord.getRoom() !=null && ! "".equals(assetRecord.getRoom())) body.put("asset-room",   assetRecord.getRoom());
-                if (assetRecord.getRack() !=null && ! "".equals(assetRecord.getRack())) body.put("asset-rack",  assetRecord.getRack());
-                if (assetRecord.getSlot() !=null && ! "".equals(assetRecord.getSlot())) body.put("asset-slot",  assetRecord.getSlot());
-                if (assetRecord.getPort() !=null && ! "".equals(assetRecord.getPort())) body.put("asset-port",  assetRecord.getPort());
-                if (assetRecord.getCategory() !=null && ! "".equals(assetRecord.getCategory())) body.put("asset-category",  assetRecord.getCategory());
-                if (assetRecord.getDisplayCategory() !=null && ! "".equals(assetRecord.getDisplayCategory())) body.put("asset-displaycategory",  assetRecord.getDisplayCategory());
-                if (assetRecord.getNotifyCategory() !=null && ! "".equals(assetRecord.getNotifyCategory())) body.put("asset-notifycategory",  assetRecord.getNotifyCategory());
-                if (assetRecord.getPollerCategory() !=null && ! "".equals(assetRecord.getPollerCategory())) body.put("asset-pollercategory",   assetRecord.getPollerCategory());
-                if (assetRecord.getThresholdCategory() !=null && ! "".equals(assetRecord.getThresholdCategory())) body.put("asset-thresholdcategory",   assetRecord.getThresholdCategory());
-                if (assetRecord.getManagedObjectType() !=null && ! "".equals(assetRecord.getManagedObjectType())) body.put("asset-managedobjecttype",   assetRecord.getManagedObjectType());
-                if (assetRecord.getManagedObjectInstance() !=null && ! "".equals(assetRecord.getManagedObjectInstance())) body.put("asset-managedobjectinstance", assetRecord.getManagedObjectInstance());
-                if (assetRecord.getManufacturer() !=null && ! "".equals(assetRecord.getManufacturer())) body.put("asset-manufacturer", assetRecord.getManufacturer());
-                if (assetRecord.getVendor() !=null && ! "".equals(assetRecord.getVendor())) body.put("asset-vendor", assetRecord.getVendor());
-                if (assetRecord.getModelNumber() !=null && ! "".equals(assetRecord.getModelNumber())) body.put("asset-modelnumber", assetRecord.getModelNumber());
+            if(node.getAsset("latitude") != null && node.getAsset("latitude") != null) {
+                putEntry(node, "latitude", body);
+                putEntry(node, "longitude", body);
+                putEntry(node, "region", body);
+                putEntry(node, "building", body);
+                putEntry(node, "floor", body);
+                putEntry(node, "room", body);
+                putEntry(node, "rack", body);
+                putEntry(node, "slot", body);
+                putEntry(node, "port", body);
+                putEntry(node, "category", body);
+                putEntry(node, "displayCategory", body);
+                putEntry(node, "notifyCategory", body);
+                putEntry(node, "pollerCategory", body);
+                putEntry(node, "thresholdCategory", body);
+                putEntry(node, "managedObjectType", body);
+                putEntry(node, "managedObjectInstance", body);
+                putEntry(node, "manufacturer", body);
+                putEntry(node, "vendor", body);
+                putEntry(node, "modelNumber", body);
             }
         }
+    }
 
+    private void putEntry(final OnmsNode node, final String key, final Map<String,String> body) {
+        if (node.getAsset(key) !=null && ! "".equals(node.getAsset(key))) body.put("asset-"+key, node.getAsset(key));
     }
 }

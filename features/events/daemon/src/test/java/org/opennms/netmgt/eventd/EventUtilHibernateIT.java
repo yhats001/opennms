@@ -38,9 +38,7 @@ import org.opennms.core.test.OpenNMSJUnit4ClassRunner;
 import org.opennms.core.test.db.annotations.JUnitTemporaryDatabase;
 import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.dao.DatabasePopulator;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.HwEntityDao;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsHwEntity;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.events.EventBuilder;
@@ -71,9 +69,6 @@ public class EventUtilHibernateIT {
 
     @Autowired
     private DatabasePopulator m_populator;
-
-    @Autowired
-    private AssetRecordDao m_assetRecordDao;
 
     @Autowired
     private HwEntityDao m_hwEntityDao;
@@ -221,10 +216,8 @@ public class EventUtilHibernateIT {
     @Test
     public void testGetAssetFieldValue() {
         OnmsNode node1 = m_populator.getNode1();
-        OnmsAssetRecord asset1 = node1.getAssetRecord();
-        asset1.setAdmin("some-adm1n-label");
-        asset1.setSerialNumber("42");
-        m_assetRecordDao.saveOrUpdate(asset1);
+        node1.setAsset("admin", "some-adm1n-label");
+        node1.setAsset("serialNumber","42");
 
         String asset = eventUtilDaoImpl.getAssetFieldValue("asset[admin]", node1.getId());
         assertEquals("some-adm1n-label", asset);

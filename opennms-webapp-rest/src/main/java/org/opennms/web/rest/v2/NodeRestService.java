@@ -221,9 +221,11 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
             object.setLocation(location);
         }
         // See NMS-9855
-        if (object.getAssetRecord() != null && object.getAssetRecord().getNode() == null) {
-            object.getAssetRecord().setNode(object);
-        }
+
+        // TODO: hopfully nothing to do here anymore
+        //        if (object.getAssetRecord() != null && object.getAssetRecord().getNode() == null) {
+        //            object.getAssetRecord().setNode(object);
+        //        }
         final Integer id = getDao().save(object);
         final Event e = EventUtils.createNodeAddedEvent("Rest", id, object.getLabel(), object.getLabelSource());
         sendEvent(e);

@@ -30,9 +30,9 @@ package org.opennms.features.apilayer.model.mappers;
 
 import org.mapstruct.Mapper;
 import org.opennms.integration.api.v1.model.immutables.ImmutableGeolocation;
-import org.opennms.netmgt.model.OnmsGeolocation;
+import org.opennms.netmgt.model.OnmsNode;
 
 @Mapper
 public interface GeolocationMapper {
-    ImmutableGeolocation map(OnmsGeolocation onmsGeolocation);
+    ImmutableGeolocation map(OnmsNode onmsNode);
 }

@@ -30,7 +30,6 @@ package org.opennms.features.vaadin.nodemaps.internal;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.web.navigate.ConditionalPageNavEntry;
 import org.opennms.web.navigate.DisplayStatus;
@@ -42,11 +41,8 @@ public class NodeMapNavEntry implements ConditionalPageNavEntry {
     @Override public DisplayStatus evaluate(final HttpServletRequest request, final Object target) {
         if (target instanceof OnmsNode) {
             final OnmsNode node = (OnmsNode)target;
-            if (node.getAssetRecord() != null && node.getAssetRecord().getGeolocation() != null) {
-                final OnmsGeolocation geolocation = node.getAssetRecord().getGeolocation();
-                if (geolocation.getLongitude() != null && geolocation.getLatitude() != null) {
-                    return DisplayStatus.DISPLAY_LINK;
-                }
+            if (node.getAsset("latitude") != null && node.getAsset("longitude") != null) {
+                return DisplayStatus.DISPLAY_LINK;
             }
         }
         return DisplayStatus.NO_DISPLAY;

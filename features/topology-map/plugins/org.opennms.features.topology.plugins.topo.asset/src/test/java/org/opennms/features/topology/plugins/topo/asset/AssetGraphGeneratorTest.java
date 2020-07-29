@@ -106,13 +106,13 @@ public class AssetGraphGeneratorTest {
 			@Override
 			public List<OnmsNode> getNodes(List<LayerDefinition> definitions) {
 				List<OnmsNode> nodes = new ArrayList<>();
-				nodes.add(new NodeBuilder().withId(1).withLabel("Node 1").withAssets().withRegion("Stuttgart").withBuilding("S1").done().getNode());
-				nodes.add(new NodeBuilder().withId(2).withLabel("Node 2").withAssets().withRegion("Stuttgart").withBuilding("S2").done().getNode());
-				nodes.add(new NodeBuilder().withId(3).withLabel("Node 3").withAssets().withRegion("Fulda").withBuilding("F1").done().getNode());
-				nodes.add(new NodeBuilder().withId(4).withLabel("Node 4").withAssets().withRegion("Frankfurt").withBuilding("F1").done().getNode());
-				nodes.add(new NodeBuilder().withId(5).withLabel("Node 5").withAssets().withRegion("Frankfurt").withBuilding("F2").done().getNode());
-				nodes.add(new NodeBuilder().withId(6).withLabel("Node 6").withAssets().withRegion("Frankfurt").done().getNode());
-				nodes.add(new NodeBuilder().withId(7).withLabel("Node 7").withAssets().withBuilding("F2").done().getNode());
+				nodes.add(new NodeBuilder().withId(1).withLabel("Node 1").withAsset("region","Stuttgart").withAsset("building","S1").getNode());
+				nodes.add(new NodeBuilder().withId(2).withLabel("Node 2").withAsset("region","Stuttgart").withAsset("building","S2").getNode());
+				nodes.add(new NodeBuilder().withId(3).withLabel("Node 3").withAsset("region","Fulda").withAsset("building","F1").getNode());
+				nodes.add(new NodeBuilder().withId(4).withLabel("Node 4").withAsset("region","Frankfurt").withAsset("building","F1").getNode());
+				nodes.add(new NodeBuilder().withId(5).withLabel("Node 5").withAsset("region","Frankfurt").withAsset("building","F2").getNode());
+				nodes.add(new NodeBuilder().withId(6).withLabel("Node 6").withAsset("region","Frankfurt").getNode());
+				nodes.add(new NodeBuilder().withId(7).withLabel("Node 7").withAsset("building","F2").getNode());
 				return nodes;
 			}
 		};
@@ -135,9 +135,9 @@ public class AssetGraphGeneratorTest {
 			@Override
 			public List<OnmsNode> getNodes(List<LayerDefinition> definitions) {
 				List<OnmsNode> nodes = new ArrayList<>();
-				nodes.add(new NodeBuilder().withId(1).withLabel("Node 1").withCategories("Server").withAssets().withRegion("Stuttgart").withBuilding("S1").done().getNode());
-				nodes.add(new NodeBuilder().withId(2).withLabel("Node 2").withCategories("Server").withAssets().withRegion("Stuttgart").withBuilding("S2").done().getNode());
-				nodes.add(new NodeBuilder().withId(3).withLabel("Node 3").withCategories("Server,Router").withAssets().withRegion("Stuttgart").withBuilding("S2").done().getNode());
+				nodes.add(new NodeBuilder().withId(1).withLabel("Node 1").withCategories("Server").withAsset("region", "Stuttgart").withAsset("building","S1").getNode());
+				nodes.add(new NodeBuilder().withId(2).withLabel("Node 2").withCategories("Server").withAsset("region", "Stuttgart").withAsset("building","S2").getNode());
+				nodes.add(new NodeBuilder().withId(3).withLabel("Node 3").withCategories("Server,Router").withAsset("region", "Stuttgart").withAsset("building","S2").getNode());
 				return nodes;
 			}
 		};
@@ -160,8 +160,8 @@ public class AssetGraphGeneratorTest {
 			@Override
 			public List<OnmsNode> getNodes(List<LayerDefinition> definitions) {
 				List<OnmsNode> nodes = new ArrayList<>();
-				nodes.add(new NodeBuilder().withId(1).withLabel("Node 1").withAssets().withRegion("Stuttgart").withBuilding("S1").done().getNode());
-				nodes.add(new NodeBuilder().withId(2).withLabel("Node 2").withAssets().withRegion("Fulda").withBuilding("F1").done().getNode());
+				nodes.add(new NodeBuilder().withId(1).withLabel("Node 1").withAsset("region","Stuttgart").withAsset("building","S1").getNode());
+				nodes.add(new NodeBuilder().withId(2).withLabel("Node 2").withAsset("region","Fulda").withAsset("building","F1").getNode());
 				return nodes;
 			}
 		};
@@ -175,5 +175,4 @@ public class AssetGraphGeneratorTest {
 		Assert.assertEquals(1, generatedGraphML.getGraphs().get(0).getNodes().size());
 		Assert.assertEquals(1, generatedGraphML.getGraphs().get(1).getNodes().size());
 	}
-
 }

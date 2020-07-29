@@ -1636,4 +1636,46 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     public void setAsset(final String key, final String value) {
         addMetaData(NODE_ASSET_CONTEXT, key, value);
     }
+
+    public String getGeoLocationAsAddressString() {
+        final StringBuilder sb = new StringBuilder();
+
+        if (hasText(this.getAsset("address1"))) {
+            sb.append(this.getAsset("address1"));
+            if (hasText(this.getAsset("address2"))) {
+                sb.append(" ").append(this.getAsset("address2"));
+            }
+        }
+
+        if (hasText(this.getAsset("city"))) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(this.getAsset("city"));
+        }
+        if (hasText(this.getAsset("state"))) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(this.getAsset("state"));
+        }
+        if (hasText(this.getAsset("zip"))) {
+            if (hasText(this.getAsset("state"))) {
+                sb.append(" ");
+            } else if (sb.length() > 0) {
+                sb.append(", ");
+            }
+            sb.append(this.getAsset("zip"));
+        }
+        if (hasText(this.getAsset("country"))) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(this.getAsset("country"));
+        }
+
+        if (sb.length() == 0) {
+            return null;
+        }
+
+        return sb.toString();
+    }
+
+    private boolean hasText(final String string) {
+        return !(string == null || string.isEmpty() || string.trim().isEmpty());
+    }
 }

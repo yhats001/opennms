@@ -102,15 +102,15 @@ public class AssetSuggestionsRestServiceIT extends AbstractSpringJerseyRestTestC
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 m_databasePopulator.populateDatabase();
 
-                m_databasePopulator.getNode1().getAssetRecord().getGeolocation().setCity("New York");
+                m_databasePopulator.getNode1().setAsset("city","New York");
                 m_databasePopulator.getNodeDao().update(m_databasePopulator.getNode1());
-                m_databasePopulator.getNode2().getAssetRecord().getGeolocation().setCity("San Francisco");
+                m_databasePopulator.getNode2().setAsset("city","San Francisco");
                 m_databasePopulator.getNodeDao().update(m_databasePopulator.getNode2());
-                m_databasePopulator.getNode3().getAssetRecord().getGeolocation().setCity("Boston");
+                m_databasePopulator.getNode3().setAsset("city","Boston");
                 m_databasePopulator.getNodeDao().update(m_databasePopulator.getNode3());
-                m_databasePopulator.getNode4().getAssetRecord().getGeolocation().setCity("Chicago");
+                m_databasePopulator.getNode4().setAsset("city","Chicago");
                 m_databasePopulator.getNodeDao().update(m_databasePopulator.getNode4());
-                m_databasePopulator.getNode5().getAssetRecord().getGeolocation().setCity("Los Angeles");
+                m_databasePopulator.getNode5().setAsset("city","Los Angeles");
                 m_databasePopulator.getNodeDao().update(m_databasePopulator.getNode5());
                 m_databasePopulator.getNodeDao().flush();
             }

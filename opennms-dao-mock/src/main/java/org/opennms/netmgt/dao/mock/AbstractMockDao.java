@@ -39,7 +39,6 @@ import java.util.Map;
 import org.opennms.core.criteria.Criteria;
 import org.opennms.core.soa.ServiceRegistry;
 import org.opennms.netmgt.dao.api.AlarmDao;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.CategoryDao;
 import org.opennms.netmgt.dao.api.DistPollerDao;
 import org.opennms.netmgt.dao.api.EventDao;
@@ -68,7 +67,6 @@ public abstract class AbstractMockDao<T, K extends Serializable> implements Lega
     private Map<K,T> m_entries = Collections.synchronizedMap(new HashMap<K,T>());
     private IpInterfaceDao m_ipInterfaceDao;
     private SnmpInterfaceDao m_snmpInterfaceDao;
-    private AssetRecordDao m_assetRecordDao;
     private CategoryDao m_categoryDao;
     private MonitoringLocationDao m_locationDao;
     private DistPollerDao m_distPollerDao;
@@ -229,15 +227,7 @@ public abstract class AbstractMockDao<T, K extends Serializable> implements Lega
         }
         return m_snmpInterfaceDao;
     }
-    
-    protected AssetRecordDao getAssetRecordDao() {
-        if (m_assetRecordDao == null) {
-            m_assetRecordDao = getServiceRegistry().findProvider(AssetRecordDao.class);
-            Assert.notNull(m_assetRecordDao);
-        }
-        return m_assetRecordDao;
-    }
-    
+
     protected CategoryDao getCategoryDao() {
         if (m_categoryDao == null) {
             m_categoryDao = getServiceRegistry().findProvider(CategoryDao.class);

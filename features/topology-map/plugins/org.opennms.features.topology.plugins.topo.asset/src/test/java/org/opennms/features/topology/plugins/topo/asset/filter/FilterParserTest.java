@@ -28,7 +28,7 @@
 
 package org.opennms.features.topology.plugins.topo.asset.filter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,9 +43,7 @@ import org.opennms.features.topology.plugins.topo.asset.GeneratorConfig;
 import org.opennms.features.topology.plugins.topo.asset.GeneratorConfigBuilder;
 import org.opennms.features.topology.plugins.topo.asset.layers.LayerDefinitionRepository;
 import org.opennms.features.topology.plugins.topo.asset.layers.NodeParamLabels;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -468,7 +466,7 @@ public class FilterParserTest {
 		for( int id = 5;id<10;id++){
 			OnmsNode n =createNode(id);
 			n.setForeignSource("testForeignSource1");
-			n.getAssetRecord().setPollerCategory("testPollerCategory1");
+			n.setAsset("pollerCategory", "testPollerCategory1");
 			
 			OnmsCategory onmsCategory4 = new OnmsCategory();
 			onmsCategory4.setName("category4");
@@ -480,16 +478,16 @@ public class FilterParserTest {
 		for( int id = 10;id<15;id++){
 			OnmsNode n =createNode(id);
 			n.setForeignSource("testForeignSource2");
-			n.getAssetRecord().setPollerCategory("testPollerCategory1");
-			n.getAssetRecord().setDisplayCategory("testDisplayCategory");
+			n.setAsset("pollerCategory","testPollerCategory1");
+			n.setAsset("displayCategory","testDisplayCategory");
 			nodeList.add(n);
 		}
 
 		for( int id = 15;id<20;id++){
 			OnmsNode n =createNode(id);
 			n.setForeignSource("testForeignSource3");
-			n.getAssetRecord().setPollerCategory("testPollerCategory2");
-			n.getAssetRecord().setDisplayCategory("testDisplayCategory");
+			n.setAsset("pollerCategory","testPollerCategory2");
+			n.setAsset("displayCategory","testDisplayCategory");
 			nodeList.add(n);
 		}
 
@@ -525,7 +523,6 @@ public class FilterParserTest {
 		onmsCategory2.setName("category2");
 		categories.add(onmsCategory2);
 
-
 		// parent information
 		OnmsNode parent = new OnmsNode();
 		node.setParent(parent);
@@ -534,47 +531,39 @@ public class FilterParserTest {
 		parent.setForeignSource("parent-foreignsource_"+id);
 		parent.setForeignId("parent-foreignid_"+id);
 
-		OnmsAssetRecord assetRecord = new OnmsAssetRecord();
-		node.setAssetRecord(assetRecord) ;
+		node.setAsset("country", "asset-country_" + id);
+		node.setAsset("address1", "asset-address1_" + id);
+		node.setAsset("address2", "asset-address2_" + id);
+		node.setAsset("city", "asset-city_" + id);
+		node.setAsset("zip", "asset-zip_" + id);
+		node.setAsset("state", "asset-state_" + id);
+		node.setAsset("latitude", "0");
+		node.setAsset("longitude", "0");
 
-		OnmsGeolocation gl = new OnmsGeolocation();
-		assetRecord.setGeolocation(gl);
+		node.setAsset("region", "asset-region_" + id);
+		node.setAsset("division", "asset-division_" + id);
+		node.setAsset("department", "asset-department_" + id);
+		node.setAsset("building", "asset-building_" + id);
+		node.setAsset("floor", "asset-floor_" + id);
+		node.setAsset("room", "asset-room_" + id);
+		node.setAsset("rack", "asset-rack_" + id);
+		node.setAsset("slot", "asset-slot_" + id);
+		node.setAsset("port", "asset-port_" + id);
+		node.setAsset("circuitId", "asset-circuitid_" + id);
 
-		//geolocation
-		gl.setCountry("asset-country_"+id);
-		gl.setAddress1("asset-address1_"+id);
-		gl.setAddress2("asset-address2_"+id);
-		gl.setCity("asset-city_"+id);
-		gl.setZip	("asset-zip_"+id);
-		gl.setState("asset-state_"+id); 
-		gl.setLatitude(0d);
-		gl.setLongitude(0d);
+		node.setAsset("category", "asset-category_" + id);
+		node.setAsset("displayCategory", "asset-displaycategory_" + id);
+		node.setAsset("notifyCategory", "asset-notifycategory_" + id);
+		node.setAsset("pollerCategory", "asset-pollercategory_" + id);
+		node.setAsset("thresholdCategory", "asset-thresholdcategory_" + id);
+		node.setAsset("managedObjectType", "asset-managedobjecttype_" + id);
+		node.setAsset("managedObjectInstance", "asset-managedobjectinstance_" + id);
 
-		//assetRecord
-		assetRecord.setRegion("asset-region_"+id);
-		assetRecord.setDivision("asset-division_"+id);
-		assetRecord.setDepartment("asset-department_"+id); 
-		assetRecord.setBuilding("asset-building_"+id); 
-		assetRecord.setFloor("asset-floor_"+id); 
-		assetRecord.setRoom("asset-room_"+id);
-		assetRecord.setRack("asset-rack_"+id); 
-		assetRecord.setSlot("asset-slot_"+id);
-		assetRecord.setPort("asset-port_"+id);
-		assetRecord.setCircuitId("asset-circuitid_"+id); 
-
-		assetRecord.setCategory("asset-category_"+id); 
-		assetRecord.setDisplayCategory("asset-displaycategory_"+id);
-		assetRecord.setNotifyCategory("asset-notifycategory_"+id);
-		assetRecord.setPollerCategory("asset-pollercategory_"+id);
-		assetRecord.setThresholdCategory("asset-thresholdcategory_"+id);
-		assetRecord.setManagedObjectType("asset-managedobjecttype_"+id);
-		assetRecord.setManagedObjectInstance("asset-managedobjectinstance_"+id); 
-
-		assetRecord.setManufacturer("asset-manufacturer_"+id);
-		assetRecord.setVendor("asset-vendor_"+id);
-		assetRecord.setModelNumber("asset-modelnumber_"+id); 
-		assetRecord.setDescription("asset-description_"+id);
-		assetRecord.setOperatingSystem("asset-operatingsystem_"+id); 
+		node.setAsset("manufacturer", "asset-manufacturer_" + id);
+		node.setAsset("vendor", "asset-vendor_" + id);
+		node.setAsset("modelNumber", "asset-modelnumber_" + id);
+		node.setAsset("description", "asset-description_" + id);
+		node.setAsset("operatingSystem", "asset-operatingsystem_" + id);
 
 		return node;
 	}
@@ -587,10 +576,6 @@ public class FilterParserTest {
 		sb.append("}");
 		return sb.toString();
 	}
-
-
-
-
 }
 
 

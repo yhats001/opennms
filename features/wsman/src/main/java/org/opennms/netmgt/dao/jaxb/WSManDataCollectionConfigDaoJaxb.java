@@ -142,7 +142,7 @@ public class WSManDataCollectionConfigDaoJaxb extends AbstractMergingJaxbConfigD
         if (agentConfig.getProductVendor() != null) {
             productVendor = agentConfig.getProductVendor();
         } else {
-            productVendor = node.getAssetRecord().getVendor();
+            productVendor = node.getAsset("vendor");
             // Guarantee that the values are non-null
             productVendor = Strings.nullToEmpty(productVendor);
         }
@@ -151,7 +151,7 @@ public class WSManDataCollectionConfigDaoJaxb extends AbstractMergingJaxbConfigD
         if (agentConfig.getProductVersion() != null) {
             productVersion = agentConfig.getProductVersion();
         } else {
-            productVersion = node.getAssetRecord().getModelNumber();
+            productVersion = node.getAsset("modelNumber");
             // Guarantee that the values are non-null
             productVersion = Strings.nullToEmpty(productVersion);
         }

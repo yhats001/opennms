@@ -46,16 +46,12 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.opennms.core.config.api.JaxbListWrapper;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
-import org.opennms.netmgt.model.OnmsAssetRecord;
-import org.opennms.web.svclayer.support.PropertyUtils;
-
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.PropertyAccessorFactory;
+import org.opennms.netmgt.dao.api.NodeDao;
+import org.opennms.netmgt.model.OnmsMetaData;
+import org.opennms.netmgt.model.OnmsNode;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * The Class AssetSuggestionsRestService.
@@ -65,6 +61,9 @@ import org.springframework.util.Assert;
 @Component("assetSuggestionsRestService")
 @Path("assets")
 public class AssetSuggestionsRestService extends OnmsRestService implements InitializingBean {
+
+    @Autowired
+    NodeDao nodeDao;
 
     /** The Constant BLACK_LIST. */
     private static final Set<String> BLACK_LIST = new HashSet<>();
@@ -76,16 +75,11 @@ public class AssetSuggestionsRestService extends OnmsRestService implements Init
         BLACK_LIST.add("lastModifiedBy");
     }
 
-    /** The Asset DAO. */
-    @Autowired
-    protected AssetRecordDao m_assetDao;
-
     /* (non-Javadoc)
      * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(m_assetDao, "AssetRecordDao is required.");
     }
 
     /**
@@ -152,15 +146,25 @@ public class AssetSuggestionsRestService extends OnmsRestService implements Init
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_ATOM_XML})
     public Suggestions getAssetSuggestions() {
         final Suggestions suggestions = new Suggestions();
-        final List<OnmsAssetRecord> distinctAssetProperties = m_assetDao.getDistinctProperties();
-        final List<String> attributes = PropertyUtils.getProperties(new OnmsAssetRecord()).stream().filter(a -> !BLACK_LIST.contains(a)).collect(Collectors.toList());
+
+        final List<OnmsMetaData> distinctAssetProperties = nodeDao.findAll().stream()
+                .flatMap(e -> e.getMetaData().stream())
+                .filter(e->OnmsNode.NODE_ASSET_CONTEXT.equals(e.getContext()))
+                .distinct()
+                .collect(Collectors.toList());
+
+        final List<String> attributes = distinctAssetProperties.stream()
+                .map(e->e.getKey())
+                .filter(a -> !BLACK_LIST.contains(a))
+                .distinct()
+                .collect(Collectors.toList());
+
         distinctAssetProperties.forEach(record -> {
-            final BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(record);
             attributes.forEach(attribute -> {
-                if (! suggestions.containsKey(attribute)) {
+                if (!suggestions.containsKey(attribute)) {
                     suggestions.put(attribute, new SuggestionList());
                 }
-                final Object value = wrapper.getPropertyValue(attribute);
+                final Object value = record.getValue();
                 if (value != null) {
                     final SuggestionList list = suggestions.get(attribute);
                     if (!list.contains(value.toString())) {

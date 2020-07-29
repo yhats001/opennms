@@ -102,8 +102,9 @@ public class MockNodeDao extends AbstractMockDao<OnmsNode, Integer> implements N
     }
 
     private void updateSubObjects(final OnmsNode node) {
-        node.getAssetRecord().setNode(node);
-        getAssetRecordDao().saveOrUpdate(node.getAssetRecord());
+        // TODO: hopefully we don't have to do anything here
+        //node.getAssetRecord().setNode(node);
+        //getAssetRecordDao().saveOrUpdate(node.getAssetRecord());
 
         for (final OnmsCategory cat : node.getCategories()) {
             getCategoryDao().saveOrUpdate(cat);
