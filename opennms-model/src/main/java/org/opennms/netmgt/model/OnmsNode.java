@@ -1634,6 +1634,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
         addMetaData(NODE_ASSET_CONTEXT, key, value);
     }
 
+    @Transient
     public String getGeoLocationAsAddressString() {
         final StringBuilder sb = new StringBuilder();
 
