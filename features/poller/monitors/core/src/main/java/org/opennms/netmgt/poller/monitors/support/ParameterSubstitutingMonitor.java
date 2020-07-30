@@ -28,10 +28,6 @@
 
 package org.opennms.netmgt.poller.monitors.support;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -40,7 +36,6 @@ import java.util.regex.Pattern;
 import org.opennms.core.spring.BeanUtils;
 import org.opennms.core.utils.ParameterMap;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.poller.MonitoredService;
 import org.opennms.netmgt.poller.support.AbstractServiceMonitor;
@@ -67,18 +62,7 @@ public abstract class ParameterSubstitutingMonitor extends AbstractServiceMonito
     private static final Supplier<NodeDao> nodeDao = Suppliers.memoize(() -> BeanUtils.getBean("daoContext", "nodeDao", NodeDao.class));
     static {
         StringBuilder patternBuilder = new StringBuilder();
-        patternBuilder.append(".*[{](ipAddr(?:ess)?|nodeId|nodeLabel|foreignId|foreignSource");
-        try {
-            BeanInfo info = Introspector.getBeanInfo(OnmsAssetRecord.class);
-            PropertyDescriptor[] pds = info.getPropertyDescriptors();
-            for (PropertyDescriptor pd : pds) {
-                patternBuilder.append("|").append(pd.getName());
-                subPatterns.put(pd.getName(), Pattern.compile("(.*)[{]" + pd.getName() + "[}](.*)"));
-            }
-        } catch (IntrospectionException ie) {
-            LOG.warn("Failed to introspect OnmsAssetRecord when initializing due to {}", ie.getLocalizedMessage());
-        }
-        patternBuilder.append(")[}].*");
+        patternBuilder.append(".*[{](ipAddr(?:ess)?|nodeId|nodeLabel|foreignId|foreignSource)[}].*");
         substitutionPattern = Pattern.compile(patternBuilder.toString());
 
         Pattern p = Pattern.compile("(.*)[{]ipAddr(?:ess)?[}](.*)");

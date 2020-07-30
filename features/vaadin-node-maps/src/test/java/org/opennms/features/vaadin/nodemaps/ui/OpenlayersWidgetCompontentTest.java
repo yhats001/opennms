@@ -38,7 +38,6 @@ import org.opennms.features.geocoder.GeocoderResult;
 import org.opennms.features.geocoder.GeocoderService;
 import org.opennms.features.vaadin.nodemaps.internal.NodeMapComponent;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsNode;
 
 import com.vaadin.server.PaintTarget;
@@ -60,7 +59,6 @@ public class OpenlayersWidgetCompontentTest {
     @Ignore
     public void testGeolocation() throws Exception {
         final OnmsNode node = new OnmsNode();
-        final OnmsAssetRecord asset = new OnmsAssetRecord();
 
         node.setId(1);
 

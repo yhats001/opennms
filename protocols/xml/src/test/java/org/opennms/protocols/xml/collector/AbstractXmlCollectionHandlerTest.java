@@ -33,7 +33,6 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsNode;
 
 /**
@@ -53,7 +52,6 @@ public class AbstractXmlCollectionHandlerTest {
         OnmsNode node = new OnmsNode();
         node.setId(1);
         node.setLabel("mynode.local");
-        OnmsAssetRecord asset = new OnmsAssetRecord();
         node.setAsset("serialNumber", "1001");
         Map<String, String> parameters = new HashMap<>();
         parameters.put("port", "80");

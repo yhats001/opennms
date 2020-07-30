@@ -49,7 +49,6 @@ import org.opennms.netmgt.events.api.annotations.EventHandler;
 import org.opennms.netmgt.events.api.annotations.EventListener;
 import org.opennms.netmgt.events.api.model.IEvent;
 import org.opennms.netmgt.events.api.model.IParm;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
 import org.opennms.netmgt.model.OnmsIpInterface;
 import org.opennms.netmgt.model.OnmsNode;
@@ -655,7 +654,7 @@ public class RancidProvisioningAdapter extends SimpleQueuedProvisioningAdapter i
         }
         
         if (node.getAsset("autoEnable") != null) {
-            r_auth_node.setAutoEnable(node.getAsset("autoEnable").equals(OnmsAssetRecord.AUTOENABLED));
+            r_auth_node.setAutoEnable(node.getAsset("autoEnable").equals("A"));
         }
         
         if (node.getAsset("connection") != null) {

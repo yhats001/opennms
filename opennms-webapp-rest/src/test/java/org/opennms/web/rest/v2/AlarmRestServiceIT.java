@@ -59,7 +59,6 @@ import org.opennms.netmgt.dao.mock.MockEventIpcManager;
 import org.opennms.netmgt.events.api.EventConstants;
 import org.opennms.netmgt.model.NetworkBuilder;
 import org.opennms.netmgt.model.OnmsAlarm;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
 import org.opennms.netmgt.model.OnmsEvent;
 import org.opennms.netmgt.model.OnmsEventParameter;
@@ -458,16 +457,6 @@ public class AlarmRestServiceIT extends AbstractSpringJerseyRestTestCase {
         executeQueryAndVerify("_s=node.label!=server02", 6);
         executeQueryAndVerify("_s=(node.label==server01,node.label==server02)", 8);
         executeQueryAndVerify("_s=node.label!=\u0000", 10);
-    }
-
-    /**
-     * Test filtering for properties of {@link OnmsAssetRecord}.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testAssetFiltering() throws Exception {
-        executeQueryAndVerify("_s=assetRecord.description==lolol", 0);
     }
 
     /**

@@ -55,20 +55,16 @@ import org.opennms.netmgt.config.PollerConfig;
 import org.opennms.netmgt.config.api.CollectdConfigFactory;
 import org.opennms.netmgt.dao.api.CategoryDao;
 import org.opennms.netmgt.dao.api.ServiceTypeDao;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsServiceType;
 import org.opennms.netmgt.provision.persist.ForeignSourceService;
 import org.opennms.netmgt.provision.persist.foreignsource.ForeignSource;
 import org.opennms.netmgt.provision.support.PluginWrapper;
-import org.opennms.web.svclayer.support.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-
-import com.google.common.collect.Lists;
 
 /**
  * The Class ForeignSourceConfigRestService.
@@ -316,23 +312,6 @@ public class ForeignSourceConfigRestService extends OnmsRestService implements I
             });
         }
         return elements;
-    }
-
-    /**
-     * Gets the assets.
-     *
-     * @return the assets
-     */
-    @GET
-    @Path("assets")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_ATOM_XML})
-    public ElementList getAssets() {
-        final List<String> blackList = Lists.newArrayList("id", "class", "geolocation", "node");
-        final Collection<String> assets = PropertyUtils.getProperties(new OnmsAssetRecord())
-                .stream()
-                .filter(a -> !blackList.contains(a))
-                .collect(Collectors.toList());
-        return new ElementList(assets);
     }
 
     /**

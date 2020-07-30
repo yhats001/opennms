@@ -30,8 +30,6 @@ package org.opennms.smoketest.rest;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.preemptive;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.opennms.smoketest.selenium.AbstractOpenNMSSeleniumHelper.BASIC_AUTH_PASSWORD;
 import static org.opennms.smoketest.selenium.AbstractOpenNMSSeleniumHelper.BASIC_AUTH_USERNAME;
 
@@ -39,8 +37,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
-import org.opennms.netmgt.dao.hibernate.AssetRecordDaoHibernate;
 import org.opennms.smoketest.stacks.OpenNMSStack;
 import org.opennms.smoketest.utils.HibernateDaoFactory;
 
@@ -75,11 +71,8 @@ public abstract class AbstractNodeRestServiceTest {
 
     // See NMS-9855
     @Test
-    public void verifyCreationWithAssetRecord() {
+    public void verifyCreation() {
         final String node = "<node type=\"A\" label=\"TestMachine1\" foreignSource=\"SmokeTests\" foreignId=\"TestMachine1\">" +
-                "<assetRecord>" +
-                "<description>Right here, right now</description>" +
-                "</assetRecord>" +
                 "<labelSource>H</labelSource>" +
                 "<sysContact>The Owner</sysContact>" +
                 "<sysDescription>" +
@@ -97,10 +90,8 @@ public abstract class AbstractNodeRestServiceTest {
 
         // Verify that only one asset record has been created
         final HibernateDaoFactory daoFactory = stack.postgres().getDaoFactory();
-        final AssetRecordDao dao = daoFactory.getDao(AssetRecordDaoHibernate.class);
-        assertThat(dao.countAll(), is(1));
 
-        // Ensure we can get nodes with asset records attached
+        // Ensure we can get nodes
         given().get()
                 .then()
                 .log().all()

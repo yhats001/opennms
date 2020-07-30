@@ -74,12 +74,6 @@ public class AssetRecordResource extends OnmsRestService {
     @Qualifier("eventProxy")
     private EventProxy m_eventProxy;
 
-    /**
-     * <p>getAssetRecord</p>
-     *
-     * @param nodeCriteria a {@link java.lang.String} object.
-     * @return a {@link org.opennms.netmgt.model.OnmsAssetRecord} object.
-     */
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public OnmsMetaDataList getAssetRecord(@PathParam("nodeCriteria") final String nodeCriteria) {

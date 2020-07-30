@@ -47,7 +47,6 @@ import java.util.stream.Collectors;
 
 import org.opennms.netmgt.model.OnmsAlarm;
 import org.opennms.netmgt.model.OnmsApplication;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
 import org.opennms.netmgt.model.OnmsDistPoller;
 import org.opennms.netmgt.model.OnmsEvent;
@@ -122,75 +121,6 @@ public abstract class SearchProperties {
 	static final SortedSet<SearchProperty> APPLICATION_PROPERTIES = new TreeSet<>(Arrays.asList(new SearchProperty[] {
 		new SearchProperty(OnmsApplication.class, "id", "ID", INTEGER),
 		new SearchProperty(OnmsApplication.class, "name", "Name", STRING)
-	}));
-
-	static final SortedSet<SearchProperty> ASSET_RECORD_PROPERTIES = new TreeSet<>(Arrays.asList(new SearchProperty[] {
-		new SearchProperty(OnmsAssetRecord.class, "id", "ID", INTEGER),
-		new SearchProperty(OnmsAssetRecord.class, "additionalhardware", "Additional Hardware", STRING),
-		//new SearchProperty(OnmsAssetRecord.class, "address1", "Address 1", STRING),
-		//new SearchProperty(OnmsAssetRecord.class, "address2", "Address 2", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "admin", "Admin", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "assetNumber", "Asset Number", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "autoenable", "Auto-enable", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "building", "Building", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "category", "Category", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "circuitId", "Circuit ID", STRING),
-		//new SearchProperty(OnmsAssetRecord.class, "city", "City", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "comment", "Comment", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "connection", "Connection", STRING),
-		//new SearchProperty(OnmsAssetRecord.class, "country", "Country", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "cpu", "CPU", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "dateInstalled", "Date Installed", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "department", "Department", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "description", "Description", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "displayCategory", "Display Category", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "division", "Division", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "enable", "Enable", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "floor", "Floor", STRING),
-		//new SearchProperty(OnmsAssetRecord.class, "geolocation", "", ?),
-		new SearchProperty(OnmsAssetRecord.class, "hdd1", "HDD 1", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "hdd2", "HDD 2", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "hdd3", "HDD 3", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "hdd4", "HDD 4", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "hdd5", "HDD 5", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "hdd6", "HDD 6", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "inputpower", "Input Power", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "lastModifiedBy", "Last Modified By", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "lastModifiedDate", "Last Modified Date", TIMESTAMP),
-		//new SearchProperty(OnmsAssetRecord.class, "latitude", "Latitude", FLOAT),
-		new SearchProperty(OnmsAssetRecord.class, "lease", "Lease", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "leaseExpires", "Lease Expires", STRING),
-		//new SearchProperty(OnmsAssetRecord.class, "longitude", "Longitude", FLOAT),
-		new SearchProperty(OnmsAssetRecord.class, "maintcontract", "Maintenance Contract", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "maintContractExpiration", "Maintenance Contract Expiration", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "managedObjectInstance", "Managed Object Instance", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "managedObjectType", "Managed Object Type", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "manufacturer", "Manufacturer", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "modelNumber", "Model Number", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "notifyCategory", "Notify Category", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "numpowersupplies", "Number of Power Supplies", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "operatingSystem", "Operating System", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "password", "Password", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "pollerCategory", "Poller Category", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "port", "Port", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "rack", "Rack", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "rackunitheight", "Rack Unit Height", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "ram", "RAM", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "region", "Region", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "room", "Room", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "serialNumber", "Serial Number", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "slot", "Slot", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "snmpcommunity", "SNMP Community", STRING),
-		//new SearchProperty(OnmsAssetRecord.class, "state", "State or Province", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "storagectrl", "Storage Controller", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "supportPhone", "Support Phone", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "thresholdCategory", "Threshold Category", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "username", "Username", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "vendor", "Vendor", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "vendorAssetNumber", "Vendor Asset Number", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "vendorFax", "Vendor Fax", STRING),
-		new SearchProperty(OnmsAssetRecord.class, "vendorPhone", "Vendor Phone", STRING),
-		//new SearchProperty(OnmsAssetRecord.class, "zip", "ZIP or Postal Code", STRING)
 	}));
 
 	static final SortedSet<SearchProperty> CATEGORY_PROPERTIES = new TreeSet<>(Arrays.asList(new SearchProperty[] {
@@ -460,7 +390,6 @@ public abstract class SearchProperties {
 		// Root prefix
 		ALARM_SERVICE_PROPERTIES.addAll(ALARM_PROPERTIES);
 		//ALARM_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.alarm, "Alarm", ALARM_PROPERTIES));
-		ALARM_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.assetRecord, "Asset", ASSET_RECORD_PROPERTIES));
 		ALARM_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.category, "Category", CATEGORY_PROPERTIES, false));
 		ALARM_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.distPoller, "Monitoring System", DIST_POLLER_PROPERTIES));
 		ALARM_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.eventParameter, "Event Parameter", EVENT_PARAMETER_PROPERTIES, false));
@@ -478,7 +407,6 @@ public abstract class SearchProperties {
 		EVENT_SERVICE_PROPERTIES.addAll(EVENT_PROPERTIES);
 		//EVENT_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.event, EVENT_PROPERTIES));
 		EVENT_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.alarm, "Alarm", ALARM_PROPERTIES));
-		EVENT_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.assetRecord, "Asset", ASSET_RECORD_PROPERTIES));
 		EVENT_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.category, "Category", CATEGORY_PROPERTIES, false));
 		EVENT_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.distPoller, "Monitoring System", DIST_POLLER_PROPERTIES));
 		EVENT_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.eventParameter, "Event Parameter", EVENT_PARAMETER_PROPERTIES, false));
@@ -491,7 +419,6 @@ public abstract class SearchProperties {
 		// Root prefix
 		IF_SERVICE_SERVICE_PROPERTIES.addAll(IF_SERVICE_PROPERTIES);
 		//IF_SERVICE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.monitoredService, IF_SERVICE_PROPERTIES));
-		IF_SERVICE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.assetRecord, "Asset", ASSET_RECORD_PROPERTIES));
 		IF_SERVICE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.ipInterface, "IP Interface", IP_INTERFACE_PROPERTIES));
 		IF_SERVICE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.location, "Location", LOCATION_PROPERTIES));
 		IF_SERVICE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.node, "Node", NODE_PROPERTIES));
@@ -503,7 +430,6 @@ public abstract class SearchProperties {
 		IP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.node, "Node", NODE_PROPERTIES));
 		IP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.snmpInterface, "SNMP Interface", SNMP_INTERFACE_PROPERTIES));
 		//IP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.monitoredService, "Monitored Service", IF_SERVICE_PROPERTIES));
-		IP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.assetRecord, "Asset", ASSET_RECORD_PROPERTIES));
 		IP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.category, "Category", CATEGORY_PROPERTIES, false));
 		IP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.location, "Location", LOCATION_PROPERTIES));
 		IP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.serviceType, "Service", SERVICE_TYPE_PROPERTIES));
@@ -513,7 +439,6 @@ public abstract class SearchProperties {
 		SNMP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.node, "Node", NODE_PROPERTIES));
 		SNMP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.ipInterface, "IP Interface", IP_INTERFACE_PROPERTIES));
 		//SNMP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.monitoredService, "Monitored Service", IF_SERVICE_PROPERTIES));
-		SNMP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.assetRecord, "Asset", ASSET_RECORD_PROPERTIES));
 		SNMP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.category, "Category", CATEGORY_PROPERTIES, false));
 		SNMP_INTERFACE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.location, "Location", LOCATION_PROPERTIES));
 
@@ -526,7 +451,6 @@ public abstract class SearchProperties {
 		// Root prefix
 		NODE_SERVICE_PROPERTIES.addAll(NODE_PROPERTIES);
 		//NODE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.node, NODE_PROPERTIES));
-		NODE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.assetRecord, "Asset", ASSET_RECORD_PROPERTIES));
 		NODE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.category, "Category", CATEGORY_PROPERTIES, false));
 		NODE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.ipInterface, "IP Interface", IP_INTERFACE_PROPERTIES, false));
 		NODE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.location, "Location", LOCATION_PROPERTIES));
@@ -538,7 +462,6 @@ public abstract class SearchProperties {
 		// Root prefix
 		NOTIFICATION_SERVICE_PROPERTIES.addAll(NOTIFICATION_PROPERTIES);
 		//NOTIFICATION_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.notification, NOTIFICATION_PROPERTIES));
-		NOTIFICATION_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.assetRecord, "Asset", ASSET_RECORD_PROPERTIES));
 		NOTIFICATION_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.category, "Category", CATEGORY_PROPERTIES, false));
 		NOTIFICATION_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.distPoller, "Monitoring System", DIST_POLLER_PROPERTIES));
 		NOTIFICATION_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.event, "Event", EVENT_PROPERTIES));
@@ -552,7 +475,6 @@ public abstract class SearchProperties {
 		// Root prefix
 		OUTAGE_SERVICE_PROPERTIES.addAll(OUTAGE_PROPERTIES);
 		//OUTAGE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.outage, OUTAGE_PROPERTIES));
-		OUTAGE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.assetRecord, "Asset", ASSET_RECORD_PROPERTIES));
 		OUTAGE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.distPoller, "Monitoring System", DIST_POLLER_PROPERTIES));
 		OUTAGE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.ipInterface, "IP Interface", IP_INTERFACE_PROPERTIES));
 		OUTAGE_SERVICE_PROPERTIES.addAll(withAliasPrefix(Aliases.location, "Location", LOCATION_PROPERTIES));
