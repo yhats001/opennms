@@ -149,10 +149,10 @@ public class SnmpAssetProvisioningAdapterFullIT implements InitializingBean {
 	
 			node = m_nodeDao.get(firstNodeId);
 			assertNotNull(node);
-			System.out.println("ID: " + node.getAssetRecord().getId());
-			System.out.println("Comment: " + node.getAssetRecord().getComment());
-			assertNotNull("AssetRecord comment is null", node.getAssetRecord().getComment());
-			assertEquals(EXPECTED_COMMENT_FIELD, node.getAssetRecord().getComment());
+			System.out.println("ID: " + node.getAsset("id"));
+			System.out.println("Comment: " + node.getAsset("comment"));
+			assertNotNull("AssetRecord comment is null", node.getAsset("comment"));
+			assertEquals(EXPECTED_COMMENT_FIELD, node.getAsset("comment"));
 		} finally {
 			m_adapter.getOperationQueue().removeListener(verifyOperations);
 		}
@@ -170,8 +170,8 @@ public class SnmpAssetProvisioningAdapterFullIT implements InitializingBean {
 
 		node = m_nodeDao.get(firstNodeId);
 		assertNotNull(node);
-		assertNotNull("AssetRecord comment is null", node.getAssetRecord().getComment());
-		assertEquals(EXPECTED_COMMENT_FIELD, node.getAssetRecord().getComment());
+		assertNotNull("AssetRecord comment is null", node.getAsset("comment"));
+		assertEquals(EXPECTED_COMMENT_FIELD, node.getAsset("comment"));
 	}
 
 	@Test
@@ -196,10 +196,10 @@ public class SnmpAssetProvisioningAdapterFullIT implements InitializingBean {
 	
 			node = m_nodeDao.get(firstNodeId);
 			assertNotNull(node);
-			System.out.println("ID: " + node.getAssetRecord().getId());
-			System.out.println("Comment: " + node.getAssetRecord().getComment());
-			assertNotNull("AssetRecord comment is null", node.getAssetRecord().getComment());
-			assertEquals(EXPECTED_COMMENT_FIELD, node.getAssetRecord().getComment());
+			System.out.println("ID: " + node.getAsset("id"));
+			System.out.println("Comment: " + node.getAsset("comment"));
+			assertNotNull("AssetRecord comment is null", node.getAsset("comment"));
+			assertEquals(EXPECTED_COMMENT_FIELD, node.getAsset("comment"));
 		} finally {
 			m_adapter.getOperationQueue().removeListener(verifyOperations);
 		}
@@ -216,7 +216,7 @@ public class SnmpAssetProvisioningAdapterFullIT implements InitializingBean {
 			assertNotNull(node);
 			int firstNodeId = node.getId();
 	
-			assertNull(node.getAssetRecord().getComment());
+			assertNull(node.getAsset("comment"));
 			m_adapter.addNode(firstNodeId);
 			m_adapter.updateNode(firstNodeId);
 	
@@ -227,10 +227,10 @@ public class SnmpAssetProvisioningAdapterFullIT implements InitializingBean {
 	
 			node = m_nodeDao.get(firstNodeId);
 			assertNotNull(node);
-			System.out.println("ID: " + node.getAssetRecord().getId());
-			System.out.println("Comment: " + node.getAssetRecord().getComment());
-			assertNotNull("AssetRecord comment is null", node.getAssetRecord().getComment());
-			assertEquals(EXPECTED_COMMENT_FIELD, node.getAssetRecord().getComment());
+			System.out.println("ID: " + node.getAsset("id"));
+			System.out.println("Comment: " + node.getAsset("comment"));
+			assertNotNull("AssetRecord comment is null", node.getAsset("comment"));
+			assertEquals(EXPECTED_COMMENT_FIELD, node.getAsset("comment"));
 		} finally {
 			m_adapter.getOperationQueue().removeListener(verifyOperations);
 		}

@@ -113,9 +113,8 @@ public class RadiusAuthMonitorTest {
         node.setForeignSource("AlienSource");
         node.setForeignId("31338");
         node.setId(m_nodeDao.getNextNodeId());
-        OnmsAssetRecord oar = node.getAssetRecord();
-        oar.setUsername("testing");
-        oar.setPassword("password");
+        node.setAsset("username", "testing");
+        node.setAsset("password", "password");
 
         OnmsSnmpInterface snmpInterface = new OnmsSnmpInterface(node, 2);
         snmpInterface.setId(2);

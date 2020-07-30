@@ -77,6 +77,7 @@ import org.opennms.netmgt.collection.support.builder.NodeLevelResource;
 import org.opennms.netmgt.collection.support.builder.Resource;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.ResourceStorageDao;
+import org.opennms.netmgt.model.OnmsMetaData;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.rrd.RrdRepository;
 import org.opennms.protocols.xml.config.Content;
@@ -417,20 +418,16 @@ public abstract class AbstractXmlCollectionHandler implements XmlCollectionHandl
         for(Map.Entry<String, String> entry : parameters.entrySet()) {
             formattedString = formattedString.replaceAll("[{]parameter:"+entry.getKey()+"[}]", entry.getValue());
         }
-        if (node.getAssetRecord() != null) {
-            BeanWrapper wrapper = new BeanWrapperImpl(node.getAssetRecord());
-            for (PropertyDescriptor p : wrapper.getPropertyDescriptors()) {
-                Object obj = wrapper.getPropertyValue(p.getName());
-                if (obj != null){
-                    String objStr = obj.toString();
-                    try {
-                        //NMS-7381 - if pulling from asset info you'd expect to not have to encode reserved words yourself.  
-                        objStr = URLEncoder.encode(obj.toString(), StandardCharsets.UTF_8.name());
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    formattedString = formattedString.replaceAll("[{](?i)" + p.getName() + "[}]", objStr);
+        for (final OnmsMetaData metaData : node.getMetaData()) {
+            if (OnmsNode.NODE_ASSET_CONTEXT.equals(metaData.getContext())) {
+                String objStr = metaData.getValue();
+                try {
+                    //NMS-7381 - if pulling from asset info you'd expect to not have to encode reserved words yourself.
+                    objStr = URLEncoder.encode(objStr, StandardCharsets.UTF_8.name());
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
+                formattedString = formattedString.replaceAll("[{](?i)" + metaData.getKey() + "[}]", objStr);
             }
         }
         if (formattedString.matches(".*[{].+[}].*"))

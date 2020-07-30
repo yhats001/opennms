@@ -94,7 +94,7 @@ public class WsManAssetProvisioningAdapterIT {
         nb.addInterface("192.168.0.1").setIsSnmpPrimary("P").setIsManaged("P");
         node = nb.getCurrentNode();
         // WS-Man lookups are vendor dependent, use a known one from the default config.
-        node.getAssetRecord().setVendor("Microsoft Corporation");
+        node.setAsset("vendor", "Microsoft Corporation");
         nodeDao.save(node);
     }
 
@@ -144,14 +144,14 @@ public class WsManAssetProvisioningAdapterIT {
             final OnmsNode newNode = nodeDao.get(node.getId());
             // Trigger a lazy load of the asset record
             //noinspection ResultOfMethodCallIgnored
-            newNode.getAssetRecord().getVendor();
+            newNode.getAsset("vendor");
             return newNode;
         });
 
         // Verify a field that contains concatenated results
-        assertThat(node.getAssetRecord().getOperatingSystem(), equalTo("Wesley\nSnipes"));
+        assertThat(node.getAsset("operatingSystem"), equalTo("Wesley\nSnipes"));
         // Verify a field that contains a single result
-        assertThat(node.getAssetRecord().getRam(), equalTo("Wesley"));
+        assertThat(node.getAsset("ram"), equalTo("Wesley"));
     }
 
 }

@@ -119,7 +119,7 @@ public class WsManAssetProvisioningAdapter extends SimplerQueuedProvisioningAdap
             final InetAddress ipaddress = getIpForNode(node);
 
             LOG.debug("doAdd: Fetching vendor asset string");
-            final String vendor = node.getAssetRecord().getVendor();
+            final String vendor = node.getAsset("vendor");
             LOG.debug("doAdd: Fetched asset string: {}", vendor);
 
             if (m_wsManConfigDao == null) {
@@ -130,19 +130,13 @@ public class WsManAssetProvisioningAdapter extends SimplerQueuedProvisioningAdap
             final WSManClient client = m_factory.getClient(endpoint);
             LOG.debug("doAdd: m_config: {} ", m_config);
 
-            final OnmsAssetRecord asset = node.getAssetRecord();
             m_config.getReadLock().lock();
             try {
                 for (final AssetField field : m_config.getAssetFieldsForAddress(ipaddress, vendor)) {
                     try {
                         final String value = fetchWsManAssetString(client, endpoint, field.getWqlObjs(), field.getFormatString());
                         LOG.debug("doAdd: Setting asset field \"{}\" to value: {}", field.getName(), value);
-                        // Use Spring bean-accessor classes to set the field value
-                        final BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(asset);
-                        wrapper.setPropertyValue(field.getName(), value);
-                    } catch (final BeansException e) {
-                        LOG.warn("doAdd: Could not set property \"{}\" on asset object {}", field.getName(),
-                                e.getMessage(), e);
+                        node.setAsset(field.getName(), value);
                     } catch (final Throwable t) {
                         // This exception is thrown if the WSMAN ENUM fails or an incorrect number of
                         // parameters is returned by the agent or because of a misconfiguration.
@@ -153,7 +147,6 @@ public class WsManAssetProvisioningAdapter extends SimplerQueuedProvisioningAdap
                 m_config.getReadLock().unlock();
             }
 
-            node.setAssetRecord(asset);
             m_nodeDao.saveOrUpdate(node);
             m_nodeDao.flush();
             return null;
@@ -240,7 +233,7 @@ public class WsManAssetProvisioningAdapter extends SimplerQueuedProvisioningAdap
             Objects.requireNonNull(node, "doAdd: failed to return node for given nodeId: " + nodeId);
             LOG.debug("doUpdate: Fetching vendor asset string");
             final InetAddress ipaddress = getIpForNode(node);
-            String vendor = node.getAssetRecord().getVendor();
+            String vendor = node.getAsset("vendor");
             LOG.debug("doUpdate: Fetched asset string: \"{}\"", vendor);
 
             if (m_wsManConfigDao == null) {
@@ -251,18 +244,13 @@ public class WsManAssetProvisioningAdapter extends SimplerQueuedProvisioningAdap
             final WSManClient client = m_factory.getClient(endpoint);
             LOG.debug("doUpdate: m_config: \"{}\"", m_config);
 
-            final OnmsAssetRecord asset = node.getAssetRecord();
             m_config.getReadLock().lock();
             try {
                 for (final AssetField field : m_config.getAssetFieldsForAddress(ipaddress, vendor)) {
                     try {
                         final String value = fetchWsManAssetString(client, endpoint, field.getWqlObjs(), field.getFormatString());
                         LOG.debug("doUpdate: Setting asset field \" {} \" to value: {}", field.getName(), value);
-                        // Use Spring bean-accessor classes to set the field value
-                        final BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(asset);
-                        wrapper.setPropertyValue(field.getName(), value);
-                    } catch (final BeansException e) {
-                        LOG.warn("doUpdate: Could not set property \" {} \" on asset object {}", field.getName(), e.getMessage(), e);
+                        node.setAsset(field.getName(), value);
                     } catch (final Throwable t) {
                         // This exception is thrown if the WSMAN ENUM fails or an incorrect number of
                         // parameters is returned by the agent or because of a misconfiguration.
@@ -273,7 +261,6 @@ public class WsManAssetProvisioningAdapter extends SimplerQueuedProvisioningAdap
                 m_config.getReadLock().unlock();
             }
 
-            node.setAssetRecord(asset);
             m_nodeDao.saveOrUpdate(node);
             m_nodeDao.flush();
             return null;

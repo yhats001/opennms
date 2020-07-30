@@ -1627,10 +1627,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
     public String getAsset(final String key) {
         final Optional<OnmsMetaData> onmsMetaData = findMetaDataForContextAndKey(NODE_ASSET_CONTEXT, key);
-        if (onmsMetaData.isPresent()) {
-            return onmsMetaData.get().getValue();
-        }
-        return null;
+        return onmsMetaData.map(OnmsMetaData::getValue).orElse(null);
     }
 
     public void setAsset(final String key, final String value) {

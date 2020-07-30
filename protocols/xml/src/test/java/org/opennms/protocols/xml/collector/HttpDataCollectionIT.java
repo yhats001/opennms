@@ -130,7 +130,6 @@ public class HttpDataCollectionIT {
         OnmsNode node = new OnmsNode();
         node.setId(1);
         node.setLabel("mynode.local");
-        node.setAssetRecord(new OnmsAssetRecord());
         EasyMock.expect(m_nodeDao.get(1)).andReturn(node).anyTimes();
         EasyMock.replay(m_nodeDao);
     }

@@ -35,7 +35,6 @@ import org.opennms.core.spring.BeanUtils;
 import org.opennms.features.geolocation.api.Coordinates;
 import org.opennms.features.geolocation.api.GeolocationResolver;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,19 +117,17 @@ public class GeolocationProvisioningAdapter extends SimplerQueuedProvisioningAda
         Objects.requireNonNull(node);
 
         // Only resolve long/lat if not already set and an address is set
-        final OnmsGeolocation geolocation = node.getAssetRecord().getGeolocation();
-        if (geolocation != null
-                && geolocation.getLatitude() == null
-                && geolocation.getLatitude() == null
-                && !Strings.isNullOrEmpty(geolocation.asAddressString())) {
+        if (node.getAsset("longitude") == null &&
+            node.getAsset("latitude") == null &&
+            !Strings.isNullOrEmpty(node.getGeoLocationAsAddressString())) {
 
-            final Coordinates coordinates = geolocationResolver.resolve(geolocation.asAddressString());
+            final Coordinates coordinates = geolocationResolver.resolve(node.getGeoLocationAsAddressString());
             if (coordinates != null) {
-                geolocation.setLongitude(coordinates.getLongitude());
-                geolocation.setLatitude(coordinates.getLatitude());
+                node.setAsset("longitude", Double.toString(coordinates.getLongitude()));
+                node.setAsset("latitude", Double.toString(coordinates.getLongitude()));
                 nodeDao.saveOrUpdate(node);
             } else {
-                LOG.warn("Could not resolve address string '{}' for node with id {}", geolocation.asAddressString(), node.getId());
+                LOG.warn("Could not resolve address string '{}' for node with id {}", node.getGeoLocationAsAddressString(), node.getId());
             }
         }
     }

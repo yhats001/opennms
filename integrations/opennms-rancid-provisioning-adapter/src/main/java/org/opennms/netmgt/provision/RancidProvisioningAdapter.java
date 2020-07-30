@@ -641,34 +641,25 @@ public class RancidProvisioningAdapter extends SimpleQueuedProvisioningAdapter i
         // RancidAuthentication
         RancidNodeAuthentication r_auth_node = new RancidNodeAuthentication();
         r_auth_node.setDeviceName(node.getLabel());
-        OnmsAssetRecord asset_node = node.getAssetRecord();
 
-        // Seth 2011-09-12: Is this possible? I added this as defensive code against issue NMS-4475
-        //
-        // http://issues.opennms.org/browse/NMS-4475
-        //
-        if (asset_node == null) {
-            return r_auth_node;
-        }
-
-        if (asset_node.getUsername() != null) {
-            r_auth_node.setUser(asset_node.getUsername());
+        if (node.getAsset("username") != null) {
+            r_auth_node.setUser(node.getAsset("username"));
         }
         
-        if (asset_node.getPassword() != null) {
-            r_auth_node.setPassword(asset_node.getPassword());
+        if (node.getAsset("password") != null) {
+            r_auth_node.setPassword(node.getAsset("password"));
         }
 
-        if (asset_node.getEnable() != null) {
-            r_auth_node.setEnablePass(asset_node.getEnable());
+        if (node.getAsset("enable") != null) {
+            r_auth_node.setEnablePass(node.getAsset("enable"));
         }
         
-        if (asset_node.getAutoenable() != null) {
-            r_auth_node.setAutoEnable(asset_node.getAutoenable().equals(OnmsAssetRecord.AUTOENABLED));
+        if (node.getAsset("autoEnable") != null) {
+            r_auth_node.setAutoEnable(node.getAsset("autoEnable").equals(OnmsAssetRecord.AUTOENABLED));
         }
         
-        if (asset_node.getConnection() != null) {
-            r_auth_node.setConnectionMethod(asset_node.getConnection());
+        if (node.getAsset("connection") != null) {
+            r_auth_node.setConnectionMethod(node.getAsset("connection"));
         } else {
             r_auth_node.setConnectionMethod("telnet");
         }

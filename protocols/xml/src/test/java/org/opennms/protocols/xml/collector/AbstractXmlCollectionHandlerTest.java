@@ -54,8 +54,7 @@ public class AbstractXmlCollectionHandlerTest {
         node.setId(1);
         node.setLabel("mynode.local");
         OnmsAssetRecord asset = new OnmsAssetRecord();
-        asset.setSerialNumber("1001");
-        node.setAssetRecord(asset);
+        node.setAsset("serialNumber", "1001");
         Map<String, String> parameters = new HashMap<>();
         parameters.put("port", "80");
         String url = AbstractXmlCollectionHandler.parseString("URL", "http://{nodeLabel}:{parameter:port}/{ipAddress}/serial/{serialNumber}/{step}", node, "127.0.0.1", 300, parameters);

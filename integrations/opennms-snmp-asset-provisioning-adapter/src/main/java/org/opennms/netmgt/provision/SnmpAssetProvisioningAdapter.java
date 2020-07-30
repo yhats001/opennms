@@ -144,20 +144,13 @@ public class SnmpAssetProvisioningAdapter extends SimplerQueuedProvisioningAdapt
         String locationName = node.getLocation() != null ? node.getLocation().getLocationName() : null;
         agentConfig = m_snmpConfigDao.getAgentConfig(ipaddress, locationName);
 
-		final OnmsAssetRecord asset = node.getAssetRecord();
 		m_config.getReadLock().lock();
 		try {
 		    for (final AssetField field : m_config.getAssetFieldsForAddress(ipaddress, node.getSysObjectId())) {
     			try {
 				final String value = fetchSnmpAssetString(m_locationAwareSnmpClient, agentConfig, locationName, field.getMibObjs(), field.getFormatString());
-				LOG.debug("doAdd: Setting asset field \" {} \" to value: {}", field.getName(), value);
-    				// Use Spring bean-accessor classes to set the field value
-    				final BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(asset);
-    				try {
-    					wrapper.setPropertyValue(field.getName(), value);
-    				} catch (final BeansException e) {
-					LOG.warn("doAdd: Could not set property \" {} \" on asset object {}", field.getName(), e.getMessage(), e);
-    				}
+					LOG.debug("doAdd: Setting asset field \" {} \" to value: {}", field.getName(), value);
+					node.setAsset(field.getName(), value);
     			} catch (final Throwable t) {
     				// This exception is thrown if the SNMP operation fails or an incorrect number of
     				// parameters is returned by the agent or because of a misconfiguration.
@@ -167,7 +160,6 @@ public class SnmpAssetProvisioningAdapter extends SimplerQueuedProvisioningAdapt
 		} finally {
 		    m_config.getReadLock().unlock();
 		}
-        node.setAssetRecord(asset);
         m_nodeDao.saveOrUpdate(node);
 		m_nodeDao.flush();
 	}
@@ -269,20 +261,13 @@ public class SnmpAssetProvisioningAdapter extends SimplerQueuedProvisioningAdapt
         final String locationName = node.getLocation() != null ? node.getLocation().getLocationName() : null;
         final SnmpAgentConfig agentConfig = m_snmpConfigDao.getAgentConfig(ipaddress, locationName);
 
-		final OnmsAssetRecord asset = node.getAssetRecord();
 		m_config.getReadLock().lock();
 		try {
     		for (AssetField field : m_config.getAssetFieldsForAddress(ipaddress, node.getSysObjectId())) {
     			try {
     				String value = fetchSnmpAssetString(m_locationAwareSnmpClient, agentConfig, locationName, field.getMibObjs(), field.getFormatString());
     				LOG.debug("doUpdate: Setting asset field \" {} \" to value: {}", value, field.getName());
-    				// Use Spring bean-accessor classes to set the field value
-    				BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(asset);
-    				try {
-    					wrapper.setPropertyValue(field.getName(), value);
-    				} catch (BeansException e) {
-					LOG.warn("doUpdate: Could not set property \" {} \" on asset object: {}", field.getName(), e.getMessage(), e);
-    				}
+					node.setAsset(field.getName(), value);
     			} catch (Throwable t) {
     				// This exception is thrown if the SNMP operation fails or an incorrect number of
     				// parameters is returned by the agent or because of a misconfiguration.
@@ -292,7 +277,6 @@ public class SnmpAssetProvisioningAdapter extends SimplerQueuedProvisioningAdapt
 		} finally {
 		    m_config.getReadLock().unlock();
 		}
-		node.setAssetRecord(asset);
 		m_nodeDao.saveOrUpdate(node);
 		m_nodeDao.flush();
 	}

@@ -40,7 +40,6 @@ import org.opennms.features.geolocation.api.Coordinates;
 import org.opennms.features.geolocation.api.GeolocationResolver;
 import org.opennms.netmgt.dao.DatabasePopulator;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.test.JUnitConfigurationEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +79,6 @@ public class GeolocationProvisioningAdapterIT {
     public void canHandleNullGeolocation() throws Exception {
         // Ensure that the geolocation is null
         final OnmsNode node = nodeDao.get(databasePopulator.getNode1().getId());
-        Assert.assertNull(node.getAssetRecord().getGeolocation());
 
         // Mock the geolocation resolution
         final Coordinates coordinates = new Coordinates(-3.179090f, 51.481583f);
@@ -94,16 +92,18 @@ public class GeolocationProvisioningAdapterIT {
         geolocationProvisioningAdapter.updateGeolocation(geolocationResolverMock, node);
 
         // Node should not have been updated
-        Assert.assertNull(node.getAssetRecord().getGeolocation());
+        Assert.assertNull(node.getAsset("longitude"));
+        Assert.assertNull(node.getAsset("latitude"));
 
         // Set a geolocation and resolve coordinates
-        node.getAssetRecord().setGeolocation(new OnmsGeolocation());
-        node.getAssetRecord().getGeolocation().setCity("Cardiff");
+        node.setAsset("longitude", null);
+        node.setAsset("latitude", null);
+        node.setAsset("city", "Cardiff");
         nodeDao.saveOrUpdate(node);
         geolocationProvisioningAdapter.updateGeolocation(geolocationResolverMock, node);
 
         // Node should have been updated
-        Assert.assertEquals(coordinates.getLongitude(), node.getAssetRecord().getGeolocation().getLongitude(), 0.001);
-        Assert.assertEquals(coordinates.getLatitude(), node.getAssetRecord().getGeolocation().getLatitude(), 0.001);
+        Assert.assertEquals(coordinates.getLongitude(), Double.parseDouble(node.getAsset("longitude")), 0.001);
+        Assert.assertEquals(coordinates.getLatitude(), Double.parseDouble(node.getAsset("latitude")), 0.001);
     }
 }

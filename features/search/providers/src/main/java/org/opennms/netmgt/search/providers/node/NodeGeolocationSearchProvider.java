@@ -36,7 +36,6 @@ import org.opennms.core.criteria.Criteria;
 import org.opennms.core.criteria.CriteriaBuilder;
 import org.opennms.core.criteria.restrictions.Restrictions;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.search.api.Contexts;
 import org.opennms.netmgt.search.api.Matcher;
@@ -67,20 +66,10 @@ public class NodeGeolocationSearchProvider implements SearchProvider {
     public SearchResult query(SearchQuery query) {
         final String input = query.getInput();
         final CriteriaBuilder criteriaBuilder = new CriteriaBuilder(OnmsNode.class)
-                .alias("assetRecord", "assetRecord")
-                .alias("assetRecord.geolocation", "geolocation")
-                .and(
-                        Restrictions.isNotNull("assetRecord"),
-                        Restrictions.isNotNull("assetRecord.geolocation"),
-                        Restrictions.or(
-                                Restrictions.ilike("assetRecord.geolocation.address1", QueryUtils.ilike(input)),
-                                Restrictions.ilike("assetRecord.geolocation.address2", QueryUtils.ilike(input)),
-                                Restrictions.ilike("assetRecord.geolocation.city", QueryUtils.ilike(input)),
-                                Restrictions.ilike("assetRecord.geolocation.state", QueryUtils.ilike(input)),
-                                Restrictions.ilike("assetRecord.geolocation.zip", QueryUtils.ilike(input)),
-                                Restrictions.ilike("assetRecord.geolocation.country", QueryUtils.ilike(input))
-                        )
-                )
+                .alias("metaData", "metaData")
+                .and(Restrictions.eq("metaData.context", OnmsNode.NODE_ASSET_CONTEXT),
+                     Restrictions.in("metaData.key", Lists.newArrayList("address1", "address2", "city", "state", "zip", "country")),
+                     Restrictions.ilike("metaData.value", QueryUtils.ilike(input)))
                 .distinct();
         final int totalCount = nodeDao.countMatching(criteriaBuilder.toCriteria());
         final Criteria criteria = criteriaBuilder.orderBy("label").limit(query.getMaxResults()).toCriteria();
@@ -88,14 +77,13 @@ public class NodeGeolocationSearchProvider implements SearchProvider {
         final List<SearchResultItem> results = matchingNodes.stream()
             .map(node -> {
                 final SearchResultItem result = new SearchResultItemBuilder().withOnmsNode(node).build();
-                final OnmsGeolocation geolocation = node.getAssetRecord().getGeolocation();
                 final List<Matcher> matcherList = Lists.newArrayList(
-                        new Matcher("Country", geolocation.getCountry()),
-                        new Matcher("City", geolocation.getCity()),
-                        new Matcher("State", geolocation.getState()),
-                        new Matcher("Zip", geolocation.getZip()),
-                        new Matcher("Address 1", geolocation.getAddress1()),
-                        new Matcher("Address 2", geolocation.getAddress2())
+                        new Matcher("Country", node.getAsset("country")),
+                        new Matcher("City", node.getAsset("city")),
+                        new Matcher("State", node.getAsset("state")),
+                        new Matcher("Zip", node.getAsset("zip")),
+                        new Matcher("Address 1", node.getAsset("address1")),
+                        new Matcher("Address 2", node.getAsset("address2"))
                 );
                 result.addMatches(matcherList, input);
                 return result;
