@@ -118,11 +118,6 @@
     </bean>
     <onmsgi:service interface="org.opennms.netmgt.dao.api.MemoDao" ref="memoDao" />
 
-    <bean id="assetRecordDao" class="org.opennms.netmgt.dao.hibernate.AssetRecordDaoHibernate">
-        <property name="sessionFactory" ref="sessionFactory" />
-    </bean>
-    <onmsgi:service interface="org.opennms.netmgt.dao.api.AssetRecordDao" ref="assetRecordDao" />
-
     <bean id="categoryDao" class="org.opennms.netmgt.dao.hibernate.CategoryDaoHibernate">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
