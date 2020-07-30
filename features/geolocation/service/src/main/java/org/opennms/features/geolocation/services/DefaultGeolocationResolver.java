@@ -43,7 +43,6 @@ import org.opennms.features.geocoder.GeocoderServiceManager;
 import org.opennms.features.geolocation.api.Coordinates;
 import org.opennms.features.geolocation.api.GeolocationResolver;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,10 +70,9 @@ public class DefaultGeolocationResolver implements GeolocationResolver {
         // Lookup all nodes and gather the address string
         final Criteria criteria = new CriteriaBuilder(OnmsNode.class).in("id", nodeIds).toCriteria();
         final Map<Integer, String> nodeIdAddressMap = nodeDao.findMatching(criteria).stream()
-                .filter(n -> getGeoLocation(n) != null)
-                .filter(n -> getGeoLocation(n).getLatitude() == null && getGeoLocation(n).getLongitude() == null)
-                .filter(n -> !Strings.isNullOrEmpty(getGeoLocation(n).asAddressString()))
-                .collect(Collectors.toMap(OnmsNode::getId, n -> n.getAssetRecord().getGeolocation().asAddressString()));
+                .filter(n -> n.getAsset("latitude") == null && n.getAsset("longitude") == null)
+                .filter(n -> !Strings.isNullOrEmpty(n.getGeoLocationAsAddressString()))
+                .collect(Collectors.toMap(OnmsNode::getId, n -> n.getGeoLocationAsAddressString()));
         return resolve(nodeIdAddressMap);
     }
 
@@ -129,12 +127,5 @@ public class DefaultGeolocationResolver implements GeolocationResolver {
             LOG.warn("Error resolving address '{}': An unexpected exception occurred", addressString, ex);
             return null;
         }
-    }
-
-    private static OnmsGeolocation getGeoLocation(OnmsNode node) {
-        if (node != null && node.getAssetRecord() != null && node.getAssetRecord().getGeolocation() != null) {
-            return node.getAssetRecord().getGeolocation();
-        }
-        return null;
     }
 }

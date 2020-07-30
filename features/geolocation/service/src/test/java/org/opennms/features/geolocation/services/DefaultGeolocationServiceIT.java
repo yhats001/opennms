@@ -114,8 +114,8 @@ public class DefaultGeolocationServiceIT {
     public void verifyMerging() {
         // Set coordinates for all
         nodeDao.findAll().forEach(n -> {
-            n.getAssetRecord().getGeolocation().setLongitude(coordinates.getLongitude());
-            n.getAssetRecord().getGeolocation().setLatitude(coordinates.getLatitude());
+            n.setAsset("longitude",String.valueOf(coordinates.getLongitude()));
+            n.setAsset("latitude",String.valueOf(coordinates.getLatitude()));
             nodeDao.saveOrUpdate(n);
         });
         // Query

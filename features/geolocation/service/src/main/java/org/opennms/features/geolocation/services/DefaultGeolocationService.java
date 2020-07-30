@@ -51,7 +51,6 @@ import org.opennms.features.status.api.node.strategy.NodeStatusCalculatorConfig;
 import org.opennms.features.status.api.node.strategy.Status;
 import org.opennms.netmgt.dao.api.GenericPersistenceAccessor;
 import org.opennms.netmgt.model.OnmsCategory;
-import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsSeverity;
 
@@ -73,9 +72,9 @@ public class DefaultGeolocationService implements GeolocationService {
 
         final List<OnmsNode> nodes = getNodes(query);
         final List<GeolocationInfo> nodesWithCoordinates = nodes.stream()
-                .filter(n -> geoLocation(n) != null && geoLocation(n).getLongitude() != null && geoLocation(n).getLatitude() != null)
+                .filter(n -> n.getAsset("longitude") != null && n.getAsset("latitude") != null)
                 // Avoid including -inf values, just in case. See NMS-9338
-                .filter(n -> geoLocation(n).getLatitude() != Double.NEGATIVE_INFINITY && geoLocation(n).getLongitude() != Double.NEGATIVE_INFINITY)
+                .filter(n -> Double.valueOf(n.getAsset("longitude"))!= Double.NEGATIVE_INFINITY && Double.valueOf(n.getAsset("latitude")) != Double.NEGATIVE_INFINITY)
                 .map(this::convert)
                 .collect(Collectors.toList());
 
@@ -112,14 +111,10 @@ public class DefaultGeolocationService implements GeolocationService {
     private GeolocationInfo convert(OnmsNode node) {
         GeolocationInfo geolocationInfo = new GeolocationInfo();
 
-        // Coordinates
-        OnmsGeolocation onmsGeolocation = geoLocation(node);
-        if (onmsGeolocation != null) {
-            geolocationInfo.setAddressInfo(toAddressInfo(onmsGeolocation));
-            if (onmsGeolocation.getLongitude() != null && onmsGeolocation.getLatitude() != null) {
-                geolocationInfo.setCoordinates(new Coordinates(onmsGeolocation.getLongitude(), onmsGeolocation.getLatitude()));
+        geolocationInfo.setAddressInfo(toAddressInfo(node));
+            if (node.getAsset("longitude")!= null && node.getAsset("latitude") != null) {
+                geolocationInfo.setCoordinates(new Coordinates(Double.valueOf(node.getAsset("longitude")), Double.valueOf(node.getAsset("latitude"))));
             }
-        }
 
         // NodeInfo
         NodeInfo nodeInfo = new NodeInfo();
@@ -129,10 +124,8 @@ public class DefaultGeolocationService implements GeolocationService {
         nodeInfo.setForeignSource(node.getForeignSource());
         nodeInfo.setForeignId(node.getForeignId());
         nodeInfo.setLocation(node.getLocation().getLocationName());
-        if (node.getAssetRecord() != null) {
-            nodeInfo.setDescription(node.getAssetRecord().getDescription());
-            nodeInfo.setMaintcontract(node.getAssetRecord().getMaintcontract());
-        }
+        nodeInfo.setDescription(node.getAsset("description"));
+        nodeInfo.setMaintcontract(node.getAsset("maintContract"));
         if (node.getPrimaryInterface() != null) {
             nodeInfo.setIpAddress(InetAddressUtils.str(node.getPrimaryInterface().getIpAddress()));
         }
@@ -181,23 +174,16 @@ public class DefaultGeolocationService implements GeolocationService {
         final Status status = nodeStatusCalculator.calculateStatus(nodeStatusCalculatorConfig);
         return status;
     }
-
-    private static OnmsGeolocation geoLocation(OnmsNode node) {
-        if (node != null && node.getAssetRecord() != null && node.getAssetRecord().getGeolocation() != null) {
-            return node.getAssetRecord().getGeolocation();
-        }
-        return null;
-    }
-
-    private static AddressInfo toAddressInfo(OnmsGeolocation input) {
+    
+    private static AddressInfo toAddressInfo(OnmsNode input) {
         if (input != null) {
             AddressInfo addressInfo = new AddressInfo();
-            addressInfo.setAddress1(input.getAddress1());
-            addressInfo.setAddress2(input.getAddress2());
-            addressInfo.setCity(input.getCity());
-            addressInfo.setCountry(input.getCountry());
-            addressInfo.setState(input.getState());
-            addressInfo.setZip(input.getZip());
+            addressInfo.setAddress1(input.getAsset("address1"));
+            addressInfo.setAddress2(input.getAsset("address2"));
+            addressInfo.setCity(input.getAsset("city"));
+            addressInfo.setCountry(input.getAsset("country"));
+            addressInfo.setState(input.getAsset("state"));
+            addressInfo.setZip(input.getAsset("zip"));
             return addressInfo;
         }
         return null;
