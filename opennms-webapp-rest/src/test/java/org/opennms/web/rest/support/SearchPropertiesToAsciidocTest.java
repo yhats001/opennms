@@ -30,7 +30,6 @@ package org.opennms.web.rest.support;
 
 import static org.opennms.web.rest.support.SearchProperties.ALARM_PROPERTIES;
 import static org.opennms.web.rest.support.SearchProperties.APPLICATION_PROPERTIES;
-import static org.opennms.web.rest.support.SearchProperties.ASSET_RECORD_PROPERTIES;
 import static org.opennms.web.rest.support.SearchProperties.CATEGORY_PROPERTIES;
 import static org.opennms.web.rest.support.SearchProperties.DIST_POLLER_PROPERTIES;
 import static org.opennms.web.rest.support.SearchProperties.EVENT_PARAMETER_PROPERTIES;
@@ -81,13 +80,6 @@ public class SearchPropertiesToAsciidocTest {
 
 		System.out.println(String.format(HEADER_FORMAT, "application", "Application"));
 		for (SearchProperty prop : APPLICATION_PROPERTIES) {
-			System.out.println(String.format(ROW_FORMAT, prop.getId(), toPrettyType(prop.type), nameAndValues(prop)));
-		}
-		System.out.println(FOOTER_FORMAT);
-
-		// Expand the first column width here to accommodate long property names
-		System.out.println(String.format(HEADER_FORMAT, "asset", "Asset").replace("2m,1,3", "3m,1,3"));
-		for (SearchProperty prop : SearchProperties.withAliasPrefix(Aliases.assetRecord, null, ASSET_RECORD_PROPERTIES)) {
 			System.out.println(String.format(ROW_FORMAT, prop.getId(), toPrettyType(prop.type), nameAndValues(prop)));
 		}
 		System.out.println(FOOTER_FORMAT);

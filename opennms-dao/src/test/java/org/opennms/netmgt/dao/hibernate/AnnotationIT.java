@@ -44,7 +44,6 @@ import org.opennms.core.test.OpenNMSJUnit4ClassRunner;
 import org.opennms.core.test.db.annotations.JUnitTemporaryDatabase;
 import org.opennms.netmgt.dao.DatabasePopulator;
 import org.opennms.netmgt.model.OnmsAlarm;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
 import org.opennms.netmgt.model.OnmsDistPoller;
 import org.opennms.netmgt.model.OnmsEvent;
@@ -130,20 +129,6 @@ public class AnnotationIT implements InitializingBean {
 				assertNotNull("type should not be null: " + entity.toString(), entity.getType());
 			}
 
-		});
-	}
-
-	@Test
-	@Transactional
-	public void testAssetRecord() {
-		assertLoadAll(OnmsAssetRecord.class, new EmptyChecker<OnmsAssetRecord>() {
-
-			@Override
-			public void check(OnmsAssetRecord entity) {
-				assertNotNull("node should not be null: " + entity.toString(), entity.getNode());
-				assertNotNull("node label should not be null: " + entity.toString(), entity.getNode().getLabel());
-			}
-			
 		});
 	}
 

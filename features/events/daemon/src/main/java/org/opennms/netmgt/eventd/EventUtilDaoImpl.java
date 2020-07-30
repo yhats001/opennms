@@ -48,7 +48,6 @@ import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.dao.api.HwEntityDao;
 import org.opennms.netmgt.dao.api.IpInterfaceDao;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsHwEntity;
 import org.opennms.netmgt.model.OnmsIpInterface;
 import org.opennms.netmgt.model.OnmsNode;
@@ -75,8 +74,6 @@ public class EventUtilDaoImpl extends AbstractEventUtil {
 	private final Pattern ASSET_PARM_PATTERN = Pattern.compile("^asset\\[(.*)\\]$");
 
 	private final Pattern HW_PARM_PATTERN = Pattern.compile("^hardware\\[(.*):(.*)\\]$");
-
-	private final static Map<String, PropertyDescriptor> assetDescriptorsByName = getDescriptorsForStrings(OnmsAssetRecord.class);
 
 	private final static Map<String, PropertyDescriptor> hwEntityDescriptorsByName = getDescriptorsForStrings(OnmsHwEntity.class);
 
