@@ -9,7 +9,6 @@
      <property name="ipInterfaceDao" ref="ipInterfaceDao" />
      <property name="snmpInterfaceDao" ref="snmpInterfaceDao" />
      <property name="monitoredServiceDao" ref="monitoredServiceDao" />
-     <property name="assetRecordDao" ref="assetRecordDao" />
      <property name="categoryDao" ref="categoryDao" />
      <property name="outageDao" ref="outageDao" />
      <property name="eventDao" ref="eventDao" />

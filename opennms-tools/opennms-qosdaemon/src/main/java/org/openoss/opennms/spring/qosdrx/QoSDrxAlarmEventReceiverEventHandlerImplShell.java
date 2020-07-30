@@ -37,7 +37,6 @@ import javax.oss.fm.monitor.NotifyNewAlarmEvent;
 import javax.oss.util.IRPEvent;
 
 import org.opennms.netmgt.dao.api.AlarmDao;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.openoss.ossj.fm.monitor.spring.AlarmEventReceiverEventHandler;
 import org.openoss.ossj.fm.monitor.spring.OssBeanAlarmEventReceiver;
@@ -62,23 +61,6 @@ public class QoSDrxAlarmEventReceiverEventHandlerImplShell implements AlarmEvent
 	// ************************
 
 	
-	/**
-	 * Used to obtain opennms asset information for inclusion in alarms
-	 * @see org.opennms.netmgt.dao.api.AssetRecordDao
-	 */
-	@SuppressWarnings("unused")
-	private static AssetRecordDao _assetRecordDao;
-
-
-	/**
-	 * Used by Spring Application context to pass in AssetRecordDao
-	 *
-	 * @param ar a {@link org.opennms.netmgt.dao.api.AssetRecordDao} object.
-	 */
-	public  void setAssetRecordDao(AssetRecordDao ar){
-		_assetRecordDao = ar;
-	}
-
 	/**
 	 * Used to obtain opennms node information for inclusion in alarms
 	 * @see org.opennms.netmgt.dao.api.NodeDao 

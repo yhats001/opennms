@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.opennms.netmgt.daemon.AbstractServiceDaemon;
 import org.opennms.netmgt.dao.api.AlarmDao;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.openoss.ossj.fm.monitor.spring.OssBeanRunner;
 import org.openoss.ossj.fm.monitor.spring.OssBean;
@@ -69,23 +68,6 @@ public class QoSDrx extends AbstractServiceDaemon {
 	 */
 	public void setInitialOssBeanRunner(OssBeanRunner initialOssBeanRunner) {
 		this.initialOssBeanRunner = initialOssBeanRunner;
-	}
-
-	/**
-	 * Used to obtain opennms asset information for inclusion in alarms
-	 * @see org.opennms.netmgt.dao.api.AssetRecordDao
-	 */
-	@SuppressWarnings("unused")
-	private static AssetRecordDao _assetRecordDao;
-
-
-	/**
-	 * Used by Spring Application context to pass in AssetRecordDao
-	 *
-	 * @param ar a {@link org.opennms.netmgt.dao.api.AssetRecordDao} object.
-	 */
-	public  void setAssetRecordDao(AssetRecordDao ar){
-		_assetRecordDao = ar;
 	}
 
 	/**

@@ -24,7 +24,6 @@
 			<property name="nodeDao" ref="nodeDao" />
 			<property name="eventIpcManager" ref="eventIpcManager" />
 			<property name="alarmDao" ref="alarmDao" />
-			<property name="assetRecordDao" ref="assetRecordDao" />
 			<property name="alarmListConnectionManager" ref="AlarmListConnectionManagerSpringImpl" />
 			<property name="onmsAlarmOssjMapper" ref="onmsAlarmOssjMapper" />
 			<property name="ossDao" ref="ossDao" />
@@ -35,7 +34,6 @@
 			<property name="nodeDao" ref="nodeDao" />
 			<property name="eventIpcManager" ref="eventIpcManager" />
 			<property name="alarmDao" ref="alarmDao" />
-			<property name="assetRecordDao" ref="assetRecordDao" />
 			<property name="alarmListConnectionManager" ref="AlarmListConnectionManagerSpringImpl" />
 			<property name="onmsAlarmOssjMapper" ref="onmsAlarmOssjMapper" />
 			<property name="ossDao" ref="ossDao"	/>		
@@ -125,7 +123,6 @@
 		class="org.openoss.opennms.spring.dao.OssDaoOpenNMSImpl">
 	   <property name="nodeDao" ref="nodeDao" />
 	   <property name="alarmDao" ref="alarmDao" />
-	   <property name="assetRecordDao" ref="assetRecordDao" />
 	   <property name="dataSource" ref="dataSource" />
 	</bean>
 	-->
@@ -135,7 +132,6 @@
 	    class="org.openoss.opennms.spring.dao.OssDaoOpenNMSImplSingleton" >
 		<property name="nodeDao" ref="nodeDao" />
 	    <property name="alarmDao" ref="alarmDao" />
-	    <property name="assetRecordDao" ref="assetRecordDao" />
 	    <property name="dataSource" ref="dataSource" />
 	    <property name="transTemplate" ref="transactionTemplate" />
 	</bean>
@@ -148,7 +144,6 @@
 	<bean id="onmsAlarmOssjMapper"
 		class="org.openoss.opennms.spring.dao.OnmsAlarmOssjMapper">
 		<property name="nodeDao" ref="nodeDao" />
-		<property name="assetRecordDao" ref="assetRecordDao" />
 		<property name="ossDao" ref="ossDao" />
 	    <property name="distPollerDao" ref="distPollerDao" />
 	</bean>	

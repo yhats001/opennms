@@ -164,23 +164,6 @@ public class QoSDimpl2 extends AbstractServiceDaemon implements EventListener, Q
 	}
 
 	/**
-	 * Used to obtain opennms asset information for inclusion in alarms
-	 * @see org.opennms.netmgt.dao.api.AssetRecordDao
-	 */
-	@SuppressWarnings("unused")
-	private AssetRecordDao assetRecordDao;
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * Used by Spring Application context to pass in AssetRecordDao
-	 */
-        @Override
-	public void setAssetRecordDao(AssetRecordDao ar){
-		assetRecordDao = ar;
-	}
-
-	/**
 	 * Used to obtain opennms node information for inclusion in alarms
 	 * @see org.opennms.netmgt.dao.api.NodeDao 
 	 */

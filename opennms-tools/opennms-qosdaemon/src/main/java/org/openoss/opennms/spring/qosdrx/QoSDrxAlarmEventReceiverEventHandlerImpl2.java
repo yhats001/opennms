@@ -42,7 +42,6 @@ import javax.oss.util.IRPEvent;
 
 import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.dao.api.AlarmDao;
-import org.opennms.netmgt.dao.api.AssetRecordDao;
 import org.opennms.netmgt.dao.api.DistPollerDao;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.model.OnmsAlarm;
@@ -123,24 +122,6 @@ public class QoSDrxAlarmEventReceiverEventHandlerImpl2 implements AlarmEventRece
 			return;
 		}
 		else throw new IllegalArgumentException("QoSDrxAlarmEventReceiverEventHandlerImpl().setalarmUpdateBehaviour(): Unknown value for alarmUpdateBehaviour:"+_alarmUpdateBehaviour);
-	}
-
-
-	/**
-	 * Used to obtain opennms asset information for inclusion in alarms
-	 * @see org.opennms.netmgt.dao.api.AssetRecordDao
-	 */
-	@SuppressWarnings("unused")
-	private AssetRecordDao _assetRecordDao;
-
-
-	/**
-	 * Used by Spring Application context to pass in AssetRecordDao
-	 *
-	 * @param ar a {@link org.opennms.netmgt.dao.api.AssetRecordDao} object.
-	 */
-	public  void setAssetRecordDao(AssetRecordDao ar){
-		_assetRecordDao = ar;
 	}
 
 	/**

@@ -60,9 +60,6 @@
     <bean id="applicationDao" class="org.opennms.netmgt.dao.mock.MockApplicationDao" />
     <onmsgi:service interface="org.opennms.netmgt.dao.api.ApplicationDao" ref="applicationDao" />
 
-    <bean id="assetRecordDao" class="org.opennms.netmgt.dao.mock.MockAssetRecordDao" />
-    <onmsgi:service interface="org.opennms.netmgt.dao.api.AssetRecordDao" ref="assetRecordDao" />
-
     <bean id="categoryDao" class="org.opennms.netmgt.dao.mock.MockCategoryDao" />
     <onmsgi:service interface="org.opennms.netmgt.dao.api.CategoryDao" ref="categoryDao" />
 
@@ -218,7 +215,6 @@
         <property name="ipInterfaceDao" ref="ipInterfaceDao" />
         <property name="snmpInterfaceDao" ref="snmpInterfaceDao" />
         <property name="monitoredServiceDao" ref="monitoredServiceDao" />
-        <property name="assetRecordDao" ref="assetRecordDao" />
         <property name="categoryDao" ref="categoryDao" />
         <property name="outageDao" ref="outageDao" />
         <property name="eventDao" ref="eventDao" />
