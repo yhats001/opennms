@@ -562,14 +562,14 @@ public class NodeDaoIT implements InitializingBean {
     public void testCB() {
         CriteriaBuilder cb = new CriteriaBuilder(OnmsNode.class);
         //cb.alias("assetRecord", "asset").match("any").ilike("label", "%ode%").ilike("sysDescription", "%abc%").ilike("asset.comment", "%xyz%");
-        cb.alias("metaData", "m").match("any").ilike("label", "%ode%").ilike("sysDescription", "%abc%").eq("m.context", OnmsNode.NODE_ASSET_CONTEXT).eq("m.key", "comment").ilike("m.value", "%xyz%");
+        cb.join("metaData", "m", JoinType.LEFT_JOIN).match("any").ilike("label", "%ode%").ilike("sysDescription", "%abc%").eq("m.context", OnmsNode.NODE_ASSET_CONTEXT).eq("m.key", "comment").ilike("m.value", "%xyz%");
         List<OnmsNode> nodes = m_nodeDao.findMatching(cb.toCriteria());
         System.err.println("Nodes found: "+nodes.size());
         assertEquals(6, nodes.size());
         
         cb = new CriteriaBuilder(OnmsNode.class);
         //cb.alias("assetRecord", "asset").match("any").ilike("label", "%alt%").ilike("sysDescription", "%abc%").ilike("asset.comment", "%xyz%");
-        cb.alias("metaData", "m").match("any").ilike("label", "%alt%").ilike("sysDescription", "%abc%").eq("m.context", OnmsNode.NODE_ASSET_CONTEXT).eq("m.key", "comment").ilike("m.value", "%xyz%");
+        cb.join("metaData", "m", JoinType.LEFT_JOIN).match("any").ilike("label", "%alt%").ilike("sysDescription", "%abc%").eq("m.context", OnmsNode.NODE_ASSET_CONTEXT).eq("m.key", "comment").ilike("m.value", "%xyz%");
         nodes = m_nodeDao.findMatching(cb.toCriteria());
         System.err.println("Nodes found: "+nodes.size());
         assertEquals(2, nodes.size());
