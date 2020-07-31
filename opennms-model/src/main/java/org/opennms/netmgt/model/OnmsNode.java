@@ -96,6 +96,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableMap;
 
 
 /**
@@ -115,6 +116,73 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     private static final long serialVersionUID = 5326410037533354861L;
     private static final Logger LOG = LoggerFactory.getLogger(OnmsNode.class);
     public static final String NODE_ASSET_CONTEXT = "assets";
+
+    public final static Map<String, String> LEGACY_ASSET_MAPPING = ImmutableMap.<String,String>builder()
+            .put("category", "category")
+            .put("manufacturer", "manufacturer")
+            .put("vendor", "vendor")
+            .put("modelnumber", "modelNumber")
+            .put("serialnumber", "serialNumber")
+            .put("description", "description")
+            .put("circuitid", "circuitid")
+            .put("assetnumber", "assetNumber")
+            .put("operatingsystem", "operatingSystem")
+            .put("rack", "rack")
+            .put("slot", "slot")
+            .put("port", "port")
+            .put("region", "region")
+            .put("division", "division")
+            .put("department", "department")
+            .put("address1", "address1")
+            .put("address2", "address2")
+            .put("city", "city")
+            .put("state", "state")
+            .put("zip", "zip")
+            .put("building", "building")
+            .put("floor", "floor")
+            .put("room", "room")
+            .put("vendorphone", "vendorPhone")
+            .put("vendorfax", "vendorFax")
+            .put("vendorassetnumber", "vendorAssetNumber")
+            .put("userlastmodified", "userLastModified")
+            .put("lastmodifieddate", "lastModifiedDate")
+            .put("dateinstalled", "dateInstalled")
+            .put("lease", "lease")
+            .put("leaseexpires", "leaseExpires")
+            .put("supportphone", "supportPhone")
+            .put("maintcontract", "maintContract")
+            .put("maintcontractexpires", "maintContractExpires")
+            .put("displaycategory", "displayCategory")
+            .put("notifycategory", "notifyCategory")
+            .put("pollercategory", "pollerCategory")
+            .put("thresholdcategory", "thresholdCategory")
+            .put("comment", "comment")
+            .put("managedobjectinstance", "managedObjectInstance")
+            .put("managedobjecttype", "managedObjectType")
+            .put("username", "username")
+            .put("password", "password")
+            .put("enable", "enable")
+            .put("autoenable", "autoEnable")
+            .put("connection", "connection")
+            .put("cpu", "cpu")
+            .put("ram", "ram")
+            .put("storagectrl", "storageCtrl")
+            .put("hdd1", "hdd1")
+            .put("hdd2", "hdd2")
+            .put("hdd3", "hdd3")
+            .put("hdd4", "hdd4")
+            .put("hdd5", "hdd5")
+            .put("hdd6", "hdd6")
+            .put("numpowersupplies", "numPowerSupplies")
+            .put("inputpower", "inputPower")
+            .put("additionalhardware", "additionalHardware")
+            .put("admin", "admin")
+            .put("snmpcommunity", "snmpCommunity")
+            .put("rackunitheight", "rackUnitHeight")
+            .put("country", "country")
+            .put("longitude", "longitude")
+            .put("latitude", "latitude")
+            .build();
 
     /** identifier field */
     private Integer m_id;
