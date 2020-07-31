@@ -481,7 +481,7 @@ public class NodeDaoIT implements InitializingBean {
 
     private static void assertNodeEquals(OnmsNode expected, OnmsNode actual) throws Exception {
         assertEquals("Unexpected nodeId", expected.getId(), actual.getId());
-        String[] properties = { "id", "label", "labelSource", "assetRecord.assetNumber", "location", "sysContact", "sysName", "sysObjectId" };
+        String[] properties = { "id", "label", "labelSource", "location", "sysContact", "sysName", "sysObjectId" };
         assertPropertiesEqual(properties, expected, actual);
 
         assertInterfaceSetsEqual(expected.getIpInterfaces(), actual.getIpInterfaces());
