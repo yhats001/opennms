@@ -137,7 +137,14 @@ public class EventUtilDaoImpl extends AbstractEventUtil {
         }
         final String assetField = matcher.group(1);
 
-        return nodeDao.get((int)nodeId).getAsset(assetField);
+        final OnmsNode node = nodeDao.get((int) nodeId);
+
+        String value = node.getAsset(assetField);
+        if (value != null) {
+            return value;
+        }
+
+        return node.getAsset(OnmsNode.LEGACY_ASSET_MAPPING.get(assetField.toLowerCase()));
     }
 
     @Override
