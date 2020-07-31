@@ -135,7 +135,7 @@ public class EventUtilDaoImpl extends AbstractEventUtil {
             LOG.warn("Unsupported asset field parameter '{}'.", parm);
             return null;
         }
-        final String assetField = matcher.group(1).toLowerCase();
+        final String assetField = matcher.group(1);
 
         return nodeDao.get((int)nodeId).getAsset(assetField);
     }
