@@ -124,7 +124,7 @@ public class MonitoredServiceDaoHibernate extends AbstractDaoHibernate<OnmsMonit
         		"left join fetch svc.serviceType " +
         		"left join fetch svc.ipInterface as ip " +
         		"left join fetch ip.node as node " +
-        		"left join fetch node.assetRecord " +
+        		"left join fetch node.metaData as m " +
         		"where (svc.status is null or svc.status not in ('F','U','D'))");
     }
 

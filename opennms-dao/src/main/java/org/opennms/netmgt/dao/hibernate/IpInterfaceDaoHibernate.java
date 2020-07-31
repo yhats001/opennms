@@ -113,7 +113,7 @@ public class IpInterfaceDaoHibernate extends AbstractDaoHibernate<OnmsIpInterfac
         return find("select distinct ipInterface " +
                     "from OnmsIpInterface as ipInterface " +
                     "left join fetch ipInterface.node as node " +
-                    "left join fetch node.assetRecord " +
+                    "left join fetch node.metaData as m " +
                     "left join fetch ipInterface.node.snmpInterfaces as snmpIf " +
                     "left join fetch snmpIf.ipInterfaces " +
                     "join ipInterface.monitoredServices as monSvc " +
