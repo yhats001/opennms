@@ -92,12 +92,7 @@ public class DefaultGeolocationService implements GeolocationService {
     }
 
     private List<OnmsNode> getNodes(GeolocationQuery query) {
-        CriteriaBuilder criteriaBuilder = new CriteriaBuilder(OnmsNode.class)
-                .alias("assetRecord", "assetRecord")
-                .and(
-                    Restrictions.isNotNull("assetRecord"),
-                    Restrictions.isNotNull("assetRecord.geolocation")
-                );
+        CriteriaBuilder criteriaBuilder = new CriteriaBuilder(OnmsNode.class);
         if (query.getLocation() != null) {
             criteriaBuilder.and(Restrictions.eq("location", query.getLocation()));
         }
