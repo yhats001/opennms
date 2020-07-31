@@ -62,7 +62,11 @@ public abstract class ParameterSubstitutingMonitor extends AbstractServiceMonito
     private static final Supplier<NodeDao> nodeDao = Suppliers.memoize(() -> BeanUtils.getBean("daoContext", "nodeDao", NodeDao.class));
     static {
         StringBuilder patternBuilder = new StringBuilder();
-        patternBuilder.append(".*[{](ipAddr(?:ess)?|nodeId|nodeLabel|foreignId|foreignSource)[}].*");
+        patternBuilder.append(".*[{](ipAddr(?:ess)?|nodeId|nodeLabel|foreignId|foreignSource");
+        for (final String assetField : OnmsNode.LEGACY_ASSET_MAPPING.keySet()) {
+            patternBuilder.append(assetField);
+        }
+        patternBuilder.append(")[}].*");
         substitutionPattern = Pattern.compile(patternBuilder.toString());
 
         Pattern p = Pattern.compile("(.*)[{]ipAddr(?:ess)?[}](.*)");
@@ -131,8 +135,9 @@ public abstract class ParameterSubstitutingMonitor extends AbstractServiceMonito
                     LOG.debug("attempting to add node asset property {}", m.group(1));
                     OnmsNode node = nodeDao.get().get(svc.getNodeId());
                     if (node != null) {
-                        if (node.getAsset(m.group(1)) != null) {
-                            sb.append(node.getAsset(m.group(1)));
+                        final String value = node.getAsset(OnmsNode.LEGACY_ASSET_MAPPING.get(m.group(1)));
+                        if (value != null) {
+                            sb.append(value);
                         }
                     }
             }
