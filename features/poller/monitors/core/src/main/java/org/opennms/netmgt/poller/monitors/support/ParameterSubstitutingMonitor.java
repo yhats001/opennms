@@ -64,7 +64,8 @@ public abstract class ParameterSubstitutingMonitor extends AbstractServiceMonito
         StringBuilder patternBuilder = new StringBuilder();
         patternBuilder.append(".*[{](ipAddr(?:ess)?|nodeId|nodeLabel|foreignId|foreignSource");
         for (final String assetField : OnmsNode.LEGACY_ASSET_MAPPING.keySet()) {
-            patternBuilder.append(assetField);
+            patternBuilder.append("|").append(assetField);
+            subPatterns.put(assetField, Pattern.compile("(.*)[{]" + assetField + "[}](.*)"));
         }
         patternBuilder.append(")[}].*");
         substitutionPattern = Pattern.compile(patternBuilder.toString());
