@@ -165,7 +165,6 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
     public OnmsNode getHierarchy(Integer id) {
         OnmsNode node = findUnique(
                                    "select distinct n from OnmsNode as n "
-                                           + "left join fetch n.assetRecord "
                                            + "where n.id = ?", id);
 
         initialize(node.getIpInterfaces());
@@ -198,8 +197,7 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
     @Override
     public List<OnmsNode> findAllByVarCharAssetColumn(
                                                       String columnName, String columnValue) {
-        return find("from OnmsNode as n where n.assetRecord." + columnName
-                    + " = ?", columnValue);
+        return find("from OnmsNode as n left join metaData m where m.context = ? and m.key = ? and m.value = ?", OnmsNode.NODE_ASSET_CONTEXT, columnName, columnValue);
     }
 
     /** {@inheritDoc} */
@@ -210,13 +208,13 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
 
         return find("select distinct n from OnmsNode as n "
                 + "join n.categories as c "
-                + "left join fetch n.assetRecord "
+                + "left join fetch n.metaData as m "
                 + "left join fetch n.ipInterfaces as ipInterface "
                 + "left join fetch ipInterface.monitoredServices as monSvc "
                 + "left join fetch monSvc.serviceType "
                 + "left join fetch monSvc.currentOutages "
-                + "where n.assetRecord." + columnName + " = ? "
-                + "and c.name in ("+categoryListToNameList(categories)+")", columnValue);
+                + "where m.context = ? and m.key = ? and m.value = ? "
+                + "and c.name in ("+categoryListToNameList(categories)+")", OnmsNode.NODE_ASSET_CONTEXT, columnName, columnValue);
     }
 
     /** {@inheritDoc} */
@@ -224,7 +222,7 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
     public List<OnmsNode> findByCategory(OnmsCategory category) {
         return find("select distinct n from OnmsNode as n "
                 + "join n.categories c "
-                + "left join fetch n.assetRecord "
+                + "left join fetch n.metaData as m "
                 + "left join fetch n.ipInterfaces as ipInterface "
                 + "left join fetch ipInterface.monitoredServices as monSvc "
                 + "left join fetch monSvc.serviceType "
@@ -248,8 +246,8 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
     public List<OnmsNode> findAllByCategoryList(
                                                 Collection<OnmsCategory> categories) {
         return find("select distinct n from OnmsNode as n "
-                + "join n.categories c " 
-                + "left join fetch n.assetRecord "
+                + "join n.categories c "
+                + "left join fetch n.metaData as m "
                 + "left join fetch n.ipInterfaces as ipInterface "
                 + "left join fetch n.snmpInterfaces as snmpIface"
                 + "left join fetch ipInterface.monitoredServices as monSvc "
@@ -272,7 +270,7 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
                 return (List<OnmsNode>)session.createQuery("select distinct n from OnmsNode as n "
                         + "join n.categories c1 "
                         + "join n.categories c2 "
-                        + "left join fetch n.assetRecord "
+                        + "left join fetch n.metaData as m "
                         + "left join fetch n.ipInterfaces as iface "
                         + "left join fetch n.snmpInterfaces as snmpIface"
                         + "left join fetch iface.monitoredServices as monSvc "
