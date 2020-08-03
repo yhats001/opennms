@@ -43,7 +43,6 @@ import static org.opennms.topologies.service.api.EdgeMockUtil.createEdge;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -68,7 +67,6 @@ import org.opennms.netmgt.model.OnmsAlarm;
 import org.opennms.netmgt.model.OnmsEvent;
 import org.opennms.netmgt.model.OnmsEventParameter;
 import org.opennms.netmgt.model.OnmsIpInterface;
-import org.opennms.netmgt.model.OnmsMetaData;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsSnmpInterface;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
@@ -269,6 +267,8 @@ public class ModelMappersTest {
         String locationName = "test.location";
         onmsNode.setLocation(new OnmsMonitoringLocation(locationName, null));
 
+        onmsNode.addMetaData("test.context", "test.key", "test.value");
+
         onmsNode.setAsset("vendor","test.vendor");
         onmsNode.setAsset("modelNumber","test.model");
         onmsNode.setAsset("description","test.description");
@@ -289,13 +289,6 @@ public class ModelMappersTest {
         onmsNode.setAsset("longitude","100.0");
         onmsNode.setAsset("latitude","200.0");
 
-        OnmsMetaData onmsMetaData = new OnmsMetaData();
-        onmsMetaData.setContext("test.context");
-        onmsMetaData.setKey("test.key");
-        onmsMetaData.setValue("test.value");
-        List<OnmsMetaData> metaDataList = Collections.singletonList(onmsMetaData);
-        onmsNode.setMetaData(metaDataList);
-
         OnmsSnmpInterface onmsSnmpInterface = new OnmsSnmpInterface();
         onmsSnmpInterface.setIfDescr("test.ifdescr");
         onmsSnmpInterface.setIfName("test.ifname");
@@ -305,7 +298,7 @@ public class ModelMappersTest {
         OnmsIpInterface onmsIpInterface = new OnmsIpInterface();
         onmsIpInterface.setIpAddress(InetAddress.getLocalHost());
         onmsIpInterface.setSnmpInterface(onmsSnmpInterface);
-        onmsIpInterface.setMetaData(metaDataList);
+        onmsIpInterface.addMetaData("test.context", "test.key", "test.value");
         onmsNode.setIpInterfaces(Collections.singleton(onmsIpInterface));
 
         Node node = ModelMappers.toNode(onmsNode);
