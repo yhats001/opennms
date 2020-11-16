@@ -127,12 +127,13 @@ public class ApplicationDaoHibernate extends AbstractDaoHibernate<OnmsApplicatio
 				"where alarm.severity != " + OnmsSeverity.CLEARED.getId() + " and alarm.reductionKey in :keys " +
 				"group by alarm.node.id, alarm.ipAddr, alarm.serviceType.id";
 
-		// Avoid querying the database if unnecessary
-		if (services.isEmpty()) {
-			return Lists.newArrayList();
-		}
 		// Build query based on reduction keys
 		final Set<String> reductionKeys = services.stream().flatMap(service -> ReductionKeyHelper.getNodeLostServiceFromPerspectiveReductionKeys(service).stream()).collect(Collectors.toSet());
+
+		// Avoid querying the database if unnecessary
+		if (services.isEmpty() || reductionKeys.isEmpty()) {
+			return Lists.newArrayList();
+		}
 
 		// Convert to object
 		final List<Object[][]> perspectiveAlarmsForService = (List<Object[][]>) getHibernateTemplate().findByNamedParam(sql, new String[]{"keys"}, new Object[]{reductionKeys.toArray()});
