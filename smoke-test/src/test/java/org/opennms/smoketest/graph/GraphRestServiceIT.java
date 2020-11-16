@@ -34,6 +34,9 @@ import static io.restassured.RestAssured.preemptive;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -75,14 +78,17 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
 
     private static final String CONTAINER_ID = "test";
 
-    private final RestClient restClient = stack.opennms().getRestClient();
-    private final KarafShell karafShell = new KarafShell(stack.opennms().getSshAddress());
+    private final RestClient restClient = new RestClient(new URL( "http://localhost:8980"));
+    private final KarafShell karafShell = new KarafShell(InetSocketAddress.createUnresolved("127.0.0.1", 8101));
     private GraphmlDocument graphmlDocument;
+
+    public GraphRestServiceIT() throws MalformedURLException {
+    }
 
     @Before
     public void setUp() {
         RestAssured.baseURI = stack.opennms().getBaseUrlExternal().toString();
-        RestAssured.port = stack.opennms().getWebPort();
+        RestAssured.port = 8980;
         RestAssured.basePath = "/opennms/api/v2/graphs";
         RestAssured.authentication = preemptive().basic(BASIC_AUTH_USERNAME, BASIC_AUTH_PASSWORD);
 
@@ -460,7 +466,7 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
         final List<OnmsMonitoredService> services = Lists.newArrayList(application.getMonitoredServices());
         final int nodeId1 = services.get(0).getNodeId();
         final int nodeId2 = services.get(1).getNodeId();
-        final Event nodeLostServiceEvent = new EventBuilder(EventConstants.NODE_LOST_SERVICE_EVENT_UEI, getClass().getSimpleName())
+        final Event nodeLostServiceEvent = new EventBuilder(EventConstants.PERSPECTIVE_NODE_LOST_SERVICE_UEI, getClass().getSimpleName())
                 .setNodeid(nodeId1)
                 .setInterface(InetAddressUtils.getInetAddress("127.0.0.1"))
                 .setService("ICMP")
