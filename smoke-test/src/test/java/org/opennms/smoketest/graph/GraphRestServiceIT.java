@@ -56,6 +56,7 @@ import org.opennms.netmgt.dao.hibernate.MonitoredServiceDaoHibernate;
 import org.opennms.netmgt.events.api.EventConstants;
 import org.opennms.netmgt.model.OnmsApplication;
 import org.opennms.netmgt.model.OnmsMonitoredService;
+import org.opennms.netmgt.model.OnmsSeverity;
 import org.opennms.netmgt.model.events.EventBuilder;
 import org.opennms.netmgt.xml.event.Event;
 import org.opennms.smoketest.OpenNMSSeleniumIT;
@@ -471,8 +472,11 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
                 .setInterface(InetAddressUtils.getInetAddress("127.0.0.1"))
                 .setService("ICMP")
                 .getEvent();
-        final Event nodeDownEvent = new EventBuilder(EventConstants.NODE_DOWN_EVENT_UEI, getClass().getSimpleName())
+        final Event nodeLostServiceEventApp2 = new EventBuilder(EventConstants.PERSPECTIVE_NODE_LOST_SERVICE_UEI, getClass().getSimpleName())
                 .setNodeid(nodeId2)
+                .setInterface(InetAddressUtils.getInetAddress("127.0.0.1"))
+                .setService("ICMP")
+                .setSeverity(OnmsSeverity.CRITICAL.getLabel())
                 .getEvent();
 
         // Take service down, reload graph and verify
@@ -490,11 +494,11 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
         final ApplicationViewResponse applicationViewResponse = new ApplicationViewResponse(response);
         assertThat(applicationViewResponse.length(), Matchers.is(3));
         verifyStatus(applicationViewResponse.getVertexByApplicationId(application.getId()), "Minor", 1);
-        verifyStatus(applicationViewResponse.getVertexByNodeId(nodeId1), "Minor", 1);
+        verifyStatus(applicationViewResponse.getVertexByNodeId(nodeId1), "Major", 1); // since the only (all) interface(s) are down we expect major
         verifyStatus(applicationViewResponse.getVertexByNodeId(nodeId2), "Normal", 0);
 
-        // Take node down, reload graph and verify
-        restClient.sendEvent(nodeDownEvent);
+        // Take service down with severity higher than Major
+        restClient.sendEvent(nodeLostServiceEventApp2);
         karafShell.runCommand("opennms:graph-force-reload --container application");
         final Response response2 = given().log().ifValidationFails()
                 .body(query.toString())
@@ -507,9 +511,9 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
                 .extract().response();
         final ApplicationViewResponse applicationViewResponse2 = new ApplicationViewResponse(response2);
         assertThat(applicationViewResponse2.length(), Matchers.is(3));
-        verifyStatus(applicationViewResponse2.getVertexByApplicationId(application.getId()), "Major", 1);
+        verifyStatus(applicationViewResponse2.getVertexByApplicationId(application.getId()), "Critical", 1);
         verifyStatus(applicationViewResponse2.getVertexByNodeId(nodeId1), "Minor", 1);
-        verifyStatus(applicationViewResponse2.getVertexByNodeId(nodeId2), "Major", 1);
+        verifyStatus(applicationViewResponse2.getVertexByNodeId(nodeId2), "Critical", 1); // we expect the same severity as the interface with the highest severity
 
         // Finally clean up
         applicationDao.delete(application);
