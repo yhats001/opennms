@@ -473,11 +473,13 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
                 .setNodeid(nodeId1)
                 .setInterface(InetAddressUtils.getInetAddress("127.0.0.1"))
                 .setService("ICMP")
+                .setParam("perspective", "Default")
                 .getEvent();
         final Event nodeLostServiceEventApp2 = new EventBuilder(EventConstants.PERSPECTIVE_NODE_LOST_SERVICE_UEI, getClass().getSimpleName())
                 .setNodeid(nodeId2)
                 .setInterface(InetAddressUtils.getInetAddress("127.0.0.1"))
                 .setService("ICMP")
+                .setParam("perspective", "Default")
                 .setSeverity(OnmsSeverity.CRITICAL.getLabel())
                 .getEvent();
 
@@ -496,7 +498,7 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
         final ApplicationViewResponse applicationViewResponse = new ApplicationViewResponse(response);
         assertThat(applicationViewResponse.length(), Matchers.is(3));
         verifyStatus(applicationViewResponse.getVertexByApplicationId(application.getId()), "Minor", 1);
-        verifyStatus(applicationViewResponse.getVertexByNodeId(nodeId1), "Major", 1); // since the only (all) interface(s) are down we expect major
+        verifyStatus(applicationViewResponse.getVertexByNodeId(nodeId1), "Minor", 1);
         verifyStatus(applicationViewResponse.getVertexByNodeId(nodeId2), "Normal", 0);
 
         // Take service down with severity higher than Major
@@ -513,7 +515,7 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
                 .extract().response();
         final ApplicationViewResponse applicationViewResponse2 = new ApplicationViewResponse(response2);
         assertThat(applicationViewResponse2.length(), Matchers.is(3));
-        verifyStatus(applicationViewResponse2.getVertexByApplicationId(application.getId()), "Critical", 1);
+        verifyStatus(applicationViewResponse2.getVertexByApplicationId(application.getId()), "Critical", 2);
         verifyStatus(applicationViewResponse2.getVertexByNodeId(nodeId1), "Minor", 1);
         verifyStatus(applicationViewResponse2.getVertexByNodeId(nodeId2), "Critical", 1); // we expect the same severity as the interface with the highest severity
 
@@ -673,4 +675,6 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
         }
 
     }
+
+
 }
