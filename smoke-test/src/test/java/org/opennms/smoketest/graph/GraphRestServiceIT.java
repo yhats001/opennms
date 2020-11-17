@@ -34,9 +34,11 @@ import static io.restassured.RestAssured.preemptive;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.hamcrest.Matchers;
@@ -55,6 +57,7 @@ import org.opennms.netmgt.model.OnmsApplication;
 import org.opennms.netmgt.model.OnmsMonitoredService;
 import org.opennms.netmgt.model.OnmsSeverity;
 import org.opennms.netmgt.model.events.EventBuilder;
+import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.opennms.netmgt.xml.event.Event;
 import org.opennms.smoketest.OpenNMSSeleniumIT;
 import org.opennms.smoketest.graphml.GraphmlDocument;
@@ -420,6 +423,11 @@ public class GraphRestServiceIT extends OpenNMSSeleniumIT {
         final OnmsApplication tmpApplication = transactionTemplate.execute(transactionStatus -> {
             final OnmsApplication theApplication = new OnmsApplication();
             theApplication.setName("OpenNMS Application");
+            OnmsMonitoringLocation location = new OnmsMonitoringLocation();
+            location.setLocationName("Default");
+            Set<OnmsMonitoringLocation> locations = new HashSet<>();
+            locations.add(location);
+            theApplication.setPerspectiveLocations(locations);
             monitoredServiceDao.findAllServices().stream()
                     .filter(ms -> ms.getIpAddress().toString().contains("127.0.0.1"))
                     .forEach(service -> service.addApplication(theApplication));
