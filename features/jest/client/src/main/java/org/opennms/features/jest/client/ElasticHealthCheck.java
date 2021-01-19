@@ -28,6 +28,7 @@
 package org.opennms.features.jest.client;
 
 import java.io.IOException;
+import java.util.Hashtable;
 import java.util.Objects;
 
 import org.opennms.core.health.api.Context;
@@ -56,24 +57,36 @@ public class ElasticHealthCheck implements HealthCheck {
 
     private final String featureName;
 
+    private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+        put("description", "Connecting to ElasticSearch ReST API (null)");
+        put("name", "opennms-es-restapi");
+        put("local", "false");
+    }};
+
     public ElasticHealthCheck(JestClient jestClient, String featureName) {
         this.client = Objects.requireNonNull(jestClient);
         this.featureName = Objects.requireNonNull(featureName);
+        this.hashtableTags.put("description", "Connecting to ElasticSearch ReST API (" + this.featureName + ")");
     }
 
     @Override
     public String getDescription() {
-        return "Connecting to ElasticSearch ReST API (" + featureName + ")";
+        return getTag("description");
     }
 
     @Override
-    public String getName() {
-        return "opennms-es-restapi";
+    public String getTag(String key) {
+        return this.hashtableTags.get(key);
     }
 
     @Override
-    public boolean isLocalCheck() {
-        return false;
+    public void setTag(String key, String value) {
+        this.hashtableTags.put(key, value);
+    }
+
+    @Override
+    public void setTags(Hashtable<String, String> hashtable) {
+        this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
     }
 
     @Override

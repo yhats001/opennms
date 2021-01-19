@@ -28,6 +28,8 @@
 
 package org.opennms.distributed.core.impl;
 
+import java.util.Hashtable;
+
 import org.opennms.core.health.api.Context;
 import org.opennms.distributed.core.api.RestClient;
 import org.opennms.core.health.api.HealthCheck;
@@ -43,6 +45,12 @@ public class RestConnectionHealthCheck implements HealthCheck {
 
     private final RestClient restClient;
 
+    private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+        put("description", "Connecting to OpenNMS ReST API");
+        put("name", "opennms-core-api");
+        put("local", "false");
+    }};
+
     public RestConnectionHealthCheck(final RestClient restClient) {
         this.restClient = restClient;
     }
@@ -55,16 +63,21 @@ public class RestConnectionHealthCheck implements HealthCheck {
 
     @Override
     public String getDescription() {
-        return "Connecting to OpenNMS ReST API";
+        return getTag("description");
     }
 
     @Override
-    public String getName() {
-        return "opennms-core-api";
+    public String getTag(String key) {
+        return this.hashtableTags.get(key);
     }
 
     @Override
-    public boolean isLocalCheck() {
-        return false;
+    public void setTag(String key, String value) {
+        this.hashtableTags.put(key, value);
+    }
+
+    @Override
+    public void setTags(Hashtable<String, String> hashtable) {
+        this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
     }
 }

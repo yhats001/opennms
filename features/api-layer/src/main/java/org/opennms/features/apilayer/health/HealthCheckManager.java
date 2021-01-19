@@ -28,6 +28,8 @@
 
 package org.opennms.features.apilayer.health;
 
+import java.util.Hashtable;
+
 import org.opennms.features.apilayer.utils.InterfaceMapper;
 import org.opennms.integration.api.v1.health.HealthCheck;
 import org.opennms.integration.api.v1.health.Response;
@@ -50,13 +52,18 @@ public class HealthCheckManager extends InterfaceMapper<HealthCheck, org.opennms
             }
 
             @Override
-            public String getName() {
-                return healthCheck.getName();
+            public String getTag(String key) {
+                return healthCheck.getTag(key);
             }
 
             @Override
-            public boolean isLocalCheck() {
-                return healthCheck.isLocalCheck();
+            public void setTag(String key, String value) {
+                healthCheck.setTag(key, value);
+            }
+
+            @Override
+            public void setTags(Hashtable<String, String> hashtable) {
+                healthCheck.setTags(hashtable);
             }
 
             @Override

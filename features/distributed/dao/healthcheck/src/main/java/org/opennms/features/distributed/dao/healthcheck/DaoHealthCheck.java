@@ -28,6 +28,7 @@
 
 package org.opennms.features.distributed.dao.healthcheck;
 
+import java.util.Hashtable;
 import java.util.Objects;
 
 import org.opennms.core.health.api.Context;
@@ -50,23 +51,34 @@ public class DaoHealthCheck implements HealthCheck {
 
     private BundleContext bundleContext;
 
+    private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+        put("description", "Retrieving NodeDao");
+        put("name", "opennms-nodedao");
+        put("local", "true");
+    }};
+
     public DaoHealthCheck(BundleContext bundleContext) {
         this.bundleContext = Objects.requireNonNull(bundleContext);
     }
 
     @Override
     public String getDescription() {
-        return "Retrieving NodeDao";
+        return getTag("description");
     }
 
     @Override
-    public String getName() {
-        return "opennms-nodedao";
+    public String getTag(String key) {
+        return this.hashtableTags.get(key);
     }
 
     @Override
-    public boolean isLocalCheck() {
-        return true;
+    public void setTag(String key, String value) {
+        this.hashtableTags.put(key, value);
+    }
+
+    @Override
+    public void setTags(Hashtable<String, String> hashtable) {
+        this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
     }
 
     @Override

@@ -146,8 +146,8 @@ public class HealthCheckCommand implements Action {
 
         for(HealthCheck healthCheck : healthChecks) {
             System.out.print(String.format(descFormat, healthCheck.getDescription()));
-            final Color checkColor = determineColor(healthCheck.isLocalCheck());
-            final String localCheck = healthCheck.isLocalCheck() ? "Local" : "Remote";
+            final Color checkColor = determineColor(Boolean.valueOf(healthCheck.getTag("local")));
+            final String localCheck = Boolean.valueOf(healthCheck.getTag("local")) ? "Local" : "Remote";
             final String statusText = String.format(statusFormat, Colorizer.colorize(localCheck, checkColor));
             System.out.print(statusText);
             System.out.println();

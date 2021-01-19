@@ -29,6 +29,7 @@
 package org.opennms.core.ipc.common.kafka;
 
 
+import java.util.Hashtable;
 import java.util.Properties;
 
 import org.opennms.core.health.api.Context;
@@ -43,25 +44,37 @@ public class KafkaHealthCheck implements HealthCheck {
     // Differentiate between Sink/RPC
     private final String type;
 
+    private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+        put("description", "Connecting to Kafka from null");
+        put("name", "opennms-kafka-null");
+        put("local", "false");
+    }};
+
     public KafkaHealthCheck(KafkaConfigProvider kafkaConfigProvider, String type) {
         this.kafkaConfigProvider = kafkaConfigProvider;
         this.type = type;
+        this.hashtableTags.put("description", "Connecting to Kafka from " + this.type);
+        this.hashtableTags.put("name", "opennms-kafka-" + this.type);
     }
-
 
     @Override
     public String getDescription() {
-        return "Connecting to Kafka from " + type ;
+        return getTag("description");
     }
 
     @Override
-    public String getName() {
-        return "opennms-kafka-" + type;
+    public String getTag(String key) {
+        return this.hashtableTags.get(key);
     }
 
     @Override
-    public boolean isLocalCheck() {
-        return false;
+    public void setTag(String key, String value) {
+        this.hashtableTags.put(key, value);
+    }
+
+    @Override
+    public void setTags(Hashtable<String, String> hashtable) {
+        this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
     }
 
     @Override

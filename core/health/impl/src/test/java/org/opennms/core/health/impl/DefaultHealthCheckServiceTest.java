@@ -30,6 +30,7 @@ package org.opennms.core.health.impl;
 
 import static org.hamcrest.CoreMatchers.is;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -57,19 +58,30 @@ import com.google.common.collect.Lists;
 public class DefaultHealthCheckServiceTest {
 
     private static class BlockingHealthCheck implements HealthCheck {
+        private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+            put("description", getClass().getSimpleName());
+            put("name", getClass().getSimpleName());
+            put("local", "true");
+        }};
+
         @Override
         public String getDescription() {
-            return getClass().getSimpleName();
+            return getTag("description");
         }
 
         @Override
-        public String getName() {
-            return getClass().getSimpleName();
+        public String getTag(String key) {
+            return this.hashtableTags.get(key);
         }
 
         @Override
-        public boolean isLocalCheck() {
-            return true;
+        public void setTag(String key, String value) {
+            this.hashtableTags.put(key, value);
+        }
+
+        @Override
+        public void setTags(Hashtable<String, String> hashtable) {
+            this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
         }
 
         @Override

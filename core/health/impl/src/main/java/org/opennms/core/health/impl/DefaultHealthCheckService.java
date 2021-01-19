@@ -119,12 +119,12 @@ public class DefaultHealthCheckService implements HealthCheckService {
     private void runChecks(Context context, boolean localChecksOnly, List<HealthCheck> checks, Consumer<HealthCheck> onStartConsumer, Consumer<Response> onFinishConsumer) {
         Future<Response> currentFuture = null;
         for (HealthCheck check : checks) {
-            if (ignoreHealthChecks.contains(check.getName())) {
-                LOG.debug("Check {} is ignored while performing opennms:health-check", check.getName());
+            if (ignoreHealthChecks.contains(check.getTag("name"))) {
+                LOG.debug("Check {} is ignored while performing opennms:health-check", check.getTag("name"));
                 continue;
             }
-            if (localChecksOnly && check.isLocalCheck()) {
-                LOG.debug("Check {} is ignored while performing opennms:health-check --local", check.getName());
+            if (localChecksOnly && Boolean.valueOf(check.getTag("local"))) {
+                LOG.debug("Check {} is ignored while performing opennms:health-check --local", check.getTag("name"));
                 continue;
             }
             try {

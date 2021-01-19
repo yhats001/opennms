@@ -28,6 +28,8 @@
 
 package org.opennms.core.ipc.grpc.client;
 
+import java.util.Hashtable;
+
 import org.opennms.core.health.api.Context;
 import org.opennms.core.health.api.HealthCheck;
 import org.opennms.core.health.api.Response;
@@ -39,23 +41,34 @@ public class GrpcHealthCheck implements HealthCheck {
 
     private final MinionGrpcClient minionGrpcClient;
 
+    private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+        put("description", "Connecting to gRPC IPC Server");
+        put("name", "opennms-grpc-ipc");
+        put("local", "false");
+    }};
+
     public GrpcHealthCheck(MinionGrpcClient minionGrpcClient) {
         this.minionGrpcClient = minionGrpcClient;
     }
 
     @Override
     public String getDescription() {
-        return "Connecting to gRPC IPC Server";
+        return getTag("description");
     }
 
     @Override
-    public String getName() {
-        return "opennms-grpc-ipc";
+    public String getTag(String key) {
+        return this.hashtableTags.get(key);
     }
 
     @Override
-    public boolean isLocalCheck() {
-        return false;
+    public void setTag(String key, String value) {
+        this.hashtableTags.put(key, value);
+    }
+
+    @Override
+    public void setTags(Hashtable<String, String> hashtable) {
+        this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
     }
 
     @Override

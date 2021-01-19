@@ -29,6 +29,7 @@
 package org.opennms.netmgt.dnsresolver.netty;
 
 import java.net.InetAddress;
+import java.util.Hashtable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -47,23 +48,34 @@ public class NettyDnsHealthCheck implements HealthCheck {
 
     private final NettyDnsResolver dnsResolver;
 
+    private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+        put("description", "DNS Lookups (Netty)");
+        put("name", "opennms-netty-dns");
+        put("local", "false");
+    }};
+
     public NettyDnsHealthCheck(NettyDnsResolver dnsResolver) {
         this.dnsResolver = Objects.requireNonNull(dnsResolver);
     }
 
     @Override
     public String getDescription() {
-        return "DNS Lookups (Netty)";
+        return getTag("description");
     }
 
     @Override
-    public String getName() {
-        return "opennms-netty-dns";
+    public String getTag(String key) {
+        return this.hashtableTags.get(key);
     }
 
     @Override
-    public boolean isLocalCheck() {
-        return false;
+    public void setTag(String key, String value) {
+        this.hashtableTags.put(key, value);
+    }
+
+    @Override
+    public void setTags(Hashtable<String, String> hashtable) {
+        this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
     }
 
     @Override

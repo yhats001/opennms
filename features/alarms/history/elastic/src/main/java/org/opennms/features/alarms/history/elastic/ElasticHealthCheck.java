@@ -28,6 +28,7 @@
 
 package org.opennms.features.alarms.history.elastic;
 
+import java.util.Hashtable;
 import java.util.Objects;
 
 import org.opennms.core.health.api.Context;
@@ -45,23 +46,34 @@ public class ElasticHealthCheck implements HealthCheck {
 
     private final ElasticAlarmHistoryRepository elasticAlarmHistoryRepository;
 
+    private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+        put("description", "Number of active alarms stored in Elasticsearch (Alarm History)");
+        put("name", "opennms-es-alarmhistory");
+        put("local", "false");
+    }};
+
     public ElasticHealthCheck(ElasticAlarmHistoryRepository elasticAlarmHistoryRepository) {
         this.elasticAlarmHistoryRepository = Objects.requireNonNull(elasticAlarmHistoryRepository);
     }
 
     @Override
     public String getDescription() {
-        return "Number of active alarms stored in Elasticsearch (Alarm History)";
+        return getTag("description");
     }
 
     @Override
-    public String getName() {
-        return "opennms-es-alarmhistory";
+    public String getTag(String key) {
+        return this.hashtableTags.get(key);
     }
 
     @Override
-    public boolean isLocalCheck() {
-        return false;
+    public void setTag(String key, String value) {
+        this.hashtableTags.put(key, value);
+    }
+
+    @Override
+    public void setTags(Hashtable<String, String> hashtable) {
+        this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
     }
 
     @Override

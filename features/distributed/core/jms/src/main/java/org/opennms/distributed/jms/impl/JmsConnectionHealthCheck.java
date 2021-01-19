@@ -28,6 +28,7 @@
 
 package org.opennms.distributed.jms.impl;
 
+import java.util.Hashtable;
 import java.util.Objects;
 
 import javax.jms.Connection;
@@ -54,23 +55,34 @@ public class JmsConnectionHealthCheck implements HealthCheck {
 
     private final BundleContext bundleContext;
 
+    private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+        put("description", "Connecting to JMS Broker");
+        put("name", "opennms-jms-broker");
+        put("local", "false");
+    }};
+
     public JmsConnectionHealthCheck(BundleContext bundleContext) {
         this.bundleContext = Objects.requireNonNull(bundleContext);
     }
 
     @Override
     public String getDescription() {
-        return "Connecting to JMS Broker";
+        return getTag("description");
     }
 
     @Override
-    public String getName() {
-        return "opennms-jms-broker";
+    public String getTag(String key) {
+        return this.hashtableTags.get(key);
     }
 
     @Override
-    public boolean isLocalCheck() {
-        return false;
+    public void setTag(String key, String value) {
+        this.hashtableTags.put(key, value);
+    }
+
+    @Override
+    public void setTags(Hashtable<String, String> hashtable) {
+        this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
     }
 
     @Override

@@ -35,6 +35,7 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -73,6 +74,12 @@ public class ContainerIntegrityHealthCheck implements HealthCheck {
     private final BundleContext bundleContext;
     private final List<String> ignoreBundles;
 
+    private Hashtable<String,String> hashtableTags = new Hashtable<String, String>() {{
+        put("description", "Verifying installed bundles");
+        put("name", "opennms-verify-bundles");
+        put("local", "true");
+    }};
+
     public ContainerIntegrityHealthCheck(BundleContext bundleContext, BundleService bundleService, String ignoreBundleList) {
         this.bundleContext = Objects.requireNonNull(bundleContext);
         this.bundleService = Objects.requireNonNull(bundleService);
@@ -81,17 +88,22 @@ public class ContainerIntegrityHealthCheck implements HealthCheck {
 
     @Override
     public String getDescription() {
-        return "Verifying installed bundles";
+        return getTag("description");
     }
 
     @Override
-    public String getName() {
-        return "opennms-verify-bundles";
+    public String getTag(String key) {
+        return this.hashtableTags.get(key);
     }
 
     @Override
-    public boolean isLocalCheck() {
-        return true;
+    public void setTag(String key, String value) {
+        this.hashtableTags.put(key, value);
+    }
+
+    @Override
+    public void setTags(Hashtable<String, String> hashtable) {
+        this.hashtableTags = (Hashtable<String, String>) hashtable.clone();
     }
 
     @Override
