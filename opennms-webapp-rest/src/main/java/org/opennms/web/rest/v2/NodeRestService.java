@@ -65,6 +65,7 @@ import org.opennms.netmgt.model.events.EventUtils;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.opennms.netmgt.xml.event.Event;
 import org.opennms.web.api.RestUtils;
+import org.opennms.web.enlinkd.EnLinkdElementFactoryInterface;
 import org.opennms.web.rest.support.Aliases;
 import org.opennms.web.rest.support.CriteriaBehavior;
 import org.opennms.web.rest.support.CriteriaBehaviors;
@@ -101,6 +102,9 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
     @Autowired
     @Qualifier("eventProxy")
     private EventProxy m_eventProxy;
+
+    @Autowired
+    private EnLinkdElementFactoryInterface enLinkdElementFactoryInterface;
 
     @Override
     protected NodeDao getDao() {
