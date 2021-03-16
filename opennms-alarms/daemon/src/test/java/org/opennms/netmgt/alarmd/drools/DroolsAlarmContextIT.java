@@ -33,6 +33,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -463,7 +465,7 @@ public class DroolsAlarmContextIT {
     }
 
     @Test
-    public void canCloseTicket() {
+    public void canCloseTicket()  {
         ticketer.setEnabled(true);
 
         // Trigger some problem
@@ -486,6 +488,7 @@ public class DroolsAlarmContextIT {
         dac.tick();
         // Verify that there is another
         assertThat(ticketer.getCreates(), contains(trigger.getId()));
+        assertNull(trigger.getAckTime());
 
         // Inject a clear
         OnmsAlarm clear = new OnmsAlarm();
@@ -506,9 +509,21 @@ public class DroolsAlarmContextIT {
         dac.handleNewOrUpdatedAlarm(trigger);
         dac.getClock().advanceTime( 1, TimeUnit.MINUTES );
         dac.tick();
+        final AtomicBoolean gotDelete = new AtomicBoolean();
+        doAnswer(invocation -> {
+            gotDelete.set(true);
+            return null;
+        }).when(alarmDao).delete(trigger);
+
         dac.getClock().advanceTime( 20, TimeUnit.MINUTES );
         dac.tick();
         assertThat(ticketer.didCloseTicketFor(trigger), equalTo(true));
+        assertTrue(trigger.getSeverity().isLessThanOrEqual(OnmsSeverity.NORMAL));
+        assertTrue(trigger.getTTicketState() == null ||
+                trigger.getTTicketState().equals(TroubleTicketState.CANCELLED) ||
+                trigger.getTTicketState().equals(TroubleTicketState.CLOSED));
+        assertNull(trigger.getAckTime());
+        assertThat(gotDelete.get(), equalTo(true));
     }
 
     @Test
@@ -634,6 +649,8 @@ public class DroolsAlarmContextIT {
         dac.tick();
         assertThat(dac.getAckByAlarmId(alarm1.getId()).getAckAction(), equalTo(ack1.getAckAction()));
     }
+
+
 
     public void canReloadEngine() {
         // Create a trigger alarm
