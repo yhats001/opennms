@@ -3,6 +3,8 @@ telemetry:
   flows:
     single-port-listener:
       enabled: true
+      parameters:
+          port: 50000
     listeners:
       JTI-Listener:
         class-name: "org.opennms.netmgt.telemetry.listeners.UdpListener"
