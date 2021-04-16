@@ -28,21 +28,23 @@
 
 package selenium;
 
-import static org.junit.Assert.*
+import static org.junit.Assert.*;
 
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit;
 
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.firefox.FirefoxDriver
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.opennms.netmgt.poller.MonitoredService;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-class OpennmsSeleniumExample  {
-    
+class OpennmsSeleniumExample {
+    private Logger LOG = LoggerFactory.getLogger("selenium");  
     private WebDriver driver;
     private String baseUrl="http://www.papajohns.co.uk/";
     private int timeout = 30;
@@ -55,13 +57,16 @@ class OpennmsSeleniumExample  {
     
     @Before
     public void setUp() throws Exception {
+        LOG.debug("Before is being called in Groovy Script: " + this.hashCode());
         driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
     }
 
     @Test
     public void testSelenium() throws Exception {
+        LOG.debug("Test is being called in Groovy Script: " + this.hashCode());
         // open | / |
+        assertNotNull(driver);
         driver.get(baseUrl);
         // click | link=Our Story |
         driver.findElement(By.linkText("Our Story")).click();
@@ -73,6 +78,8 @@ class OpennmsSeleniumExample  {
 
     @After
     public void tearDown() throws Exception {
+        LOG.debug("After is being called in Groovy Script: " + this.hashCode());
+        assertNotNull("Driver is null, it should not be null", driver);
         driver.quit();
         String verificationErrorString = verificationErrors.toString();
         if (!"".equals(verificationErrorString)) {

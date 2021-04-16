@@ -25,7 +25,7 @@
  *     http://www.opennms.org/
  *     http://www.opennms.com/
  *******************************************************************************/
-// DEMONSTRATES USING BMP TO CAPTURE HAR and transfor for elastic search
+// DEMONSTRATES USING BMP TO CAPTURE HAR and transform for elastic search
 // package selenium;
 
 import static org.junit.Assert.*;
@@ -47,8 +47,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
-import org.opennms.core.logging.Logging;
-import org.opennms.elastic.client.ElasticClient;
 import org.opennms.elastic.httpclient.ApacheElasticClient;
 import org.opennms.harmapper.HarTransformMapper;
 import org.opennms.harmapper.OnmsHarPollMetaData;
@@ -71,7 +69,7 @@ import net.lightbody.bmp.core.har.Har;
 import net.lightbody.bmp.proxy.CaptureType;
 import net.lightbody.bmp.mitm.TrustSource;
 
-class OpennmsSeleniumExampleHar2 {
+class OpennmsSeleniumHarCollector {
 	private Logger LOG = LoggerFactory.getLogger("selenium");
 
 	private String baseUrl = "baseUrl-undefined";
@@ -83,6 +81,7 @@ class OpennmsSeleniumExampleHar2 {
 	private HarTransformMapper harTransformMapper = null;
 	private ApacheElasticClient elasticClient = null;
 
+	private String geckoDriver = null;
 	private String harMapperJsltFileName = null;
 	private String seleniumElasticUrl = null;
 	private String seleniumElasticPassword = null;
@@ -91,19 +90,9 @@ class OpennmsSeleniumExampleHar2 {
 	private String seleniumElasticIndexName = null;
 	private String seleniumElasticIndexType = null;
 
-	public OpennmsSeleniumExampleHar2(String url, int timeoutInSeconds, MonitoredService svc, Map<String, Object> parameters) {
+	public OpennmsSeleniumHarCollector(String url, int timeoutInSeconds, MonitoredService svc, Map<String, Object> parameters) {
 		baseUrl = url;
 		timeout = timeoutInSeconds;
-
-		// TODO these need replaced in opennms.properties
-		System.setProperty("webdriver.gecko.driver", "/opt/geckodriver/geckodriver");
-		System.setProperty("harMapperJsltFileName", "hartransform-0-1.jslt");
-		System.setProperty("seleniumElasticUrl", "http://localhost:9200");
-		// System.setProperty("seleniumElasticUsername", null);
-		// System.setProperty("seleniumElasticPassword", null);
-		System.setProperty("seleniumElasticIndexName", "onmshardata");
-		System.setProperty("seleniumElasticIndexType", "onmshartype");
-
 	}
 
 	@Before
@@ -112,16 +101,24 @@ class OpennmsSeleniumExampleHar2 {
 		try {
 			LOG.debug("setUp() starting selenium script baseUrl=" + baseUrl + " timeout=" + timeout);
 
+			
+			if(System.getProperty("webdriver.gecko.driver")==null){
+			    System.setProperty("webdriver.gecko.driver", "/opt/geckodriver/geckodriver");
+			}
+			
+            geckoDriver = System.getProperty("webdriver.gecko.driver"); 
+			
 			harMapperJsltFileName = System.getProperty("harMapperJsltFileName", "hartransform-0-1.jslt");
-			seleniumElasticUrl = System.getProperty("seleniumElasticUrl");
-			seleniumElasticUsername = System.getProperty("seleniumElasticUsername");
-			seleniumElasticPassword = System.getProperty("seleniumElasticPassword");
-			seleniumElasticIndexName = System.getProperty("seleniumElasticIndexName");
-			seleniumElasticIndexType = System.getProperty("seleniumElasticIndexType");
+			seleniumElasticUrl = System.getProperty("seleniumElasticUrl", "http://localhost:9200");
+			seleniumElasticUsername = System.getProperty("seleniumElasticUsername", "");
+			seleniumElasticPassword = System.getProperty("seleniumElasticPassword", "");
+			seleniumElasticIndexName = System.getProperty("seleniumElasticIndexName", "onmshardata");
+			seleniumElasticIndexType = System.getProperty("seleniumElasticIndexType", "onmshartype");
 
 			opennmsHome = System.getProperty("opennms.home");
 
-			LOG.debug("setUp() system settings harMapperJsltFileName =" + harMapperJsltFileName + " seleniumElasticUrl="
+			LOG.debug("setUp() System settings location of webdriver.gecko.driver ="+geckoDriver
+			        + " harMapperJsltFileName =" + harMapperJsltFileName + " seleniumElasticUrl="
 					+ seleniumElasticUrl + " seleniumElasticUsername=" + seleniumElasticUsername
 					+ " seleniumElasticPassword =" + seleniumElasticPassword + " opennmsHome=" + opennmsHome);
 
@@ -130,8 +127,8 @@ class OpennmsSeleniumExampleHar2 {
 
 			harTransformMapper = new HarTransformMapper(mappingFile);
 
-			if (seleniumElasticUrl == null) {
-				LOG.debug("setUp()  elastic not configured so not setting up elasticClient");
+			if (seleniumElasticUrl == null | "".equals(seleniumElasticUrl) ) {
+				LOG.debug("setUp()  seleniumElasticUrl not configured so not setting up elasticClient");
 			} else {
 				LOG.debug("setUp() elastic configured");
 				elasticClient = new ApacheElasticClient(seleniumElasticUrl, seleniumElasticIndexName,
@@ -141,7 +138,6 @@ class OpennmsSeleniumExampleHar2 {
 		} catch (Throwable ex) {
 			LOG.error("setUp() selenium script exception ", ex);
 		}
-
 	}
 
 	@Test
@@ -195,16 +191,6 @@ class OpennmsSeleniumExampleHar2 {
 
 			// insert your own tests here if they fail, the test will end and capture will
 			// complete
-
-			// click | link=Our Story |
-			// driver.findElement(By.linkText("Latest Offers")).click();
-
-			// assertText | link=Contact Us | Contact Us
-			// assertEquals("Contact Us", driver.findElement(By.linkText("Contact
-			// Us")).getText());
-			// assertEquals("Contact Us", driver.findElement(By.linkText("Contact
-			// Us")).getText())
-			// fail("selenium test failed script");
 
 		} catch (java.lang.AssertionError ae) {
 			LOG.debug("testSelenium() selenium poller assertion error: ", ae);

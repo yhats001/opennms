@@ -26,25 +26,29 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+// package selenium;
+
+import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.opennms.netmgt.poller.MonitoredService;
-import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.opennms.netmgt.poller.MonitoredService;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class OpennmsSeleniumExample {
+class OpennmsSeleniumExample {
+    private Logger LOG = LoggerFactory.getLogger("selenium");
+    
     private WebDriver driver;
-    private String baseUrl="";
-    private int timeout = 3;
+    private String baseUrl="http://www.papajohns.co.uk/";
+    private int timeout = 30;
     private StringBuffer verificationErrors = new StringBuffer();
 
     public OpennmsSeleniumExample(String url, int timeoutInSeconds, MonitoredService svc, Map<String, Object> parameters) {
@@ -54,14 +58,14 @@ public class OpennmsSeleniumExample {
     
     @Before
     public void setUp() throws Exception {
-        System.err.println("Before is being called in Groovy Script: " + this.hashCode());
+        LOG.debug("Before is being called in Groovy Script: " + this.hashCode());
         driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
     }
 
     @Test
     public void testSelenium() throws Exception {
-        System.err.println("Test is being called in Groovy Script: " + this.hashCode());
+        LOG.debug("Test is being called in Groovy Script: " + this.hashCode());
         // open | / |
         assertNotNull(driver);
         driver.get(baseUrl);
@@ -75,7 +79,7 @@ public class OpennmsSeleniumExample {
 
     @After
     public void tearDown() throws Exception {
-        System.err.println("After is being called in Groovy Script: " + this.hashCode());
+        LOG.debug("After is being called in Groovy Script: " + this.hashCode());
         assertNotNull("Driver is null, it should not be null", driver);
         driver.quit();
         

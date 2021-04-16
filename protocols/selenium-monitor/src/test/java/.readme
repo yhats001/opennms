@@ -1,0 +1,4 @@
+These classes in the test default package are not used directly.
+They are used to create and check for syntax errors equivalent groovy classes.
+They are in the default package and not the selenium package to avoid conflicts 
+with the groovy generated classes when testing.
