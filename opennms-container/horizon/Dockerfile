@@ -99,6 +99,8 @@ RUN echo "installing packages for build ${REVISION} (${BUILD_DATE})"; \
     fi && \
     if [[ -n ${ADD_YUM_PACKAGES} ]]; then dnf -y install ${ADD_YUM_PACKAGES}; fi && \
     rm -rf /tmp/rpms /tmp/tarball && \
+    # Disable the local HTTP repository, so you can use dnf/yum without having it running
+    dnf config-manager --set-disabled opennms-repo-docker-common && \
     dnf clean all && \
     rm -rf /var/cache/yum && \
     rm -rf /opt/opennms/share/rrd \
