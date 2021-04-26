@@ -639,6 +639,7 @@ workflows:
                 - develop
                 - /^master-.*/
                 - /^release-.*/
+                - jira/NMS-13190
       - sentinel-publish-oci:
           requires:
             - sentinel-rpm-build
