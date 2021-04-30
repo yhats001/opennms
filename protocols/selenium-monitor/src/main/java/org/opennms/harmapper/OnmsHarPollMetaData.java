@@ -40,6 +40,12 @@ public class OnmsHarPollMetaData {
 	String pollerDns = null;
 	String pollerIp = null;
 	String pollId = UUID.randomUUID().toString();
+    String svcName;
+    String ipAddr;
+    Integer nodeId;
+    String nodeLabel;
+    String nodeLocation;
+
 
 	public Date getStartTime() {
 		return startTime;
@@ -104,5 +110,46 @@ public class OnmsHarPollMetaData {
 	public void setPollId(String pollId) {
 		this.pollId = pollId;
 	}
+
+    public String getSvcName() {
+        return svcName;
+    }
+
+    public void setSvcName(String svcName) {
+        this.svcName = svcName;
+    }
+
+    public String getIpAddr() {
+        return ipAddr;
+    }
+
+    public void setIpAddr(String ipAddr) {
+        this.ipAddr = ipAddr;
+    }
+
+    public int getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(int nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public String getNodeLabel() {
+        return nodeLabel;
+    }
+
+    public void setNodeLabel(String nodeLabel) {
+        this.nodeLabel = nodeLabel;
+    }
+
+    public String getNodeLocation() {
+        return nodeLocation;
+    }
+
+    public void setNodeLocation(String nodeLocation) {
+        this.nodeLocation = nodeLocation;
+    }
+
 
 }

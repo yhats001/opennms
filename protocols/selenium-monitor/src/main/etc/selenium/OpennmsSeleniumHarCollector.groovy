@@ -103,6 +103,7 @@ class OpennmsSeleniumHarCollector {
     private String svcNodeLocation = null;
     private String svcNodeLabel = null;
     private String svcHostAddress = null;
+    private String svcName = null;
 
     public OpennmsSeleniumHarCollector(String url, int timeoutInSeconds, MonitoredService svc, Map<String, Object> parameters) {
         baseUrl = url;
@@ -142,6 +143,7 @@ class OpennmsSeleniumHarCollector {
             svcNodeLocation = m_svc.getNodeLocation();
             svcNodeLabel = m_svc.getNodeLabel();
             svcHostAddress = m_svc.getAddress().getHostAddress();
+            svcName = m_svc.getSvcName();
 
             LOG.debug("setUp() starting selenium script baseUrl=" + baseUrl + " timeout=" + timeout + " nodeLabel="
                     + svcNodeLabel + " nodeId=" + svcNodeId + " nodeLocation=" + svcNodeLocation + " serviceAddress="
@@ -291,7 +293,13 @@ class OpennmsSeleniumHarCollector {
                 ArrayNode jsonArrayData = null;
                 try {
                     pollMetaData.setPollerlocation(svcNodeLocation);
-                    pollMetaData.setPollerIp(svcHostAddress); //TODO ADD SERVICE FIELDS INTO METADATA
+                    pollMetaData.setPollerIp(svcHostAddress);
+                    pollMetaData.setIpAddr(svcHostAddress);
+                    pollMetaData.setNodeId(svcNodeId);
+                    pollMetaData.setNodeLabel(svcNodeLabel);
+                    pollMetaData.setNodeLocation(svcNodeLocation);
+                    pollMetaData.setSvcName(svcName);
+
                     harJsonNode = mapper.readTree(harString);
                     jsonArrayData = harTransformMapper.transform(harJsonNode, pollMetaData);
                     LOG.debug("testSelenium transformed har into array of " + jsonArrayData.size() + " objects :");
