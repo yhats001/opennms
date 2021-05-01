@@ -28,8 +28,6 @@
 
 package org.opennms.netmgt.poller.monitors;
 
-import groovy.lang.GroovyClassLoader;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,6 +40,7 @@ import org.codehaus.groovy.control.CompilationFailedException;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+import org.opennms.core.logging.Logging;
 import org.opennms.core.utils.TimeoutTracker;
 import org.opennms.netmgt.junit.runner.SeleniumComputer;
 import org.opennms.netmgt.poller.MonitoredService;
@@ -49,7 +48,10 @@ import org.opennms.netmgt.poller.PollStatus;
 import org.opennms.netmgt.poller.support.AbstractServiceMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.opennms.core.logging.Logging;
+
+import com.google.common.base.Strings;
+
+import groovy.lang.GroovyClassLoader;
 
 
 public class SeleniumMonitor extends AbstractServiceMonitor {
@@ -205,7 +207,7 @@ public class SeleniumMonitor extends AbstractServiceMonitor {
 		GroovyClassLoader gcl = new GroovyClassLoader(GroovyClassLoader.class.getClassLoader());
 		String opennmsHome = System.getProperty("opennms.home");
 		String etcPath = "";
-		if(opennmsHome != null) {
+		if(!Strings.isNullOrEmpty(opennmsHome)) {
 			etcPath = opennmsHome + "/etc";
 		} else {
 			etcPath = System.getProperty("karaf.etc");
