@@ -23,6 +23,11 @@ RUN apt-get update && apt-get -y install wget && update-ca-certificates -f
 RUN mkdir -p /opt/prom-jmx-exporter && \
     wget "${PROM_JMX_EXPORTER_URL}" --output-document=/opt/prom-jmx-exporter/jmx_prometheus_javaagent.jar
 
+# Selenium
+RUN apt-get install firefox
+RUN wget "https://github.com/mozilla/geckodriver/releases/download/v0.29.1/geckodriver-v0.29.1-linux64.tar.gz" --output-document=/tmp/gecko.tgz && \
+    tar zxvf /tmp/gecko.tgz -C /
+
 # We set the correct permissions in this stage, so we don't have this as an addtional
 # layer in our deploy image.
 RUN groupadd --gid 10001 minion && \
