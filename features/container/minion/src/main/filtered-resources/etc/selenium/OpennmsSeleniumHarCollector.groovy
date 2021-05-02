@@ -78,9 +78,20 @@ class OpennmsSeleniumHarCollector {
 	private String seleniumElasticIndexName = null;
 	private String seleniumElasticIndexType = null;
 
+	private MonitoredService m_svc = null;
+	private Map<String, Object> m_parameters = null;
+	private OnmsHarPollMetaData pollMetaData = new OnmsHarPollMetaData();
+	private Integer svcNodeId = null;
+	private String svcNodeLocation = null;
+	private String svcNodeLabel = null;
+	private String svcHostAddress = null;
+	private String svcName = null;
+
 	public OpennmsSeleniumHarCollector(String url, int timeoutInSeconds, MonitoredService svc, Map<String, Object> parameters) {
 		baseUrl = url;
 		timeout = timeoutInSeconds;
+		m_svc = svc;
+		m_parameters = parameters;
 
 		//TODO these need replaced in opennms.properties
 		String geckoDriver = parameters.get("gecko-driver")
@@ -102,7 +113,15 @@ class OpennmsSeleniumHarCollector {
 	public void setUp() throws Exception {
 
 		try {
-			LOG.debug("setUp() starting selenium script baseUrl=" + baseUrl + " timeout=" + timeout);
+			svcNodeId = m_svc.getNodeId();
+			svcNodeLocation = m_svc.getNodeLocation();
+			svcNodeLabel = m_svc.getNodeLabel();
+			svcHostAddress = m_svc.getAddress().getHostAddress();
+			svcName = m_svc.getSvcName();
+
+			LOG.debug("setUp() starting selenium script baseUrl=" + baseUrl + " timeout=" + timeout + " nodeLabel="
+					+ svcNodeLabel + " nodeId=" + svcNodeId + " nodeLocation=" + svcNodeLocation + " serviceAddress="
+					+ svcHostAddress);
 
 			harMapperJsltFileName = System.getProperty("harMapperJsltFileName", "hartransform-0-1.jslt");
 			seleniumElasticUrl = System.getProperty("seleniumElasticUrl");
@@ -170,7 +189,9 @@ class OpennmsSeleniumHarCollector {
 			firefoxOptions.setBinary(firefoxBinary);
 			firefoxOptions.setLogLevel(FirefoxDriverLogLevel.INFO);
 
-			int implicitlyWait = timeout - 10000; 
+
+			timeout = Math.max(timeout, 1000);
+			int implicitlyWait = Math.max(timeout - 10000, 1000);
 			LOG.debug("testSelenium()  create driver: pageloadtimeout ms = "+ timeout+ " implicitlyWait ms= "+implicitlyWait);
 			driver = new FirefoxDriver(firefoxOptions);
 			driver.manage().deleteAllCookies();
@@ -234,10 +255,16 @@ class OpennmsSeleniumHarCollector {
 				String json = null;
 				JsonNode harJsonNode = null;
 
-				OnmsHarPollMetaData pollMetaData = new OnmsHarPollMetaData();
-
 				ArrayNode jsonArrayData = null;
 				try {
+					pollMetaData.setPollerlocation(svcNodeLocation);
+					pollMetaData.setPollerIp(svcHostAddress);
+					pollMetaData.setIpAddr(svcHostAddress);
+					pollMetaData.setNodeId(svcNodeId);
+					pollMetaData.setNodeLabel(svcNodeLabel);
+					pollMetaData.setNodeLocation(svcNodeLocation);
+					pollMetaData.setSvcName(svcName);
+
 					harJsonNode = mapper.readTree(harString);
 					jsonArrayData = harTransformMapper.transform(harJsonNode, pollMetaData);
 					LOG.debug("testSelenium transformed har into array of " + jsonArrayData.size() + " objects :");

@@ -124,7 +124,9 @@ public class MetaTagDataLoader extends CacheLoader<CollectionResource, Map<Strin
             // set the location name for latency type resources
             if (CollectionResource.RESOURCE_TYPE_LATENCY.equals(resource.getResourceTypeName())) {
                 if (resource.getPath().elements().length >= 2) {
-                    tags.put("location", resource.getPath().elements()[0]);
+                    String locationName = resource.getPath().elements()[0];
+                    tags.put("location", locationName);
+                    getGeohashForLocation(locationName).ifPresent(geohash -> tags.put("minionGeohash", geohash));
                 }
             }
 
@@ -132,25 +134,28 @@ public class MetaTagDataLoader extends CacheLoader<CollectionResource, Map<Strin
             if (resource.getPath().elements().length >= 3 && "perspective".equals(resource.getPath().elements()[1])) {
                 String locationName = resource.getPath().elements()[2];
                 tags.put("location", locationName);
-
-                // find the Minions at the given location
-                final Criteria criteria = new CriteriaBuilder(OnmsNode.class)
-                        .alias("location", "location", Alias.JoinType.LEFT_JOIN)
-                        .eq("location.id", locationName)
-                        .eq("foreignSource", "Minions")
-                        .toCriteria();
-                List<OnmsNode> nodes = nodeDao.findMatching(criteria);
-                for (OnmsNode minionNode : nodes) {
-                    Optional<String> geohash = EntityScopeProviderImpl.getNodeGeoHash(minionNode);
-                    if (geohash.isPresent()) {
-                        tags.put("minionGeohash", geohash.get());
-                        break;
-                    }
-                }
+                getGeohashForLocation(locationName).ifPresent(geohash -> tags.put("minionGeohash", geohash));
             }
 
             return tags;
         });
+    }
+
+    private Optional<String> getGeohashForLocation(String location) {
+        // find the Minions at the given location
+        final Criteria criteria = new CriteriaBuilder(OnmsNode.class)
+                .alias("location", "location", Alias.JoinType.LEFT_JOIN)
+                .eq("location.id", location)
+                .eq("foreignSource", "Minions")
+                .toCriteria();
+        List<OnmsNode> nodes = nodeDao.findMatching(criteria);
+        for (OnmsNode minionNode : nodes) {
+            Optional<String> geohash = EntityScopeProviderImpl.getNodeGeoHash(minionNode);
+            if (geohash.isPresent()) {
+                return geohash;
+            }
+        }
+        return Optional.empty();
     }
 
     private void mapCategories(final Map<String, String> tags, final OnmsNode node) {
