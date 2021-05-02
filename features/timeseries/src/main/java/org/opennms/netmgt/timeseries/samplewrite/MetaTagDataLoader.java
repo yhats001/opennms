@@ -122,8 +122,8 @@ public class MetaTagDataLoader extends CacheLoader<CollectionResource, Map<Strin
             nodeOptional.ifPresent(onmsNode -> mapCategories(tags, onmsNode));
 
             // this response time data from the perspective poller, try and find the first Minion associated with the location
-            if ("perspective".equals(resource.getPath().elements()[0])) {
-                String locationName = resource.getPath().elements()[1];
+            if (resource.getPath().elements().length >= 3 && "perspective".equals(resource.getPath().elements()[1])) {
+                String locationName = resource.getPath().elements()[2];
                 // find the Minions at the given location
                 final Criteria criteria = new CriteriaBuilder(OnmsNode.class)
                         .alias("location", "location", Alias.JoinType.LEFT_JOIN)
