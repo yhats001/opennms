@@ -253,6 +253,7 @@ class OpennmsSeleniumHarCollector {
 					LOG.debug("testSelenium writing to elastic");
 					try {
 						elasticClient.sendBulkJsonArray(jsonArrayData);
+					        LOG.debug("testSelenium succesfully wrote data to elastic");
 					} catch (Throwable ex) {
 						LOG.error("testSelenium() error sending bulk data to elastic ", ex);
 					}

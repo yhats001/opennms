@@ -127,7 +127,7 @@ public class OnmsHarPollMetaData {
         this.ipAddr = ipAddr;
     }
 
-    public int getNodeId() {
+    public Integer getNodeId() {
         return nodeId;
     }
 
