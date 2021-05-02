@@ -121,9 +121,18 @@ public class MetaTagDataLoader extends CacheLoader<CollectionResource, Map<Strin
             // create tags for categories
             nodeOptional.ifPresent(onmsNode -> mapCategories(tags, onmsNode));
 
+            // set the location name for latency type resources
+            if (CollectionResource.RESOURCE_TYPE_LATENCY.equals(resource.getResourceTypeName())) {
+                if (resource.getPath().elements().length >= 2) {
+                    tags.put("location", resource.getPath().elements()[0]);
+                }
+            }
+
             // this response time data from the perspective poller, try and find the first Minion associated with the location
             if (resource.getPath().elements().length >= 3 && "perspective".equals(resource.getPath().elements()[1])) {
                 String locationName = resource.getPath().elements()[2];
+                tags.put("location", locationName);
+
                 // find the Minions at the given location
                 final Criteria criteria = new CriteriaBuilder(OnmsNode.class)
                         .alias("location", "location", Alias.JoinType.LEFT_JOIN)
