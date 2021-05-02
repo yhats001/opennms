@@ -37,7 +37,11 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.opennms.core.criteria.Alias;
+import org.opennms.core.criteria.Criteria;
+import org.opennms.core.criteria.CriteriaBuilder;
 import org.opennms.core.rpc.utils.mate.EntityScopeProvider;
+import org.opennms.core.rpc.utils.mate.EntityScopeProviderImpl;
 import org.opennms.core.rpc.utils.mate.FallbackScope;
 import org.opennms.core.rpc.utils.mate.Interpolator;
 import org.opennms.core.rpc.utils.mate.Scope;
@@ -116,6 +120,26 @@ public class MetaTagDataLoader extends CacheLoader<CollectionResource, Map<Strin
 
             // create tags for categories
             nodeOptional.ifPresent(onmsNode -> mapCategories(tags, onmsNode));
+
+            // this response time data from the perspective poller, try and find the first Minion associated with the location
+            if ("perspective".equals(resource.getPath().elements()[0])) {
+                String locationName = resource.getPath().elements()[1];
+                // find the Minions at the given location
+                final Criteria criteria = new CriteriaBuilder(OnmsNode.class)
+                        .alias("location", "location", Alias.JoinType.LEFT_JOIN)
+                        .eq("location.id", locationName)
+                        .eq("foreignSource", "Minions")
+                        .toCriteria();
+                List<OnmsNode> nodes = nodeDao.findMatching(criteria);
+                for (OnmsNode minionNode : nodes) {
+                    Optional<String> geohash = EntityScopeProviderImpl.getNodeGeoHash(minionNode);
+                    if (geohash.isPresent()) {
+                        tags.put("minionGeohash", geohash.get());
+                        break;
+                    }
+                }
+            }
+
             return tags;
         });
     }

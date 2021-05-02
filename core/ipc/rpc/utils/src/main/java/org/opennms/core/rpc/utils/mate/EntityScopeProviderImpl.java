@@ -109,7 +109,7 @@ public class EntityScopeProviderImpl implements EntityScopeProvider {
                     .map(NODE, "sys-object-id", (n) -> Optional.ofNullable(n.getSysObjectId()))
                     .map(NODE, "location", (n) -> Optional.ofNullable(n.getLocation().getLocationName()))
                     .map(NODE, "area", (n) -> Optional.ofNullable(n.getLocation().getMonitoringArea()))
-                    .map(NODE, "geohash", this::getNodeGeoHash);
+                    .map(NODE, "geohash", EntityScopeProviderImpl::getNodeGeoHash);
             scopes.add(nodeScope);
 
             if (node.getAssetRecord() != null) {
@@ -197,7 +197,7 @@ public class EntityScopeProviderImpl implements EntityScopeProvider {
      * @param node node from which to derive the geohash
      * @return geohash
      */
-    private Optional<String> getNodeGeoHash(final OnmsNode node) {
+    public static Optional<String> getNodeGeoHash(final OnmsNode node) {
         double latitude = Double.NaN;
         double longitude = Double.NaN;
 
