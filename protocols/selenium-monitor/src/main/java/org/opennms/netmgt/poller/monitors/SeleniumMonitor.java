@@ -204,7 +204,7 @@ public class SeleniumMonitor extends AbstractServiceMonitor {
 	}
 
 	private Class<?> createGroovyClass(String filename) throws CompilationFailedException, IOException {
-		GroovyClassLoader gcl = new GroovyClassLoader(GroovyClassLoader.class.getClassLoader());
+	
 		String opennmsHome = System.getProperty("opennms.home");
 		String etcPath = "";
 		if(!Strings.isNullOrEmpty(opennmsHome)) {
@@ -214,7 +214,15 @@ public class SeleniumMonitor extends AbstractServiceMonitor {
 		}
 		String file = etcPath + "/selenium/" + filename;
 		SeleniumMonitor.LOG.debug("Loading groovy class from file name: " + file);
-		return gcl.parseClass(new File(file));
+		
+		GroovyClassLoader gcl = null;
+		try {
+		    gcl = new GroovyClassLoader(GroovyClassLoader.class.getClassLoader());
+		    return gcl.parseClass(new File(file)); 
+		} finally {
+		    if (gcl != null ) gcl.close();
+		}
+		
 	}
 
 }
