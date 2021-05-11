@@ -36,9 +36,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.google.common.collect.Lists;
-
 import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.google.common.collect.Lists;
 
 /**
  * Query request attributes.
@@ -215,7 +215,7 @@ public class QueryRequest {
 
     @Override
     public String toString() {
-       return com.google.common.base.Objects.toStringHelper(this)
+       return com.google.common.base.MoreObjects.toStringHelper(this)
                  .add("Step", this.step)
                  .add("Start", this.start)
                  .add("End", this.end)
