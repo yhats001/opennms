@@ -1,5 +1,5 @@
 <template>
-
+  Test Nodes Table Component
 </template>
 
 <script lang="ts">

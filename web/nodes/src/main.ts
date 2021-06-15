@@ -1,20 +1,28 @@
 import { h, createApp } from 'vue'
 import singleSpaVue from 'single-spa-vue'
+import PrimeVue from 'primevue/config'
+
+import 'primevue/resources/themes/saga-blue/theme.css'
+import 'primevue/resources/primevue.min.css'
+import 'primeicons/primeicons.css'
 
 import App from './App.vue'
 import router from './router'
+import Vuex from 'vuex'
+import store from '@/store'
 
 const vueLifecycles = singleSpaVue({
   createApp,
   appOptions: {
     render() {
-      return h(App, {
-      })
+      return h(App, {})
     },
   },
-  handleInstance(app) {
+  handleInstance: (app) => {
     app.use(router)
-  },
+    app.use(store)
+    app.use(PrimeVue)
+  }
 })
 
 export const bootstrap = vueLifecycles.bootstrap

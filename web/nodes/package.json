@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --port 8082",
     "build": "vue-cli-service build",
     "serve:standalone": "vue-cli-service serve --mode standalone"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "primeicons": "^4.1.0",
+    "primevue": "^3.5.1",
     "single-spa-vue": "^2.1.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
