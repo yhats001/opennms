@@ -1,27 +1,27 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <Menubar :model="items" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import Menubar from 'primevue/menubar'
 
 export default defineComponent({
-  name: 'App',
   components: {
-    HelloWorld
+    Menubar
+  },
+  data() {
+    return {
+      items: [
+        {
+          label: 'Return to previous UI',
+          icon: 'pi pi-fw pi-arrow-left'
+        }
+      ]
+    }
   }
 })
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
