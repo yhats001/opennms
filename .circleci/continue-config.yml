@@ -70,15 +70,15 @@ commands:
         type: string
     steps:
       - run:
-          name: Install dependencies
+          name: Install dependencies (<< parameters.app >>)
           command: |
             cd web/<< parameters.app >>
             npm install
       - run:
-          name: Run test
+          name: Build (<< parameters.app >>)
           command: |
             cd web/<< parameters.app >>
-            npm test
+            npm run-script build
 
 jobs:
   build-web:
