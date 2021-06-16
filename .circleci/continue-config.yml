@@ -94,5 +94,5 @@ jobs:
       - build-micro-frontend-app:
           app: navbar
       - persist_to_workspace:
-          root: ~/repo
+          root: ~/project
           paths: web
