@@ -82,6 +82,7 @@ commands:
 
 jobs:
   build-web:
+    executor: web-executor
     steps:
       - cached-checkout
       - restore-nodejs-cache
