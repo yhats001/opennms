@@ -1,0 +1,18 @@
+version: 2.1
+
+setup: true
+
+orbs:
+  path-filtering: circleci/path-filtering@0.0.2
+
+workflows:
+  version: 2
+
+  setup:
+    jobs:
+      - path-filtering/filter:
+          base-revision: features/vue3
+          config-path: .circleci/continue-config.yml
+          mapping: |
+            .circleci/.* build-web true
+            web/.* build-web true
