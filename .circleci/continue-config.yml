@@ -84,9 +84,8 @@ jobs:
   build-web:
     executor: web-executor
     steps:
-      - cached-checkout
-      - restore-nodejs-cache
       - checkout
+      - restore-nodejs-cache
       - save-nodejs-cache
       - build-micro-frontend-app:
           app: root-config
