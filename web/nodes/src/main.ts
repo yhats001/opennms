@@ -8,7 +8,6 @@ import 'primeicons/primeicons.css'
 
 import App from './App.vue'
 import router from './router'
-import Vuex from 'vuex'
 import store from '@/store'
 
 const vueLifecycles = singleSpaVue({
