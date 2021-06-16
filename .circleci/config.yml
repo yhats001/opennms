@@ -14,4 +14,5 @@ workflows:
           base-revision: features/vue3
           config-path: .circleci/continue-config.yml
           mapping: |
+            .circleci/.* build-web true
             web/.* build-web true
