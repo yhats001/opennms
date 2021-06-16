@@ -41,7 +41,7 @@ commands:
           name: git fetch origin
           command: git fetch origin
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: source-v100-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
   restore-nodejs-cache:
