@@ -561,6 +561,23 @@ function createConfig(options) {
     }
   ]));
 
+  // Copy the artifacts from the micro-frontends to the build directory that will be included
+  // in the web application archive
+  myconf.plugins.push(new CopyWebpackPlugin([
+    {
+      from: path.join('..', '..', 'web', 'root-config', 'dist'),
+      to: 'ui'
+    },
+    {
+      from: path.join('..', '..', 'web', 'navbar', 'dist'),
+      to: 'ui/navbar'
+    },
+    {
+      from: path.join('..', '..', 'web', 'nodes', 'dist'),
+      to: 'ui/nodes'
+    }
+  ]));
+
   console.log('Building variant: production=' + options.production);
   //console.log(myconf);
 

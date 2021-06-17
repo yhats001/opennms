@@ -32,6 +32,8 @@
             </ul>
         </#if>
 
+        <a href="${baseHref}assets/ui/index.html"><h1>New Experience</h1></a>
+
         <onms-central-search class="ml-auto"></onms-central-search>
 
         <ul class="navbar-nav ml-auto">
