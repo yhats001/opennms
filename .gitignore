@@ -53,6 +53,6 @@ __pycache__
 # Ignore jenv local version files
 .java-version
 
-web/*/node_modules/
-web/*/package-lock.json
-web/*/dist/
+web/**/node_modules/
+web/**/package-lock.json
+web/**/dist/

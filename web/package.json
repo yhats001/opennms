@@ -1,0 +1,16 @@
+{
+  "name": "microfrontends",
+  "private": true,
+  "workspaces": [
+    "navbar",
+    "nodes",
+    "root-config"
+  ],
+  "scripts": {
+    "start": "wsrun --parallel start",
+    "build": "yarn workspaces run build"
+  },
+  "devDependencies": {
+    "wsrun": "^5.2.0"
+  }
+}
