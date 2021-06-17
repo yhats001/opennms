@@ -49,14 +49,16 @@ jobs:
       - checkout
       - restore-nodejs-cache
       - save-nodejs-cache
-      - name: Install dependencies
-        command: |
-          cd web
-          yarn
-      - name: Build applications
-        command: |
-          cd web
-          yarn build
+      - run:
+          name: Install dependencies
+          command: |
+            cd web
+            yarn
+      - run:
+          name: Build applications
+          command: |
+            cd web
+            yarn build
       - persist_to_workspace:
           root: ~/project
           paths: web
