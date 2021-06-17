@@ -1,10 +1,10 @@
 import { portal } from './axiosInstance'
-import { NodeApiResponse, QueryParameters } from '@/types'
+import { QueryParameters } from '@/types'
 import { queryParametersHandler } from './serviceHelpers'
 
-const endpoint = '/nodes'
+const endpoint = '/events'
 
-const getNodes = async (queryParameters?: QueryParameters): Promise<NodeApiResponse | false> => {
+const getEvents = async (queryParameters?: QueryParameters): Promise<any> => {
   let endpointWithQueryString = ''
 
   if (queryParameters) {
@@ -16,7 +16,7 @@ const getNodes = async (queryParameters?: QueryParameters): Promise<NodeApiRespo
 
     // no content from server
     if (resp.status === 204) {
-      return { node: [], totalCount: 0, count: 0, offset: 0 } 
+      return []
     }
 
     return resp.data
@@ -25,16 +25,6 @@ const getNodes = async (queryParameters?: QueryParameters): Promise<NodeApiRespo
   }
 }
 
-const getNodeById = async (id: string): Promise<any> => {
-  try {
-    const resp = await portal.get(`${endpoint}/${id}`)
-    return resp.data
-  } catch (err) {
-    return false
-  }
-}
-
 export {
-  getNodes,
-  getNodeById
+  getEvents
 }

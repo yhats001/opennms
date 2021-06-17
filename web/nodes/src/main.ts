@@ -17,7 +17,7 @@ const vueLifecycles = singleSpaVue({
   createApp,
   appOptions: {
     render() {
-      return h(Nodes, {})
+      return h(App, {})
     },
   },
   handleInstance: (app) => {

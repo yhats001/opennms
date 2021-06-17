@@ -5,7 +5,7 @@
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import API from '../services/nodesService'
+import API from '../services'
 
 export default defineComponent({
   name: 'NodeDetails',

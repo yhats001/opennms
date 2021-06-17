@@ -77,7 +77,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const call = ref('getNodes')
+    const call = ref('nodesModule/getNodes')
     const loading = ref(false)
     const queryParameters = ref({ 
       limit: 5, 
@@ -94,7 +94,7 @@ export default defineComponent({
 
     const updateQueryParameters = (updatedParams: QueryParameters) => queryParameters.value = updatedParams
 
-    const nodes = computed(() => store.state.nodes)
+    const nodes = computed(() => store.state.nodesModule.nodes)
 
     return {
       call,

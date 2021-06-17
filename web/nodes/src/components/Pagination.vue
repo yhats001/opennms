@@ -29,7 +29,7 @@ export default defineComponent({
 
     onMounted(() => store.dispatch(props.call, props.parameters))
 
-    const totalCount = computed(() => store.state.totalCount)
+    const totalCount = computed(() => store.state.nodesModule.totalCount)
 
     const onPage = (event: PageState) => {
       limit.value = event.rows
