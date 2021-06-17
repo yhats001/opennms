@@ -1,5 +1,7 @@
 {
   "name": "@opennms/web",
+  "version": "0.1.0",
+  "license": "AGPL-3.0",
   "scripts": {
     "start": "webpack serve --port 9000 --env isLocal",
     "lint": "eslint src --ext js,ts,tsx",
