@@ -1,8 +1,10 @@
 {
   "name": "@opennms/nodes",
   "version": "0.1.0",
+  "license": "AGPL-3.0",
   "private": true,
   "scripts": {
+    "start": "yarn serve",
     "serve": "vue-cli-service serve --port 8082",
     "build": "vue-cli-service build",
     "serve:standalone": "vue-cli-service serve --mode standalone"

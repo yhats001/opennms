@@ -7,9 +7,6 @@ executors:
   web-executor:
     docker:
       - image: cimg/node:16.3.0
-  docker-executor:
-    docker:
-      - image: cimg/base:2021.02
 
 parameters:
   build-web:
@@ -25,25 +22,6 @@ workflows:
       - build-web
 
 commands:
-  cached-checkout:
-    description: "Checkout with caching"
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - run:
-          name: git config merge.renameLimit
-          command: git config merge.renameLimit 999999
-      - run:
-          name: git fetch origin
-          command: git fetch origin
-      - save_cache:
-          key: source-v100-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
   restore-nodejs-cache:
     description: "NodeJS: Calculate cache key and restore cache"
     steps:
@@ -59,26 +37,10 @@ commands:
       - save_cache:
           key: web-nodejs-dependencies-v100-{{ checksum "nodejs-dependency-json-cache.key" }}
           paths:
+            - web/node_modules
             - web/navbar/node_modules
             - web/nodes/node_modules
             - web/root-config/node_modules
-  build-micro-frontend-app:
-    description: "Build one of the micro-frontend apps"
-    parameters:
-      app:
-        description: name of the app to build
-        type: string
-    steps:
-      - run:
-          name: Install dependencies (<< parameters.app >>)
-          command: |
-            cd web/<< parameters.app >>
-            npm install
-      - run:
-          name: Build (<< parameters.app >>)
-          command: |
-            cd web/<< parameters.app >>
-            npm run-script build
 
 jobs:
   build-web:
@@ -87,12 +49,16 @@ jobs:
       - checkout
       - restore-nodejs-cache
       - save-nodejs-cache
-      - build-micro-frontend-app:
-          app: root-config
-      - build-micro-frontend-app:
-          app: nodes
-      - build-micro-frontend-app:
-          app: navbar
+      - run:
+          name: Install dependencies
+          command: |
+            cd web
+            yarn
+      - run:
+          name: Build applications
+          command: |
+            cd web
+            yarn build
       - persist_to_workspace:
           root: ~/project
           paths: web
