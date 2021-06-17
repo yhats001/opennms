@@ -5,7 +5,7 @@
     </template>
 
     <template #end>
-        <Button>Return to previous UI</Button>
+        <a href="/opennms/" class="button">Return to previous UI</a>
     </template>
   </Menubar>
 </template>
