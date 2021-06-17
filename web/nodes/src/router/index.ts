@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Nodes from '../views/Nodes.vue'
+import NodeDetails from '../views/NodeDetails.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -8,14 +9,14 @@ const routes: Array<RouteRecordRaw> = [
     component: Nodes
   },
   {
-    path: '/nodes:id',
+    path: '/node/:id',
     name: 'Node Details',
-    component: () => import('../views/NodeDetails.vue')
+    component: NodeDetails
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 

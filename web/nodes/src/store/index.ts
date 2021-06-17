@@ -8,12 +8,14 @@ interface VuexContext {
 }
 interface State {
   nodes: Node[]
-  totalCount: number
+  totalCount: number,
+  node: Node
 }
 
 export default createStore({
   state: {
     nodes: [],
+    node: {} as Node,
     totalCount: 0
   },
 
@@ -23,6 +25,9 @@ export default createStore({
     },
     SAVE_NODES_TO_STATE: (state: State, nodes: Node[]) => {
       state.nodes = [...nodes]
+    },
+    SAVE_NODE_DETAILS_TO_STATE: (state: State, node: Node) => {
+      state.node = node
     }
   },
 
@@ -32,6 +37,12 @@ export default createStore({
       if (resp) {
         context.commit('SAVE_TOTAL_COUNT', resp.totalCount)
         context.commit('SAVE_NODES_TO_STATE', resp.node)
+      }
+    },
+    getNodeById: async (context: VuexContext, node: Node) => {
+      const resp = await API.getNodeById(node.id)
+      if (resp) {
+        context.commit('SAVE_NODE_DETAILS_TO_STATE', resp)
       }
     }
   }

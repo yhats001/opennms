@@ -25,6 +25,17 @@ const getNodes = async (queryParameters?: QueryParameters): Promise<NodeApiRespo
   }
 }
 
+
+const getNodeById = async (id: string): Promise<any> => {
+  try {
+    const resp = await portal.get(`${endpoint}/${id}`)
+    return resp.data
+  } catch (err) {
+    return false
+  }
+}
+
 export default {
-  getNodes
+  getNodes,
+  getNodeById
 }

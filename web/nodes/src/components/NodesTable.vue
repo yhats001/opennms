@@ -31,7 +31,9 @@
 
         <Column field="label" header="Label" style="min-width:12rem">
           <template #body="{data}">
-              {{data.label}}
+            <router-link :to="`/node/${data.id}`">
+              {{ data.label }}
+            </router-link>
           </template>
         </Column>
 
