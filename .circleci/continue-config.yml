@@ -58,7 +58,6 @@ jobs:
     steps:
       - git-shallow-clone/checkout:
           fetch_depth: 1
-      - checkout
       - restore-nodejs-cache
       - save-nodejs-cache
       - run:
@@ -88,9 +87,9 @@ jobs:
           command: |
             cd opennms-container/web
             ./build_container_image.sh
-      - store_artifacts:
-          path: ~/project/opennms-container/web/images/horizon.oci
-          destination: horizon.oci
+      - persist_to_workspace:
+          root: ~/project
+          paths: opennms-container/web/images
   deploy-container:
     executor: centos-build-executor
     steps:
@@ -102,7 +101,7 @@ jobs:
       - run:
           name: Load OCI
           command: |
-            docker image load -i horizon.oci
+            docker image load -i opennms-container/web/images/horizon.oci
       - run:
           name: Tag and publish Docker image to registry
           command: |

@@ -15,7 +15,7 @@ source ../set-build-environment.sh
 UI_PATH="${PWD}/target/ui"
 mkdir -p "$UI_PATH"
 pushd ../../web
-./build-and-copy.sh "${UI_PATH}"
+./copy.sh "${UI_PATH}"
 popd
 
 # Now copy other files we need to override as well
