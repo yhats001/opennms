@@ -16,3 +16,4 @@ workflows:
           mapping: |
             .circleci/.* build-web true
             web/.* build-web true
+            opennms-container/web/.* build-web true
