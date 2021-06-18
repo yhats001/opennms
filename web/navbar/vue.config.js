@@ -9,7 +9,7 @@ const importMap = new ImportMapWebpackPlugin({
         }
     },
     fileName: 'import-map.json',
-    baseUrl: 'http://localhost:8980/opennms/assets/ui/navbar/'
+    baseUrl: 'assets/ui/navbar/'
 });
 
 module.exports = {

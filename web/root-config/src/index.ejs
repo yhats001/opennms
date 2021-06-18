@@ -54,15 +54,7 @@
     }
   </script>
   <% } else { %>
-  <script type="systemjs-importmap">
-    {
-      "imports": {
-        "@opennms/root-config": "http://localhost:8980/opennms/assets/ui/opennms-root-config.js"
-      }
-    }
-  </script>
-  <script type="systemjs-importmap" src="/opennms/assets/ui/navbar/import-map.json"></script>
-  <script type="systemjs-importmap" src="/opennms/assets/ui/nodes/import-map.json"></script>
+  <script type="systemjs-importmap" src="/opennms/import-map.json.jsp"></script>
   <% } %>
 
   <!--
