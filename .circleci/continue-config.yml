@@ -26,6 +26,9 @@ workflows:
       - build-container:
           requires:
             - build-web
+      - deploy-container:
+          requires:
+            - build-container
 
 commands:
   restore-nodejs-cache:
@@ -78,5 +81,23 @@ jobs:
           name: Build Docker
           command: |
             cd opennms-container/web
-            ./build.sh
-
+            ./build_container_image.sh
+      - store_artifacts:
+          path: ~/project/opennms-container/web/images/horizon.oci
+          destination: horizon.oci
+  deploy-container:
+    executor: docker-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Load OCI
+          command: |
+            docker image load -i horizon.oci
+      - run:
+          name: Tag and publish Docker image to registry
+          command: |
+            cd opennms-container/horizon
+            ./tag.sh
+            ./publish.sh
