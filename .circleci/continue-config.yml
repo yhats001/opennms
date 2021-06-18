@@ -10,6 +10,9 @@ executors:
   docker-executor:
     docker:
       - image: docker:20.10.1-git
+  centos-build-executor:
+    docker:
+      - image: opennms/build-env:11.0.9.11-3.6.3-b5958
 
 parameters:
   build-web:
@@ -86,7 +89,7 @@ jobs:
           path: ~/project/opennms-container/web/images/horizon.oci
           destination: horizon.oci
   deploy-container:
-    executor: docker-executor
+    executor: centos-build-executor
     steps:
       - checkout
       - attach_workspace:
