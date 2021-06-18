@@ -20,6 +20,7 @@ popd
 
 # Now copy other files we need to override as well
 cp ../../opennms-webapp/src/main/webapp/WEB-INF/templates/navbar.ftl target/
+cp ../../opennms-webapp/src/main/webapp/import-map.json.jsp target/
 
 echo "Building container..."
 docker build . -t horizon
