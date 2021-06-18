@@ -6,7 +6,7 @@ fi
 
 yarn build
 
-echo "Copy ew UI structure in: $UI_PATH"
+echo "Copy new UI structure in: $UI_PATH"
 cp -R root-config/dist/* "${UI_PATH}/"
 cp -R navbar/dist "${UI_PATH}/navbar"
 cp -R nodes/dist "${UI_PATH}/nodes"

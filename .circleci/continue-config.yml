@@ -23,7 +23,7 @@ workflows:
     when: << pipeline.parameters.build-web >>
     jobs:
       - build-web
-      - build-container
+      - build-container:
           requires:
             - build-web
 
