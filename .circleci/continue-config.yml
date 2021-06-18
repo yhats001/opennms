@@ -51,6 +51,17 @@ commands:
             - web/navbar/node_modules
             - web/nodes/node_modules
             - web/root-config/node_modules
+  dockerhub-login:
+    description: "Connect to DockerHub"
+    steps:
+      - run:
+          name: Login to DockerHub
+          command: |
+            if [ -n "${DOCKERHUB_LOGIN}" ]; then
+              docker login -u ${DOCKERHUB_LOGIN} -p ${DOCKERHUB_PASS}
+            else
+              echo "WARNING: dockerhub login not found. Assuming this is a PR or other external branch build."
+            fi
 
 jobs:
   build-web:
@@ -98,6 +109,7 @@ jobs:
       - attach_workspace:
           at: ~/project
       - setup_remote_docker
+      - dockerhub-login
       - run:
           name: Load OCI
           command: |

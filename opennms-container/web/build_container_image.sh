@@ -21,6 +21,7 @@ popd
 # Now copy other files we need to override as well
 cp ../../opennms-webapp/src/main/webapp/WEB-INF/templates/navbar.ftl target/
 
-# Build and save
+echo "Building container..."
 docker build . -t horizon
+echo "Exporting container image to file..."
 docker image save horizon -o images/horizon.oci
