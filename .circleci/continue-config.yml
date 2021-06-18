@@ -2,14 +2,12 @@ version: 2.1
 
 orbs:
   path-filtering: circleci/path-filtering@0.0.2
+  git-shallow-clone: guitarrapc/git-shallow-clone@2.0.3
 
 executors:
   web-executor:
     docker:
       - image: cimg/node:16.3.0
-  docker-executor:
-    docker:
-      - image: docker:20.10.1-git
   centos-build-executor:
     docker:
       - image: opennms/build-env:11.0.9.11-3.6.3-b5958
@@ -58,6 +56,8 @@ jobs:
   build-web:
     executor: web-executor
     steps:
+      - git-shallow-clone/checkout:
+          fetch_depth: 1
       - checkout
       - restore-nodejs-cache
       - save-nodejs-cache
@@ -75,11 +75,14 @@ jobs:
           root: ~/project
           paths: web
   build-container:
-    executor: docker-executor
+    executor: centos-build-executor
     steps:
-      - checkout
+      - git-shallow-clone/checkout:
+          fetch_depth: 1
       - attach_workspace:
           at: ~/project
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Build Docker
           command: |
@@ -91,9 +94,11 @@ jobs:
   deploy-container:
     executor: centos-build-executor
     steps:
-      - checkout
+      - git-shallow-clone/checkout:
+          fetch_depth: 1
       - attach_workspace:
           at: ~/project
+      - setup_remote_docker
       - run:
           name: Load OCI
           command: |
