@@ -128,7 +128,7 @@ jobs:
           name: Run tests
           command: |
             cd ~/project/smoke-test
-            ../compile.pl -Dit.test=UXRefreshUI install verify
+            ../compile.pl -Dit.test=UXRefreshIT install verify
       - save_cache:
           paths:
             - ~/.m2

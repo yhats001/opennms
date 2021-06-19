@@ -42,7 +42,7 @@ import org.opennms.smoketest.utils.RestClient;
 import org.openqa.selenium.By;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class UXRefreshUI extends OpenNMSSeleniumIT {
+public class UXRefreshIT extends OpenNMSSeleniumIT {
 
     @Before
     public void setUp() throws Exception {
