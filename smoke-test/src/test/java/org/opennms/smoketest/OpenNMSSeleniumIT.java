@@ -57,9 +57,10 @@ public class OpenNMSSeleniumIT extends AbstractOpenNMSSeleniumHelper {
 
     public static final BrowserWebDriverContainer firefox = (BrowserWebDriverContainer) new BrowserWebDriverContainer()
             .withCapabilities(getFirefoxOptions())
+            // Record for demo purposes, accept instability as described bellow.
             // Don't record. This container can fail and cause test instability - for example if retrieving the
             // .flv from the container fails, an exception will be thrown causing the test to fail
-            .withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.SKIP, new File("target"))
+            .withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL, new File("target"))
             //.withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL, new File("target"))
             .withNetwork(Network.SHARED)
             // Increase the containers shared memory to 2GB to help prevent Firefox from crashing

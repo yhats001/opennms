@@ -11,6 +11,9 @@ executors:
   centos-build-executor:
     docker:
       - image: opennms/build-env:11.0.9.11-3.6.3-b5958
+  smoke-test-executor:
+    machine:
+      image: ubuntu-2004:202010-01
 
 parameters:
   build-web:
@@ -27,9 +30,12 @@ workflows:
       - build-container:
           requires:
             - build-web
-      - deploy-container:
+      - test-container:
           requires:
             - build-container
+      - deploy-container:
+          requires:
+            - test-container
 
 commands:
   restore-nodejs-cache:
@@ -101,6 +107,47 @@ jobs:
       - persist_to_workspace:
           root: ~/project
           paths: opennms-container/web/images
+
+  test-container:
+    executor: smoke-test-executor
+    steps:
+      - git-shallow-clone/checkout:
+          fetch_depth: 1
+      - attach_workspace:
+          at: ~/project
+      - setup_remote_docker
+      - dockerhub-login
+      - run:
+          name: Load OCI
+          command: |
+            docker image load -i opennms-container/web/images/horizon.oci
+      - run:
+          name: Run tests
+          command: |
+            cd ~/project/smoke-test
+            ../compile.pl -Dit.test=UXRefreshUI install verify
+      - run:
+          name: Gather test artifacts
+          when: always
+          command: |
+            mkdir -p ~/test-results/junit
+            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+            find . -type f -regex ".*/target/failsafe-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+            mkdir -p ~/test-artifacts/recordings
+            cp -R ~/project/smoke-test/target/*.flv ~/test-artifacts/recordings || true
+            cp -R ~/project/smoke-test/target/screenshots ~/test-artifacts/ || true
+            cp -R ~/project/smoke-test/target/logs ~/test-artifacts/ || true
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          when: always
+          path: ~/test-results
+          destination: test-results
+      - store_artifacts:
+          when: always
+          path: ~/test-artifacts
+          destination: test-artifacts
+
   deploy-container:
     executor: centos-build-executor
     steps:
