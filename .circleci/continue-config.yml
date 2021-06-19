@@ -120,16 +120,19 @@ jobs:
           name: Load OCI
           command: |
             docker image load -i opennms-container/web/images/horizon.oci
-      - run:
-          name: Compile dependencies
-          command: |
-            # FIXME: We should be able to pull latest SNAPSHOTS from Maven instead of building here
-            ./compile.pl -DskipTests=true
+      - restore_cache:
+          keys:
+          - v100-smoke-dependencies-{{ checksum "smoke-test/pom.xml" }}
+          - v100-smoke-dependencies-
       - run:
           name: Run tests
           command: |
             cd ~/project/smoke-test
             ../compile.pl -Dit.test=UXRefreshUI install verify
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v100-smoke-dependencies-{{ checksum "smoke-test/pom.xml" }}
       - run:
           name: Gather test artifacts
           when: always
