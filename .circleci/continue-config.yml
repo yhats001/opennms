@@ -110,6 +110,7 @@ jobs:
 
   test-container:
     executor: smoke-test-executor
+    resource_class: xlarge
     steps:
       - git-shallow-clone/checkout:
           fetch_depth: 1
@@ -119,6 +120,11 @@ jobs:
           name: Load OCI
           command: |
             docker image load -i opennms-container/web/images/horizon.oci
+      - run:
+          name: Compile dependencies
+          command: |
+            # FIXME: We should be able to pull latest SNAPSHOTS from Maven instead of building here
+            ./compile.pl -DskipTests=true
       - run:
           name: Run tests
           command: |
