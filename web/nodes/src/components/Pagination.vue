@@ -13,13 +13,25 @@ export default defineComponent({
     Paginator
   },
   props: {
-    call: {
+    moduleName: {
       type: String,
       required: true
-    },  
+    },
+    functionName: {
+      type: String,
+      required: true
+    },
+    totalCountStateName: {
+      type: String,
+      required: true
+    },
     parameters: {
       type: Object,
       required: true
+    },
+    payload: {
+      type: Object,
+      required: false
     }
   },
   setup(props, { emit }) {
@@ -27,16 +39,21 @@ export default defineComponent({
     const limit = ref(props.parameters.limit)
     const offset = ref(props.parameters.offset)
 
-    onMounted(() => store.dispatch(props.call, props.parameters))
-
-    const totalCount = computed(() => store.state.nodesModule.totalCount)
+    onMounted(() => store.dispatch(`${props.moduleName}/${props.functionName}`, props.payload || props.parameters))
+    const totalCount = computed(() => store.state[props.moduleName][props.totalCountStateName])
 
     const onPage = (event: PageState) => {
       limit.value = event.rows
       offset.value = event.rows * event.page
       const updatedParameters = { ...props.parameters, limit: limit.value, offset: offset.value }
       emit('update-query-parameters', updatedParameters)
-      store.dispatch(props.call, updatedParameters)
+
+      if (props.payload) {
+        store.dispatch(`${props.moduleName}/${props.functionName}`, { ...props.payload, queryParameters: updatedParameters })
+        return
+      }
+
+      store.dispatch(`${props.moduleName}/${props.functionName}`, updatedParameters)
     }
 
     return {

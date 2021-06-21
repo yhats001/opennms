@@ -1,9 +1,19 @@
-
-export interface NodeApiResponse {
+export interface ApiResponse {
   count: number
-  node: Node[]
   offset: number
   totalCount: number
+}
+
+export interface NodeApiResponse extends ApiResponse {
+  node: Node[]
+}
+
+export interface EventApiResponse extends ApiResponse {
+  event: Event[]
+}
+
+export interface SnmpInterfaceApiResponse extends ApiResponse {
+  snmpInterface: SnmpInterface[]
 }
 export interface Node {
   location: string
@@ -17,6 +27,48 @@ export interface Node {
   foreignSource: string
   lastEgressFlow: any
   lastIngressFlow: any
+}
+
+export interface Event {
+  createTime: number
+  description: string
+  display: string
+  id: number
+  label: string
+  location: string
+  log: string
+  logMessage: string
+  nodeId: number
+  nodeLabel: string
+  parameters: Array<any>
+  severity: string
+  source: string
+  time: number
+  uei: string
+}
+
+export interface SnmpInterface {
+  collect: boolean
+  collectFlag: string
+  collectionUserSpecified: boolean
+  hasEgressFlows: boolean
+  hasFlows: boolean
+  hasIngressFlows: boolean
+  id: number
+  ifAdminStatus: number
+  ifAlias: any
+  ifDescr: any
+  ifIndex: number
+  ifName: any
+  ifOperStatus: number
+  ifSpeed: number
+  ifType: number
+  lastCapsdPoll: number
+  lastEgressFlow: any
+  lastIngressFlow: any
+  lastSnmpPoll: number
+  physAddr: any
+  poll: boolean
 }
 
 export interface Category {

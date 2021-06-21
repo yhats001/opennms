@@ -1,19 +1,19 @@
 <template>
-  <div class="top-30">
-    <DataTable :value="nodes" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
+  <div>
+    <DataTable :value="events" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
 
         <!-- Search -->
         <template #header>
           <div class="flex-container space-between">
             <div>
-              <h1>Nodes</h1>
+              <h1>Recent Events</h1>
             </div>
-            <div>
+            <!-- <div>
               <span class="p-input-icon-left top-30">
                 <i class="pi pi-search" />
-                <InputText @input="searchFilterHandler" placeholder="Search node label" />
+                <InputText @input="searchFilterHandler" placeholder="Search event" />
               </span>
-            </div>
+            </div> -->
           </div>
         </template>
 
@@ -29,34 +29,34 @@
           <Pagination 
             :parameters="queryParameters" 
             @update-query-parameters="updateQueryParameters" 
-            moduleName="nodesModule"
-            functionName="getNodes"
+            moduleName="eventsModule"
+            functionName="getEvents"
             totalCountStateName="totalCount"/>
         </template>
 
-        <Column field="label" header="Label" style="min-width:12rem">
+        <Column field="id" header="Id">
           <template #body="{data}">
-            <router-link :to="`/node/${data.id}`">
-              {{ data.label }}
+            <router-link :to="`/event/${data.id}`">
+              {{ data.id }}
             </router-link>
           </template>
         </Column>
 
-        <Column field="location" header="Location" style="min-width:12rem">
+        <Column field="createTime" header="Created">
           <template #body="{data}">
-              {{data.location}}
+              {{data.createTime}}
           </template>
         </Column>
 
-        <Column field="foreignSource" header="Foreign Source" style="min-width:12rem">
+        <Column field="severity" header="Severity">
           <template #body="{data}">
-              {{data.foreignSource}}
+              {{data.severity}}
           </template>
         </Column>
 
-        <Column field="foreignId" header="Foreign Id" style="min-width:12rem">
+        <Column field="logMessage" header="Message">
           <template #body="{data}">
-              {{data.foreignId}}
+            <span v-html="data.logMessage"></span> 
           </template>
         </Column>
     </DataTable>
@@ -71,9 +71,10 @@ import Column from 'primevue/column'
 import Pagination from './Pagination.vue'
 import { useStore } from 'vuex'
 import { QueryParameters } from '../types'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
-  name: 'NodesTable',
+  name: 'EventsTable',
   components: {
     DataTable,
     InputText,
@@ -82,29 +83,29 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const route = useRoute()
     const loading = ref(false)
     const queryParameters = ref({ 
       limit: 5, 
       offset: 0,
-      orderBy: 'label'
+      _s: `node.id==${route.params.id}`
     } as QueryParameters)
 
-    const searchFilterHandler = (e: any) => {
-      const searchQueryParam: QueryParameters = { _s: `node.label==${e.target.value}*`}
-      const updatedParams = { ...queryParameters.value, ...searchQueryParam }
-      store.dispatch('nodesModule/getNodes', updatedParams)
-      queryParameters.value = updatedParams
-    }
+    // const searchFilterHandler = (e: any) => {
+    //   const searchQueryParam: QueryParameters = { _s: `node.id==${route.params.id}`}
+    //   const updatedParams = { ...queryParameters.value, ...searchQueryParam }
+    //   store.dispatch(call.value, updatedParams)
+    //   queryParameters.value = updatedParams
+    // }
 
     const updateQueryParameters = (updatedParams: QueryParameters) => queryParameters.value = updatedParams
-
-    const nodes = computed(() => store.state.nodesModule.nodes)
+    const events = computed(() => store.state.eventsModule.events)
 
     return {
-      nodes,
+      events,
       loading,
       queryParameters,
-      searchFilterHandler,
+     // searchFilterHandler,
       updateQueryParameters
     }
   }
@@ -112,7 +113,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  .top-30 {
-    margin-top: 30px;
+  .flex-container {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+  }
+  .space-between { 
+    justify-content: space-between; 
   }
 </style>

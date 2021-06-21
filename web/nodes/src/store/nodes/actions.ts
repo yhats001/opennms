@@ -22,7 +22,16 @@ const getNodeById = async (context: VuexContext, node: Node) => {
   }
 }
 
+const getNodeSnmpInterfaces = async (context: VuexContext, payload: { id: string, queryParameters?: QueryParameters }) => {
+  const resp = await API.getNodeSnmpInterfaces(payload.id, payload.queryParameters)
+  if (resp) {
+    context.commit('SAVE_SNMP_INTERFACES_TO_STATE', resp.snmpInterface)
+    context.commit('SAVE_SNMP_INTERFACES_TOTAL_COUNT', resp.totalCount)
+  }
+}
+
 export default {
   getNodes,
-  getNodeById
+  getNodeById,
+  getNodeSnmpInterfaces
 }

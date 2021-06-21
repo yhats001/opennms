@@ -1,23 +1,24 @@
 <template>
-  Node details
+  <div class="flex-container space-between">
+    <div>
+      <SnmpInterfacesTable />
+    </div>
+    <div>
+      <EventsTable />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import API from '../services'
+import { defineComponent } from 'vue'
+import EventsTable from '@/components/EventsTable.vue'
+import SnmpInterfacesTable from '@/components/SnmpInterfacesTable.vue'
 
 export default defineComponent({
   name: 'NodeDetails',
   components: {
-
-  },
-  setup() {
-    const route = useRoute()
-
-    onMounted(() => {
-      API.getNodeById(route.params.id as string)
-    })
+    EventsTable,
+    SnmpInterfacesTable
   }
 })
 </script>

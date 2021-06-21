@@ -1,5 +1,5 @@
 import { portal } from './axiosInstance'
-import { NodeApiResponse, QueryParameters } from '@/types'
+import { NodeApiResponse, SnmpInterfaceApiResponse, QueryParameters } from '@/types'
 import { queryParametersHandler } from './serviceHelpers'
 
 const endpoint = '/nodes'
@@ -12,7 +12,7 @@ const getNodes = async (queryParameters?: QueryParameters): Promise<NodeApiRespo
   }
 
   try {
-    const resp = await portal.get(endpointWithQueryString)
+    const resp = await portal.get(endpointWithQueryString || endpoint)
 
     // no content from server
     if (resp.status === 204) {
@@ -34,7 +34,30 @@ const getNodeById = async (id: string): Promise<any> => {
   }
 }
 
+const getNodeSnmpInterfaces = async (id: string, queryParameters?: QueryParameters): Promise<SnmpInterfaceApiResponse | false> => {
+  const snmpInterfaceEndpoint = `${endpoint}/${id}/snmpinterfaces`
+  let endpointWithQueryString = ''
+
+  if (queryParameters) {
+    endpointWithQueryString = queryParametersHandler(queryParameters, snmpInterfaceEndpoint)
+  }
+
+  try {
+    const resp = await portal.get(`${endpointWithQueryString || snmpInterfaceEndpoint}`)
+
+    // no content from server
+    if (resp.status === 204) {
+      return { snmpInterface: [], totalCount: 0, count: 0, offset: 0 }
+    }
+
+    return resp.data
+  } catch (err) {
+    return false
+  }
+}
+
 export {
   getNodes,
-  getNodeById
+  getNodeById,
+  getNodeSnmpInterfaces
 }

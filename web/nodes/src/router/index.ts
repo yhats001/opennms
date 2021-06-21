@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Nodes from '../views/Nodes.vue'
 import NodeDetails from '../views/NodeDetails.vue'
 

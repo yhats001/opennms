@@ -1,4 +1,4 @@
-import { Node } from '@/types'
+import { Node, SnmpInterface } from '@/types'
 import { State } from './state'
 
 const SAVE_TOTAL_COUNT = (state: State, totalCount: number) => {
@@ -12,8 +12,19 @@ const SAVE_NODES_TO_STATE = (state: State, nodes: Node[]) => {
 const SAVE_NODE_DETAILS_TO_STATE = (state: State, node: Node) => {
   state.node = node
 }
+
+const SAVE_SNMP_INTERFACES_TO_STATE = (state: State, snmpInterfaces: SnmpInterface[]) => {
+  state.snmpInterfaces = snmpInterfaces
+}
+
+const SAVE_SNMP_INTERFACES_TOTAL_COUNT = (state: State, snmpInterfacesTotalCount: number) => {
+  state.snmpInterfacesTotalCount = snmpInterfacesTotalCount
+}
+
 export default {
   SAVE_TOTAL_COUNT,
   SAVE_NODES_TO_STATE,
-  SAVE_NODE_DETAILS_TO_STATE
+  SAVE_NODE_DETAILS_TO_STATE,
+  SAVE_SNMP_INTERFACES_TO_STATE,
+  SAVE_SNMP_INTERFACES_TOTAL_COUNT
 }

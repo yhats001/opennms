@@ -10,9 +10,6 @@ import App from './App.vue'
 import router from './router'
 import store from '@/store'
 
-// test
-import Nodes from './views/Nodes.vue'
-
 const vueLifecycles = singleSpaVue({
   createApp,
   appOptions: {
