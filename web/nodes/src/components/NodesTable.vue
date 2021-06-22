@@ -1,66 +1,64 @@
 <template>
-  <div class="top-30">
-    <DataTable :value="nodes" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
+  <DataTable :value="nodes" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll" class="top-30">
 
-        <!-- Search -->
-        <template #header>
-          <div class="flex-container space-between">
-            <div>
-              <h1>Nodes</h1>
-            </div>
-            <div>
-              <span class="p-input-icon-left top-30">
-                <i class="pi pi-search" />
-                <InputText @input="searchFilterHandler" placeholder="Search node label" />
-              </span>
-            </div>
+      <!-- Search -->
+      <template #header>
+        <div class="flex-container space-between">
+          <div>
+            <h1>Nodes</h1>
           </div>
+          <div>
+            <span class="p-input-icon-left top-30">
+              <i class="pi pi-search" />
+              <InputText @input="searchFilterHandler" placeholder="Search node label" />
+            </span>
+          </div>
+        </div>
+      </template>
+
+      <template #empty>
+          No data found.
+      </template>
+
+      <template #loading>
+          Loading data. Please wait.
+      </template>
+
+      <template #footer>
+        <Pagination
+          :parameters="queryParameters"
+          @update-query-parameters="updateQueryParameters"
+          moduleName="nodesModule"
+          functionName="getNodes"
+          totalCountStateName="totalCount"/>
+      </template>
+
+      <Column field="label" header="Label" style="min-width:12rem">
+        <template #body="{data}">
+          <router-link :to="`/node/${data.id}`">
+            {{ data.label }}
+          </router-link>
         </template>
+      </Column>
 
-        <template #empty>
-            No data found.
+      <Column field="location" header="Location" style="min-width:12rem">
+        <template #body="{data}">
+            {{data.location}}
         </template>
+      </Column>
 
-        <template #loading>
-            Loading data. Please wait.
+      <Column field="foreignSource" header="Foreign Source" style="min-width:12rem">
+        <template #body="{data}">
+            {{data.foreignSource}}
         </template>
+      </Column>
 
-        <template #footer>
-          <Pagination 
-            :parameters="queryParameters" 
-            @update-query-parameters="updateQueryParameters" 
-            moduleName="nodesModule"
-            functionName="getNodes"
-            totalCountStateName="totalCount"/>
+      <Column field="foreignId" header="Foreign Id" style="min-width:12rem">
+        <template #body="{data}">
+            {{data.foreignId}}
         </template>
-
-        <Column field="label" header="Label" style="min-width:12rem">
-          <template #body="{data}">
-            <router-link :to="`/node/${data.id}`">
-              {{ data.label }}
-            </router-link>
-          </template>
-        </Column>
-
-        <Column field="location" header="Location" style="min-width:12rem">
-          <template #body="{data}">
-              {{data.location}}
-          </template>
-        </Column>
-
-        <Column field="foreignSource" header="Foreign Source" style="min-width:12rem">
-          <template #body="{data}">
-              {{data.foreignSource}}
-          </template>
-        </Column>
-
-        <Column field="foreignId" header="Foreign Id" style="min-width:12rem">
-          <template #body="{data}">
-              {{data.foreignId}}
-          </template>
-        </Column>
-    </DataTable>
-  </div>
+      </Column>
+  </DataTable>
 </template>
 
 <script lang="ts">
@@ -110,9 +108,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-  .top-30 {
-    margin-top: 30px;
-  }
-</style>

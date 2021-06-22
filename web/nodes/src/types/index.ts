@@ -15,6 +15,11 @@ export interface EventApiResponse extends ApiResponse {
 export interface SnmpInterfaceApiResponse extends ApiResponse {
   snmpInterface: SnmpInterface[]
 }
+
+export interface IpInterfaceApiResponse extends ApiResponse {
+  ipInterface: IpInterface[]
+}
+
 export interface Node {
   location: string
   type: string
@@ -69,6 +74,22 @@ export interface SnmpInterface {
   lastSnmpPoll: number
   physAddr: any
   poll: boolean
+}
+
+export interface IpInterface {
+  ifIndex: string
+  isManaged: null | string
+  id: string
+  ipAddress: string
+  isDown: boolean
+  lastCapsdPoll: number
+  lastEgressFlow: any
+  lastIngressFlow: any
+  monitoredServiceCount: number
+  nodeId: number
+  snmpInterface: SnmpInterface
+  snmpPrimary: string
+  hostName: string
 }
 
 export interface Category {

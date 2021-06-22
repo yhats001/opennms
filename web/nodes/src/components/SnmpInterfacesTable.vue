@@ -1,70 +1,63 @@
 <template>
-  <div>
-    <DataTable :value="snmpInterfaces" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
+  <DataTable :value="snmpInterfaces" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
 
-        <template #header>
-          <div class="flex-container space-between">
-            <div>
-              <h1>SNMP Interfaces</h1>
-            </div>
-            <!-- <div>
-              <span class="p-input-icon-left top-30">
-                <i class="pi pi-search" />
-                <InputText @input="searchFilterHandler" placeholder="Search event" />
-              </span>
-            </div> -->
+      <!-- <template #header>
+          <div>
+            <span class="p-input-icon-left top-30">
+              <i class="pi pi-search" />
+              <InputText @input="searchFilterHandler" placeholder="Search event" />
+            </span>
           </div>
+      </template> -->
+
+      <template #empty>
+          No data found.
+      </template>
+
+      <template #loading>
+          Loading data. Please wait.
+      </template>
+
+      <template #footer>
+        <Pagination
+          :payload="payload"
+          :parameters="queryParameters"
+          @update-query-parameters="updateQueryParameters"
+          moduleName="nodesModule"
+          functionName="getNodeSnmpInterfaces"
+          totalCountStateName="snmpInterfacesTotalCount"/>
+      </template>
+
+      <Column field="idIndex" header="SNMP ifIndex">
+        <template #body="{data}">
+          {{ data.ifIndex }}
         </template>
+      </Column>
 
-        <template #empty>
-            No data found.
+      <Column field="ifDescr" header="SNMP ifDescr">
+        <template #body="{data}">
+            {{ data.idDescr || 'N/A' }}
         </template>
+      </Column>
 
-        <template #loading>
-            Loading data. Please wait.
+      <Column field="ifName" header="SNMP ifName">
+        <template #body="{data}">
+            {{ data.ifName || 'N/A' }}
         </template>
+      </Column>
 
-        <template #footer>
-          <Pagination
-            :payload="payload"
-            :parameters="queryParameters" 
-            @update-query-parameters="updateQueryParameters" 
-            moduleName="nodesModule"
-            functionName="getNodeSnmpInterfaces"
-            totalCountStateName="snmpInterfacesTotalCount"/>
+      <Column field="ifAlias" header="SNMP ifAlias">
+        <template #body="{data}">
+          {{ data.ifAlias || 'N/A' }}
         </template>
+      </Column>
 
-        <Column field="idIndex" header="SNMP ifIndex">
-          <template #body="{data}">
-            {{ data.ifIndex }}
-          </template>
-        </Column>
-
-        <Column field="ifDescr" header="SNMP ifDescr">
-          <template #body="{data}">
-              {{ data.idDescr || 'N/A' }}
-          </template>
-        </Column>
-
-        <Column field="ifName" header="SNMP ifName">
-          <template #body="{data}">
-              {{ data.ifName || 'N/A' }}
-          </template>
-        </Column>
-
-        <Column field="ifAlias" header="SNMP ifAlias">
-          <template #body="{data}">
-            {{ data.ifAlias || 'N/A' }}
-          </template>
-        </Column>
-
-        <Column field="ifSpeed" header="SNMP ifSpeed">
-          <template #body="{data}">
-            <span v-html="data.ifSpeed"></span> 
-          </template>
-        </Column>
-    </DataTable>
-  </div>
+      <Column field="ifSpeed" header="SNMP ifSpeed">
+        <template #body="{data}">
+          <span v-html="data.ifSpeed"></span>
+        </template>
+      </Column>
+  </DataTable>
 </template>
 
 <script lang="ts">
@@ -116,15 +109,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-  .flex-container {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    display: flex;
-  }
-  .space-between { 
-    justify-content: space-between; 
-  }
-</style>

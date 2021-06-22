@@ -30,8 +30,17 @@ const getNodeSnmpInterfaces = async (context: VuexContext, payload: { id: string
   }
 }
 
+const getNodeIpInterfaces = async (context: VuexContext, payload: { id: string, queryParameters?: QueryParameters }) => {
+  const resp = await API.getNodeIpInterfaces(payload.id, payload.queryParameters)
+  if (resp) {
+    context.commit('SAVE_IP_INTERFACES_TO_STATE', resp.ipInterface)
+    context.commit('SAVE_IP_INTERFACES_TOTAL_COUNT', resp.totalCount)
+  }
+}
+
 export default {
   getNodes,
   getNodeById,
+  getNodeIpInterfaces,
   getNodeSnmpInterfaces
 }

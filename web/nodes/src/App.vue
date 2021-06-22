@@ -12,4 +12,14 @@
   .space-between { 
     justify-content: space-between; 
   }
+  .space-evenly {
+    justify-content: space-evenly;
+  }
+  .top-30 {
+    margin-top: 30px;
+  }
+  .page {
+    max-width: 1600px;
+    margin: auto
+  }
 </style>

@@ -15,10 +15,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped lang="scss">
-  .page {
-    max-width: 1200px;
-    margin: auto
-  }
-</style>

@@ -1,66 +1,62 @@
 <template>
-  <div>
-    <DataTable :value="events" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
+  <DataTable :value="events" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
 
-        <!-- Search -->
-        <template #header>
-          <div class="flex-container space-between">
-            <div>
-              <h1>Recent Events</h1>
-            </div>
-            <!-- <div>
-              <span class="p-input-icon-left top-30">
-                <i class="pi pi-search" />
-                <InputText @input="searchFilterHandler" placeholder="Search event" />
-              </span>
-            </div> -->
-          </div>
+      <!-- Search -->
+      <template #header>
+        Recent Events
+        <!-- <div class="flex-container space-between">
+          <div>
+            <span class="p-input-icon-left top-30">
+              <i class="pi pi-search" />
+              <InputText @input="searchFilterHandler" placeholder="Search event" />
+            </span>
+          </div> 
+        </div> -->
+      </template>
+
+      <template #empty>
+          No data found.
+      </template>
+
+      <template #loading>
+          Loading data. Please wait.
+      </template>
+
+      <template #footer>
+        <Pagination 
+          :parameters="queryParameters" 
+          @update-query-parameters="updateQueryParameters" 
+          moduleName="eventsModule"
+          functionName="getEvents"
+          totalCountStateName="totalCount"/>
+      </template>
+
+      <Column field="id" header="Id">
+        <template #body="{data}">
+          <router-link :to="`/event/${data.id}`">
+            {{ data.id }}
+          </router-link>
         </template>
+      </Column>
 
-        <template #empty>
-            No data found.
+      <Column field="createTime" header="Created">
+        <template #body="{data}">
+            {{data.createTime}}
         </template>
+      </Column>
 
-        <template #loading>
-            Loading data. Please wait.
+      <Column field="severity" header="Severity">
+        <template #body="{data}">
+            {{data.severity}}
         </template>
+      </Column>
 
-        <template #footer>
-          <Pagination 
-            :parameters="queryParameters" 
-            @update-query-parameters="updateQueryParameters" 
-            moduleName="eventsModule"
-            functionName="getEvents"
-            totalCountStateName="totalCount"/>
+      <Column field="logMessage" header="Message">
+        <template #body="{data}">
+          <span v-html="data.logMessage"></span> 
         </template>
-
-        <Column field="id" header="Id">
-          <template #body="{data}">
-            <router-link :to="`/event/${data.id}`">
-              {{ data.id }}
-            </router-link>
-          </template>
-        </Column>
-
-        <Column field="createTime" header="Created">
-          <template #body="{data}">
-              {{data.createTime}}
-          </template>
-        </Column>
-
-        <Column field="severity" header="Severity">
-          <template #body="{data}">
-              {{data.severity}}
-          </template>
-        </Column>
-
-        <Column field="logMessage" header="Message">
-          <template #body="{data}">
-            <span v-html="data.logMessage"></span> 
-          </template>
-        </Column>
-    </DataTable>
-  </div>
+      </Column>
+  </DataTable>
 </template>
 
 <script lang="ts">
@@ -111,15 +107,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-  .flex-container {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    display: flex;
-  }
-  .space-between { 
-    justify-content: space-between; 
-  }
-</style>

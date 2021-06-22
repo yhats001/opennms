@@ -5,6 +5,7 @@ import PrimeVue from 'primevue/config'
 import 'primevue/resources/themes/saga-blue/theme.css'
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
+import 'primeflex/primeflex.css'
 
 import App from './App.vue'
 import router from './router'
@@ -15,7 +16,7 @@ const vueLifecycles = singleSpaVue({
   appOptions: {
     render() {
       return h(App, {})
-    },
+    }
   },
   handleInstance: (app) => {
     app.use(router)

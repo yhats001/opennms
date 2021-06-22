@@ -1,5 +1,5 @@
 import { portal } from './axiosInstance'
-import { NodeApiResponse, SnmpInterfaceApiResponse, QueryParameters } from '@/types'
+import { NodeApiResponse, SnmpInterfaceApiResponse, QueryParameters, IpInterfaceApiResponse } from '@/types'
 import { queryParametersHandler } from './serviceHelpers'
 
 const endpoint = '/nodes'
@@ -56,8 +56,31 @@ const getNodeSnmpInterfaces = async (id: string, queryParameters?: QueryParamete
   }
 }
 
+const getNodeIpInterfaces = async (id: string, queryParameters?: QueryParameters): Promise<IpInterfaceApiResponse | false> => {
+  const ipInterfaceEndpoint = `${endpoint}/${id}/ipinterfaces`
+  let endpointWithQueryString = ''
+
+  if (queryParameters) {
+    endpointWithQueryString = queryParametersHandler(queryParameters, ipInterfaceEndpoint)
+  }
+
+  try {
+    const resp = await portal.get(`${endpointWithQueryString || ipInterfaceEndpoint}`)
+
+    // no content from server
+    if (resp.status === 204) {
+      return { ipInterface: [], totalCount: 0, count: 0, offset: 0 }
+    }
+
+    return resp.data
+  } catch (err) {
+    return false
+  }
+}
+
 export {
   getNodes,
   getNodeById,
+  getNodeIpInterfaces,
   getNodeSnmpInterfaces
 }

@@ -1,0 +1,87 @@
+<template>
+  <DataTable :value="ipInterfaces" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
+      <template #empty>
+          There are no IP interfaces for this node 
+      </template>
+
+      <template #loading>
+          Loading data. Please wait.
+      </template>
+
+      <template #footer>
+        <Pagination
+          :payload="payload"
+          :parameters="queryParameters" 
+          @update-query-parameters="updateQueryParameters" 
+          moduleName="nodesModule"
+          functionName="getNodeIpInterfaces"
+          totalCountStateName="ipInterfacesTotalCount"/>
+      </template>
+
+      <Column field="ipAddress" header="IP Address">
+        <template #body="{data}">
+          {{ data.ipAddress }}
+        </template>
+      </Column>
+
+      <Column field="hostName" header="IP Host Name">
+        <template #body="{data}">
+            {{ data.hostName || 'N/A' }}
+        </template>
+      </Column>
+
+      <Column field="ifIndex" header="SNMP ifIndex">
+        <template #body="{data}">
+            {{ data.ifIndex || 'N/A' }}
+        </template>
+      </Column>
+
+      <Column field="managed" header="Managed">
+        <template #body="{data}">
+          {{ data.managed || 'False' }}
+        </template>
+      </Column>
+  </DataTable>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, computed } from 'vue'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import Pagination from './Pagination.vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+import { QueryParameters } from '../types'
+
+export default defineComponent({
+  name: 'IP Interfaces Table',
+  components: {
+    DataTable,
+    Column,
+    Pagination
+  },
+  setup() {
+    const store = useStore()
+    const route = useRoute()
+
+    // data
+    const loading = ref(false)
+    const queryParameters = ref({ limit: 5, offset: 0, _s: 'isManaged==isnull=0' } as QueryParameters)
+    const payload = ref({ id: route.params.id, queryParameters})
+
+    // methods
+    const updateQueryParameters = (updatedParams: QueryParameters) => queryParameters.value = updatedParams
+
+    // computed
+    const ipInterfaces = computed(() => store.state.nodesModule.ipInterfaces)
+
+    return {
+      loading,
+      ipInterfaces,
+      queryParameters,
+      payload,
+      updateQueryParameters
+    }
+  }
+})
+</script>
