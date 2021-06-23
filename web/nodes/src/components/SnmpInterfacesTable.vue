@@ -1,14 +1,6 @@
 <template>
-  <DataTable :value="snmpInterfaces" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
-
-      <!-- <template #header>
-          <div>
-            <span class="p-input-icon-left top-30">
-              <i class="pi pi-search" />
-              <InputText @input="searchFilterHandler" placeholder="Search event" />
-            </span>
-          </div>
-      </template> -->
+  <DataTable 
+    :value="snmpInterfaces" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll" @sort="sort" :lazy="true">
 
       <template #empty>
           No data found.
@@ -28,31 +20,31 @@
           totalCountStateName="snmpInterfacesTotalCount"/>
       </template>
 
-      <Column field="idIndex" header="SNMP ifIndex">
+      <Column field="ifIndex" header="SNMP ifIndex" :sortable="true">
         <template #body="{data}">
           {{ data.ifIndex }}
         </template>
       </Column>
 
-      <Column field="ifDescr" header="SNMP ifDescr">
+      <Column field="ifDescr" header="SNMP ifDescr" :sortable="true">
         <template #body="{data}">
             {{ data.idDescr || 'N/A' }}
         </template>
       </Column>
 
-      <Column field="ifName" header="SNMP ifName">
+      <Column field="ifName" header="SNMP ifName" :sortable="true">
         <template #body="{data}">
             {{ data.ifName || 'N/A' }}
         </template>
       </Column>
 
-      <Column field="ifAlias" header="SNMP ifAlias">
+      <Column field="ifAlias" header="SNMP ifAlias" :sortable="true">
         <template #body="{data}">
           {{ data.ifAlias || 'N/A' }}
         </template>
       </Column>
 
-      <Column field="ifSpeed" header="SNMP ifSpeed">
+      <Column field="ifSpeed" header="SNMP ifSpeed" :sortable="true">
         <template #body="{data}">
           <span v-html="data.ifSpeed"></span>
         </template>
@@ -68,7 +60,7 @@ import Column from 'primevue/column'
 import Pagination from './Pagination.vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { QueryParameters } from '../types'
+import useQueryParameters from '@/hooks/useQueryParams'
 
 export default defineComponent({
   name: 'SNMP Interfaces Table',
@@ -82,28 +74,20 @@ export default defineComponent({
     const store = useStore()
     const route = useRoute()
     const loading = ref(false)
-    const queryParameters = ref({
+    const optionalPayload = { id: route.params.id }
+    const { queryParameters, updateQueryParameters, payload, sort } = useQueryParameters({
       limit: 5, 
       offset: 0,
-    } as QueryParameters)
-    const payload = ref({ id: route.params.id, queryParameters})
+    }, 'nodesModule/getNodeSnmpInterfaces', optionalPayload)
 
-    // const searchFilterHandler = (e: any) => {
-    //   const searchQueryParam: QueryParameters = { _s: `node.id==${route.params.id}`}
-    //   const updatedParams = { ...queryParameters.value, ...searchQueryParam }
-    //   store.dispatch(call.value, updatedParams)
-    //   queryParameters.value = updatedParams
-    // }
-
-    const updateQueryParameters = (updatedParams: QueryParameters) => queryParameters.value = updatedParams
     const snmpInterfaces = computed(() => store.state.nodesModule.snmpInterfaces)
 
     return {
+      sort,
       loading,
+      payload,
       snmpInterfaces,
       queryParameters,
-      payload,
-     // searchFilterHandler,
       updateQueryParameters
     }
   }

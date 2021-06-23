@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="ipInterfaces" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
+  <DataTable :value="ipInterfaces" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll" @sort="sort" :lazy="true">
       <template #empty>
           There are no IP interfaces for this node 
       </template>
@@ -18,7 +18,7 @@
           totalCountStateName="ipInterfacesTotalCount"/>
       </template>
 
-      <Column field="ipAddress" header="IP Address">
+      <Column field="ipAddress" header="IP Address" :sortable="true">
         <template #body="{data}">
           {{ data.ipAddress }}
         </template>
@@ -51,7 +51,7 @@ import Column from 'primevue/column'
 import Pagination from './Pagination.vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { QueryParameters } from '../types'
+import useQueryParameters from '@/hooks/useQueryParams'
 
 export default defineComponent({
   name: 'IP Interfaces Table',
@@ -63,23 +63,25 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const route = useRoute()
+    const optionalPayload = { id: route.params.id }
+    const { queryParameters, updateQueryParameters, sort, payload } = useQueryParameters({ 
+      limit: 5, 
+      offset: 0, 
+      _s: 'isManaged==isnull=0' 
+    }, 'nodesModule/getNodeIpInterfaces', optionalPayload)
 
     // data
     const loading = ref(false)
-    const queryParameters = ref({ limit: 5, offset: 0, _s: 'isManaged==isnull=0' } as QueryParameters)
-    const payload = ref({ id: route.params.id, queryParameters})
-
-    // methods
-    const updateQueryParameters = (updatedParams: QueryParameters) => queryParameters.value = updatedParams
 
     // computed
     const ipInterfaces = computed(() => store.state.nodesModule.ipInterfaces)
 
     return {
       loading,
+      sort,
+      payload,
       ipInterfaces,
       queryParameters,
-      payload,
       updateQueryParameters
     }
   }

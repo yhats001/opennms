@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="nodes" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll" class="top-30">
+  <DataTable :value="nodes" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll" class="top-30" @sort="sort" :lazy="true">
 
       <!-- Search -->
       <template #header>
@@ -33,7 +33,7 @@
           totalCountStateName="totalCount"/>
       </template>
 
-      <Column field="label" header="Label" style="min-width:12rem">
+      <Column field="label" header="Label" style="min-width:12rem" :sortable="true">
         <template #body="{data}">
           <router-link :to="`/node/${data.id}`">
             {{ data.label }}
@@ -41,19 +41,19 @@
         </template>
       </Column>
 
-      <Column field="location" header="Location" style="min-width:12rem">
+      <Column field="location" header="Location" style="min-width:12rem" :sortable="true">
         <template #body="{data}">
             {{data.location}}
         </template>
       </Column>
 
-      <Column field="foreignSource" header="Foreign Source" style="min-width:12rem">
+      <Column field="foreignSource" header="Foreign Source" style="min-width:12rem" :sortable="true">
         <template #body="{data}">
             {{data.foreignSource}}
         </template>
       </Column>
 
-      <Column field="foreignId" header="Foreign Id" style="min-width:12rem">
+      <Column field="foreignId" header="Foreign Id" style="min-width:12rem" :sortable="true">
         <template #body="{data}">
             {{data.foreignId}}
         </template>
@@ -69,6 +69,7 @@ import Column from 'primevue/column'
 import Pagination from './Pagination.vue'
 import { useStore } from 'vuex'
 import { QueryParameters } from '../types'
+import useQueryParameters from '@/hooks/useQueryParams'
 
 export default defineComponent({
   name: 'NodesTable',
@@ -81,11 +82,11 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const loading = ref(false)
-    const queryParameters = ref({ 
+    const { queryParameters, updateQueryParameters, sort } = useQueryParameters({ 
       limit: 5, 
       offset: 0,
       orderBy: 'label'
-    } as QueryParameters)
+    }, 'nodesModule/getNodes')
 
     const searchFilterHandler = (e: any) => {
       const searchQueryParam: QueryParameters = { _s: `node.label==${e.target.value}*`}
@@ -94,12 +95,11 @@ export default defineComponent({
       queryParameters.value = updatedParams
     }
 
-    const updateQueryParameters = (updatedParams: QueryParameters) => queryParameters.value = updatedParams
-
     const nodes = computed(() => store.state.nodesModule.nodes)
 
     return {
       nodes,
+      sort,
       loading,
       queryParameters,
       searchFilterHandler,

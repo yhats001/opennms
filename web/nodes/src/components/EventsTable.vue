@@ -1,17 +1,8 @@
 <template>
-  <DataTable :value="events" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll">
+  <DataTable :value="events" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll" @sort="sort" :lazy="true">
 
-      <!-- Search -->
       <template #header>
         Recent Events
-        <!-- <div class="flex-container space-between">
-          <div>
-            <span class="p-input-icon-left top-30">
-              <i class="pi pi-search" />
-              <InputText @input="searchFilterHandler" placeholder="Search event" />
-            </span>
-          </div> 
-        </div> -->
       </template>
 
       <template #empty>
@@ -31,7 +22,7 @@
           totalCountStateName="totalCount"/>
       </template>
 
-      <Column field="id" header="Id">
+      <Column field="id" header="Id" :sortable="true">
         <template #body="{data}">
           <router-link :to="`/event/${data.id}`">
             {{ data.id }}
@@ -66,8 +57,8 @@ import InputText from 'primevue/inputtext'
 import Column from 'primevue/column'
 import Pagination from './Pagination.vue'
 import { useStore } from 'vuex'
-import { QueryParameters } from '../types'
 import { useRoute } from 'vue-router'
+import useQueryParameters from '@/hooks/useQueryParams'
 
 export default defineComponent({
   name: 'EventsTable',
@@ -81,28 +72,21 @@ export default defineComponent({
     const store = useStore()
     const route = useRoute()
     const loading = ref(false)
-    const queryParameters = ref({ 
+
+    const { queryParameters, sort, updateQueryParameters } = useQueryParameters({ 
       limit: 5, 
       offset: 0,
       _s: `node.id==${route.params.id}`
-    } as QueryParameters)
+    }, 'eventsModule/getEvents')
 
-    // const searchFilterHandler = (e: any) => {
-    //   const searchQueryParam: QueryParameters = { _s: `node.id==${route.params.id}`}
-    //   const updatedParams = { ...queryParameters.value, ...searchQueryParam }
-    //   store.dispatch(call.value, updatedParams)
-    //   queryParameters.value = updatedParams
-    // }
-
-    const updateQueryParameters = (updatedParams: QueryParameters) => queryParameters.value = updatedParams
     const events = computed(() => store.state.eventsModule.events)
 
     return {
       events,
       loading,
       queryParameters,
-     // searchFilterHandler,
-      updateQueryParameters
+      updateQueryParameters,
+      sort
     }
   }
 })

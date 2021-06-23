@@ -105,3 +105,13 @@ export interface QueryParameters {
   orderBy?: string
   order?: 'asc' | 'desc'
 }
+
+export interface SortProps {
+  filters: Object
+  first: Number
+  multiSortMeta: Object
+  originalEvent: MouseEvent
+  rows: Number
+  sortField: string
+  sortOrder: 1 | -1
+}
