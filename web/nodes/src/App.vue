@@ -19,7 +19,7 @@
     margin-top: 30px;
   }
   .page {
-    max-width: 1600px;
+    max-width: 2400px;
     margin: auto
   }
 </style>

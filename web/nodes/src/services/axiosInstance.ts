@@ -1,10 +1,16 @@
 import axios from 'axios'
 
-const portal = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL || '/opennms/api/v2',
+const v2 = axios.create({
+  baseURL: process.env.VUE_APP_BASE_V2_URL || '/opennms/api/v2',
+  withCredentials: true
+})
+
+const rest = axios.create({
+  baseURL: process.env.VUE_APP_BASE_REST_URL || '/opennms/rest',
   withCredentials: true
 })
 
 export {
-  portal
+  v2,
+  rest
 }

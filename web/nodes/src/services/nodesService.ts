@@ -1,6 +1,7 @@
-import { portal } from './axiosInstance'
+import { v2, rest } from './axiosInstance'
 import { NodeApiResponse, SnmpInterfaceApiResponse, QueryParameters, IpInterfaceApiResponse } from '@/types'
 import { queryParametersHandler } from './serviceHelpers'
+import dayjs from 'dayjs'
 
 const endpoint = '/nodes'
 
@@ -12,7 +13,7 @@ const getNodes = async (queryParameters?: QueryParameters): Promise<NodeApiRespo
   }
 
   try {
-    const resp = await portal.get(endpointWithQueryString || endpoint)
+    const resp = await v2.get(endpointWithQueryString || endpoint)
 
     // no content from server
     if (resp.status === 204) {
@@ -27,7 +28,7 @@ const getNodes = async (queryParameters?: QueryParameters): Promise<NodeApiRespo
 
 const getNodeById = async (id: string): Promise<any> => {
   try {
-    const resp = await portal.get(`${endpoint}/${id}`)
+    const resp = await v2.get(`${endpoint}/${id}`)
     return resp.data
   } catch (err) {
     return false
@@ -43,7 +44,7 @@ const getNodeSnmpInterfaces = async (id: string, queryParameters?: QueryParamete
   }
 
   try {
-    const resp = await portal.get(`${endpointWithQueryString || snmpInterfaceEndpoint}`)
+    const resp = await v2.get(`${endpointWithQueryString || snmpInterfaceEndpoint}`)
 
     // no content from server
     if (resp.status === 204) {
@@ -65,7 +66,7 @@ const getNodeIpInterfaces = async (id: string, queryParameters?: QueryParameters
   }
 
   try {
-    const resp = await portal.get(`${endpointWithQueryString || ipInterfaceEndpoint}`)
+    const resp = await v2.get(`${endpointWithQueryString || ipInterfaceEndpoint}`)
 
     // no content from server
     if (resp.status === 204) {
@@ -78,9 +79,35 @@ const getNodeIpInterfaces = async (id: string, queryParameters?: QueryParameters
   }
 }
 
+const getNodeAvailabilityImage = async (id: string, ipAddress: string, service: string): Promise<any> => {
+  const now = dayjs()
+  const startTime = now.subtract(1, 'day').unix()
+  const endTime = now.unix()
+
+  try {
+    const resp = await rest.get(`/timeline/html/${id}/${ipAddress}/${service}/${startTime}/${endTime}`)
+
+    return resp.data
+  } catch (err) {
+    return false
+  }
+}
+
+const getNodeAvailabilityPercentage = async (id: string): Promise<any> => {
+  try {
+    const resp = await rest.get(`/availabilityRestService/nodes/${id}`)
+
+    return resp.data
+  } catch (err) {
+    return false
+  }
+}
+
 export {
   getNodes,
   getNodeById,
   getNodeIpInterfaces,
-  getNodeSnmpInterfaces
+  getNodeSnmpInterfaces,
+  getNodeAvailabilityImage,
+  getNodeAvailabilityPercentage
 }

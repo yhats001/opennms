@@ -1,10 +1,10 @@
-import { v2 } from './axiosInstance'
-import { QueryParameters, EventApiResponse } from '@/types'
+import { v2, rest } from './axiosInstance'
+import { QueryParameters } from '@/types'
 import { queryParametersHandler } from './serviceHelpers'
 
-const endpoint = '/events'
+const endpoint = '/ifservices'
 
-const getEvents = async (queryParameters?: QueryParameters): Promise<EventApiResponse | false> => {
+const getNodeIfServices = async (queryParameters?: QueryParameters): Promise<any> => {
   let endpointWithQueryString = ''
 
   if (queryParameters) {
@@ -14,9 +14,8 @@ const getEvents = async (queryParameters?: QueryParameters): Promise<EventApiRes
   try {
     const resp = await v2.get(endpointWithQueryString || endpoint)
 
-    // no content from server
     if (resp.status === 204) {
-      return { event: [], count: 0, offset: 0, totalCount: 0 }
+      return { service: [], totalCount: 0, count: 0, offset: 0 } 
     }
 
     return resp.data
@@ -26,5 +25,5 @@ const getEvents = async (queryParameters?: QueryParameters): Promise<EventApiRes
 }
 
 export {
-  getEvents
+  getNodeIfServices
 }

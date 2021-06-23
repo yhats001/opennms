@@ -1,5 +1,11 @@
 <template>
-  <DataTable :value="events" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll" @sort="sort" :lazy="true">
+  <DataTable :value="events" 
+    showGridlines dataKey="id" 
+    :loading="loading" 
+    responsiveLayout="scroll"
+    @sort="sort" 
+    :lazy="true" 
+    :rowClass="getRowClass">
 
       <template #header>
         Recent Events
@@ -32,7 +38,7 @@
 
       <Column field="createTime" header="Created">
         <template #body="{data}">
-            {{data.createTime}}
+            {{ getFormattedCreatedTime(data.createTime) }}
         </template>
       </Column>
 
@@ -44,7 +50,7 @@
 
       <Column field="logMessage" header="Message">
         <template #body="{data}">
-          <span v-html="data.logMessage"></span> 
+          <span v-html="data.logMessage" class="log-message"></span> 
         </template>
       </Column>
   </DataTable>
@@ -59,6 +65,8 @@ import Pagination from './Pagination.vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import useQueryParameters from '@/hooks/useQueryParams'
+import { Event } from '@/types'
+import dayjs from 'dayjs'
 
 export default defineComponent({
   name: 'EventsTable',
@@ -81,13 +89,32 @@ export default defineComponent({
 
     const events = computed(() => store.state.eventsModule.events)
 
+    const getRowClass = (data: Event) => data.severity.toLowerCase()
+    const getFormattedCreatedTime = (time: number) => dayjs(time).format()
+
     return {
+      sort,
       events,
       loading,
+      getRowClass,
       queryParameters,
       updateQueryParameters,
-      sort
+      getFormattedCreatedTime
     }
   }
 })
 </script>
+
+<style lang="scss">
+  .log-message {
+    p {
+      margin: 0px !important;
+    }
+  }
+  .warning {
+    background: var(--orange-100) !important;
+  }
+  .normal {
+    background: var(--green-100) !important;
+  }
+</style>
