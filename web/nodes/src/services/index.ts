@@ -3,8 +3,7 @@ import {
   getNodeById, 
   getNodeIpInterfaces,
   getNodeSnmpInterfaces,
-  getNodeAvailabilityImage,
-  getNodeAvailabilityPercentage 
+  getNodeAvailabilityPercentage
 } from './nodesService'
 
 import { getEvents } from './eventsService'
@@ -17,6 +16,5 @@ export default {
   getNodeIfServices,
   getNodeIpInterfaces,
   getNodeSnmpInterfaces,
-  getNodeAvailabilityImage,
   getNodeAvailabilityPercentage
 }

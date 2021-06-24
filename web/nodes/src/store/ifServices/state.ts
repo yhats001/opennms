@@ -1,9 +1,13 @@
+import { IfService } from '@/types'
+
 export interface State {
-  ifServices: any
+  ifServices: IfService[]
+  totalCount: number
 }
 
 const state: State = {
-  ifServices: []
+  ifServices: [],
+  totalCount: 0
 }
 
 export default () => state

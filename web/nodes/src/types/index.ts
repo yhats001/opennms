@@ -20,6 +20,10 @@ export interface IpInterfaceApiResponse extends ApiResponse {
   ipInterface: IpInterface[]
 }
 
+export interface IfServiceApiResponse extends ApiResponse {
+  "monitored-service": IfService[]
+}
+
 export interface Node {
   location: string
   type: string
@@ -92,6 +96,18 @@ export interface IpInterface {
   hostName: string
 }
 
+export interface IfService {
+  id: string
+  ipAddress: string
+  ipInterfaceId: number
+  isDown: false
+  isMonitored: boolean
+  node: string
+  serviceName: string
+  status: string
+  statusCode: string
+}
+
 export interface Category {
   authorizedGroups: string[]
   id: number
@@ -104,6 +120,7 @@ export interface QueryParameters {
   _s?: string
   orderBy?: string
   order?: 'asc' | 'desc'
+  [x: string]: any 
 }
 
 export interface SortProps {

@@ -1,7 +1,6 @@
 import { v2, rest } from './axiosInstance'
 import { NodeApiResponse, SnmpInterfaceApiResponse, QueryParameters, IpInterfaceApiResponse } from '@/types'
 import { queryParametersHandler } from './serviceHelpers'
-import dayjs from 'dayjs'
 
 const endpoint = '/nodes'
 
@@ -79,20 +78,6 @@ const getNodeIpInterfaces = async (id: string, queryParameters?: QueryParameters
   }
 }
 
-const getNodeAvailabilityImage = async (id: string, ipAddress: string, service: string): Promise<any> => {
-  const now = dayjs()
-  const startTime = now.subtract(1, 'day').unix()
-  const endTime = now.unix()
-
-  try {
-    const resp = await rest.get(`/timeline/html/${id}/${ipAddress}/${service}/${startTime}/${endTime}`)
-
-    return resp.data
-  } catch (err) {
-    return false
-  }
-}
-
 const getNodeAvailabilityPercentage = async (id: string): Promise<any> => {
   try {
     const resp = await rest.get(`/availabilityRestService/nodes/${id}`)
@@ -108,6 +93,5 @@ export {
   getNodeById,
   getNodeIpInterfaces,
   getNodeSnmpInterfaces,
-  getNodeAvailabilityImage,
   getNodeAvailabilityPercentage
 }
