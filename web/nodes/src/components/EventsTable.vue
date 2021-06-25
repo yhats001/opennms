@@ -112,9 +112,9 @@ export default defineComponent({
     }
   }
   .warning {
-    background: var(--orange-100) !important;
+    background: rgba(255, 175, 34, 0.5) !important;
   }
   .normal {
-    background: var(--green-100) !important;
+    background: rgba(133, 217, 165, 0.5) !important;
   }
 </style>

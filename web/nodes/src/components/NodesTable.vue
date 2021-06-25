@@ -1,14 +1,14 @@
 <template>
-  <DataTable :value="nodes" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll" class="top-30" @sort="sort" :lazy="true">
+  <DataTable :value="nodes" showGridlines dataKey="id" :loading="loading" responsiveLayout="scroll" @sort="sort" :lazy="true" class="nodes-table">
 
       <!-- Search -->
       <template #header>
         <div class="flex-container space-between">
           <div>
-            <h1>Nodes</h1>
+            <h2 style="line-height: 0.7;">Nodes</h2>
           </div>
           <div>
-            <span class="p-input-icon-left top-30">
+            <span class="p-input-icon-left top-10">
               <i class="pi pi-search" />
               <InputText @input="searchFilterHandler" placeholder="Search node label" />
             </span>
@@ -108,3 +108,11 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+  .nodes-table::v-deep .p-datatable-header {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    height: 60px;
+  }
+</style>

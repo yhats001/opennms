@@ -80,7 +80,7 @@ const getNodeIpInterfaces = async (id: string, queryParameters?: QueryParameters
 
 const getNodeAvailabilityPercentage = async (id: string): Promise<any> => {
   try {
-    const resp = await rest.get(`/availabilityRestService/nodes/${id}`)
+    const resp = await rest.get(`/availability/nodes/${id}`)
 
     return resp.data
   } catch (err) {

@@ -1,4 +1,4 @@
-import { IpInterface, Node, SnmpInterface } from '@/types'
+import { IpInterface, Node, NodeAvailability, SnmpInterface } from '@/types'
 
 export interface State {
   nodes: Node[]
@@ -7,7 +7,8 @@ export interface State {
   snmpInterfaces: SnmpInterface[]
   snmpInterfacesTotalCount: number
   ipInterfaces: IpInterface[]
-  ipInterfacesTotalCount: number
+  ipInterfacesTotalCount: number,
+  availability: NodeAvailability
 }
 
 const state: State = {
@@ -17,7 +18,8 @@ const state: State = {
   snmpInterfaces: [],
   snmpInterfacesTotalCount: 0,
   ipInterfaces: [],
-  ipInterfacesTotalCount: 0
+  ipInterfacesTotalCount: 0,
+  availability: {} as NodeAvailability
 }
 
 export default () => state

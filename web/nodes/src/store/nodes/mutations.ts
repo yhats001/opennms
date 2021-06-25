@@ -1,4 +1,4 @@
-import { IpInterface, Node, SnmpInterface } from '@/types'
+import { IpInterface, Node, NodeAvailability, SnmpInterface } from '@/types'
 import { State } from './state'
 
 const SAVE_TOTAL_COUNT = (state: State, totalCount: number) => {
@@ -29,6 +29,10 @@ const SAVE_IP_INTERFACES_TOTAL_COUNT = (state: State, ipInterfacesTotalCount: nu
   state.ipInterfacesTotalCount = ipInterfacesTotalCount
 }
 
+const SAVE_NODE_AVAILABILITY_TO_STATE = (state: State, availability: NodeAvailability) => {
+  state.availability = availability
+}
+
 export default {
   SAVE_TOTAL_COUNT,
   SAVE_NODES_TO_STATE,
@@ -36,5 +40,6 @@ export default {
   SAVE_SNMP_INTERFACES_TO_STATE,
   SAVE_SNMP_INTERFACES_TOTAL_COUNT,
   SAVE_IP_INTERFACES_TO_STATE,
-  SAVE_IP_INTERFACES_TOTAL_COUNT
+  SAVE_IP_INTERFACES_TOTAL_COUNT,
+  SAVE_NODE_AVAILABILITY_TO_STATE
 }

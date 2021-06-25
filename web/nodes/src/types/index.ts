@@ -132,3 +132,20 @@ export interface SortProps {
   sortField: string
   sortOrder: 1 | -1
 }
+
+export interface NodeAvailability {
+  availability: number
+  id: number
+  ipinterfaces: [{
+    address: string
+    availability: number
+    id: number
+    services: [{
+      id: number, 
+      name: string, 
+      availability: number
+    }]
+  }]
+  'service-count': number
+  'service-down-count': number
+}

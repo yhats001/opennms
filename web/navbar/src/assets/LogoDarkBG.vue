@@ -14,7 +14,8 @@ export default {
 
 <style>
   .img {
-    widows: 8em;
+    width: 8em;
     height: 2em;
+    cursor: pointer;
   }
 </style>

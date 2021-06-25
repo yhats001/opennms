@@ -2,31 +2,43 @@
   <Panel header="Availability (last 24 hours)">
 
     <div class="p-grid">
-      <div class="p-col-12 p-sm-4 p-md-3">
-        Availability
+
+      <div class="flex-container availability-header">
+        <div class="service">
+          Availability
+        </div>
+        <div class="timeline" ref="timeline">
+          {{ availability.availability }}%
+        </div>
       </div>
-      <div class="p-col-9" ref="timeline"></div>
 
-      <template v-for="ipAddress of ipAddresses">
 
-        <div class="p-col-12 p-sm-4 p-md-2">
-          {{ ipAddress }}
+      <template v-for="ipinterface of availability.ipinterfaces">
+        <Divider />
+
+        <div class="flex-container">
+          <div class="service">
+            {{ ipinterface.address }}
+          </div>
+          <div class="">
+            <img :src="`${baseUrl}/opennms/rest/timeline/header/${startTime}/${endTime}/${width}`" :data-imgsrc="`/opennms/rest/timeline/header/${startTime}/${endTime}/`">
+          </div>
         </div>
-        <div class="p-col-10">
-          <img :src="`${baseUrl}/opennms/rest/timeline/header/${startTime}/${endTime}/${width}`" :data-imgsrc="`/opennms/rest/timeline/header/${startTime}/${endTime}/`">
-        </div>
 
-
-        <template v-for="service of services">
-          <template v-if="service.ipAddress === ipAddress">
-            <div class="p-col-12 p-sm-4 p-md-2">
-              {{ service.serviceName }}
-            </div>
-            <div class="p-col-10">
-              <img :src="`${baseUrl}/opennms/rest/timeline/image/${nodeId}/${service.ipAddress}/${service.serviceName}/${startTime}/${endTime}/${width}`">
-            </div>
-          </template>
+        <template v-for="service of ipinterface.services">
+          <div class="flex-container">
+              <div class="service">
+                {{ service.name }}
+              </div>
+              <div>
+                <img :src="`${baseUrl}/opennms/rest/timeline/image/${nodeId}/${ipinterface.address}/${service.name}/${startTime}/${endTime}/${width}`">
+              </div>
+              <div class="percentage">
+                {{ service.availability }}%
+              </div>
+          </div>
         </template>
+
         
       </template>
     </div>
@@ -35,20 +47,19 @@
 </template>
   
 <script lang="ts">
-import { defineComponent, onMounted, ref, onUnmounted } from 'vue'
+import { defineComponent, onMounted, ref, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import useQueryParameters from '@/hooks/useQueryParams'
-import { IfService } from '@/types'
-import API from '@/services'
 import dayjs from 'dayjs'
 import Panel from 'primevue/panel'
+import Divider from 'primevue/divider'
 import { debounce } from 'lodash'
 
 export default defineComponent({
   name: 'Node Availability Graph',
   components: {
-    Panel
+    Panel,
+    Divider
   },
   setup() {
     // @ts-ignore
@@ -56,34 +67,25 @@ export default defineComponent({
     const store = useStore()
     const route = useRoute()
     const nodeId = ref(route.params.id as string)
-    const call = 'ifServicesModule/getNodeIfServices'
-    const { queryParameters } = useQueryParameters({ "node.id": nodeId.value}, call)
     const now = dayjs()
     const startTime = ref(now.subtract(1, 'day').unix())
     const endTime = ref(now.unix())
     const width = ref(200)
-    const services = ref([] as IfService[])
-    const availabilityPercentage = ref()
     const ipAddresses = ref()
     const timeline = ref(null)
 
     const recalculateWidth = () => {
       // @ts-ignore
-      width.value = timeline.value.clientWidth -20
+      width.value = timeline.value.clientWidth -50
     }
     
     onMounted(async () => {
-      services.value = await store.dispatch(call, queryParameters.value)
-      availabilityPercentage.value = await API.getNodeAvailabilityPercentage(nodeId.value)
-      ipAddresses.value = Array.from(
-        new Set(
-          services.value.map((service: IfService) => service.ipAddress)
-        )
-      )
-
+      store.dispatch('nodesModule/getNodeAvailabilityPercentage', nodeId.value)
       recalculateWidth()
       window.addEventListener("resize", debounce(recalculateWidth, 100));
     })
+
+    const availability = computed(() => store.state.nodesModule.availability)
 
     onUnmounted(() => window.removeEventListener("resize", recalculateWidth))
 
@@ -92,13 +94,27 @@ export default defineComponent({
       nodeId,
       baseUrl,
       endTime,
-      services,
       timeline,
       startTime,
       ipAddresses,
-      queryParameters,
-      availabilityPercentage
+      availability
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+  .service {
+    min-width: 120px;
+  }
+  .timeline {
+    flex-grow: 1;
+    text-align: end;
+  }
+  .availability-header {
+    width: 100%;
+  }
+  .percentage {
+    margin-left: 10px;
+  }
+</style>

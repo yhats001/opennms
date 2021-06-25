@@ -1,6 +1,8 @@
 <template>
-  <div class="page">
-    <NodesTable />
+  <div class="p-grid page">
+    <div class="p-col-12">
+      <NodesTable />
+    </div>
   </div>
 </template>
 

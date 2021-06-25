@@ -38,7 +38,7 @@
 
       <Column field="managed" header="Managed">
         <template #body="{data}">
-          {{ data.managed || 'False' }}
+          {{ data.managed }}
         </template>
       </Column>
   </DataTable>
@@ -67,7 +67,7 @@ export default defineComponent({
     const { queryParameters, updateQueryParameters, sort, payload } = useQueryParameters({ 
       limit: 5, 
       offset: 0, 
-      _s: 'isManaged==isnull=0' 
+      _s: 'isManaged==U,isManaged==P,isManaged==N,isManaged==M' 
     }, 'nodesModule/getNodeIpInterfaces', optionalPayload)
 
     // data

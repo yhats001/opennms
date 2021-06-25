@@ -38,9 +38,17 @@ const getNodeIpInterfaces = async (context: VuexContext, payload: { id: string, 
   }
 }
 
+const getNodeAvailabilityPercentage = async (context: VuexContext, id: string) => {
+  const availability = await API.getNodeAvailabilityPercentage(id)
+  if (availability) {
+    context.commit('SAVE_NODE_AVAILABILITY_TO_STATE', availability)
+  }
+}
+
 export default {
   getNodes,
   getNodeById,
   getNodeIpInterfaces,
-  getNodeSnmpInterfaces
+  getNodeSnmpInterfaces,
+  getNodeAvailabilityPercentage
 }
