@@ -45,9 +45,18 @@ const getNodeAvailabilityPercentage = async (context: VuexContext, id: string) =
   }
 }
 
+const getNodeOutages = async (context: VuexContext, payload: { id: string, queryParameters?: QueryParameters }) => {
+  const resp = await API.getNodeOutages(payload.id, payload.queryParameters)
+  if (resp) {
+    context.commit('SAVE_NODE_OUTAGES_TO_STATE', resp.outage)
+    context.commit('SAVE_NODE_OUTAGES_TOTAL_COUNT_TO_STATE', resp.totalCount)
+  }
+}
+
 export default {
   getNodes,
   getNodeById,
+  getNodeOutages,
   getNodeIpInterfaces,
   getNodeSnmpInterfaces,
   getNodeAvailabilityPercentage

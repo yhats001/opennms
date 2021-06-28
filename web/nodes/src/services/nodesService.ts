@@ -1,5 +1,11 @@
 import { v2, rest } from './axiosInstance'
-import { NodeApiResponse, SnmpInterfaceApiResponse, QueryParameters, IpInterfaceApiResponse } from '@/types'
+import { 
+  NodeApiResponse, 
+  SnmpInterfaceApiResponse, 
+  QueryParameters, 
+  IpInterfaceApiResponse,
+  NodeAvailability,
+  OutagesApiResponse } from '@/types'
 import { queryParametersHandler } from './serviceHelpers'
 
 const endpoint = '/nodes'
@@ -78,9 +84,26 @@ const getNodeIpInterfaces = async (id: string, queryParameters?: QueryParameters
   }
 }
 
-const getNodeAvailabilityPercentage = async (id: string): Promise<any> => {
+const getNodeAvailabilityPercentage = async (id: string): Promise<NodeAvailability | false> => {
   try {
     const resp = await rest.get(`/availability/nodes/${id}`)
+
+    return resp.data
+  } catch (err) {
+    return false
+  }
+}
+
+const getNodeOutages = async (id: string, queryParameters?: QueryParameters): Promise<OutagesApiResponse | false> => {
+  const outagesEndpoint = `/outages/forNode/${id}`
+  let outagesEndpointWithQueryString = ''
+
+  if (queryParameters) {
+    outagesEndpointWithQueryString = queryParametersHandler(queryParameters, outagesEndpoint)
+  }
+
+  try {
+    const resp = await rest.get(outagesEndpointWithQueryString || outagesEndpoint)
 
     return resp.data
   } catch (err) {
@@ -91,6 +114,7 @@ const getNodeAvailabilityPercentage = async (id: string): Promise<any> => {
 export {
   getNodes,
   getNodeById,
+  getNodeOutages,
   getNodeIpInterfaces,
   getNodeSnmpInterfaces,
   getNodeAvailabilityPercentage

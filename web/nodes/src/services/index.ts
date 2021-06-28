@@ -1,6 +1,7 @@
 import {
   getNodes,
-  getNodeById, 
+  getNodeById,
+  getNodeOutages,
   getNodeIpInterfaces,
   getNodeSnmpInterfaces,
   getNodeAvailabilityPercentage
@@ -13,6 +14,7 @@ export default {
   getNodes,
   getEvents,
   getNodeById,
+  getNodeOutages,
   getNodeIfServices,
   getNodeIpInterfaces,
   getNodeSnmpInterfaces,

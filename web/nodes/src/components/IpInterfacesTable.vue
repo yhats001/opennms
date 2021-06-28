@@ -38,7 +38,7 @@
 
       <Column field="managed" header="Managed">
         <template #body="{data}">
-          {{ data.managed }}
+          {{ data.isManaged }}
         </template>
       </Column>
   </DataTable>

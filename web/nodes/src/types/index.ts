@@ -20,6 +20,10 @@ export interface IpInterfaceApiResponse extends ApiResponse {
   ipInterface: IpInterface[]
 }
 
+export interface OutagesApiResponse extends ApiResponse {
+  outage: Outage[]
+}
+
 export interface IfServiceApiResponse extends ApiResponse {
   "monitored-service": IfService[]
 }
@@ -94,6 +98,17 @@ export interface IpInterface {
   snmpInterface: SnmpInterface
   snmpPrimary: string
   hostName: string
+}
+
+export interface Outage {
+  nodeId: number,
+  ipAddress: string,
+  serviceIs: number,
+  nodeLabel: string
+  location: string
+  hostname: string
+  serviceName: string
+  outageId: number
 }
 
 export interface IfService {

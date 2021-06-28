@@ -15,6 +15,7 @@
     </div>
     <div class="p-col-6">
       <EventsTable />
+      <OutagesTable />
     </div>
   </div>
 </template>
@@ -22,6 +23,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import EventsTable from '@/components/EventsTable.vue'
+import OutagesTable from '@/components/OutagesTable.vue'
 import InterfacesTabsVue from '@/components/InterfacesTabs.vue'
 import NodeAvailabilityGraphVue from '@/components/NodeAvailabilityGraph.vue'
 import Breadcrumb from 'primevue/breadcrumb';
@@ -31,6 +33,7 @@ export default defineComponent({
   name: 'NodeDetails',
   components: {
     EventsTable,
+    OutagesTable,
     InterfacesTabsVue,
     NodeAvailabilityGraphVue,
     Breadcrumb,

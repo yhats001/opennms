@@ -76,7 +76,7 @@ export default defineComponent({
 
     const recalculateWidth = () => {
       // @ts-ignore
-      width.value = timeline.value.clientWidth -50
+      width.value = timeline.value.clientWidth -60
     }
     
     onMounted(async () => {
