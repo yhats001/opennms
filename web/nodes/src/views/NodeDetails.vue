@@ -2,9 +2,9 @@
   <div class="p-grid page">
     <div class="p-col-12">
       <Breadcrumb :home="home" :model="items">
-          <template #item="{item}">
-            <a :href="item.to">{{item.label}}</a>
-          </template>
+        <template #item="{item}">
+          <a :href="item.to">{{item.label}}</a>
+        </template>
       </Breadcrumb>
     </div>
     <div class="p-col-6">
@@ -15,7 +15,7 @@
     </div>
     <div class="p-col-6">
       <EventsTable />
-      <OutagesTable />
+      <OutagesTable class="outages-table" />
     </div>
   </div>
 </template>
@@ -54,7 +54,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  .node-interfaces {
+  .node-interfaces,
+  .outages-table {
     margin-top: 20px;
   }
 </style>
