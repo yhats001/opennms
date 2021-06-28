@@ -14,16 +14,19 @@
 
 
       <template v-for="ipinterface of availability.ipinterfaces">
-        <Divider />
 
-        <div class="flex-container">
-          <div class="service">
-            {{ ipinterface.address }}
-          </div>
-          <div class="">
-            <img :src="`${baseUrl}/opennms/rest/timeline/header/${startTime}/${endTime}/${width}`" :data-imgsrc="`/opennms/rest/timeline/header/${startTime}/${endTime}/`">
+        <div v-if="ipinterface.services.length">
+          <Divider />
+          <div class="flex-container">
+            <div class="service">
+              {{ ipinterface.address }}
+            </div>
+            <div class="">
+              <img :src="`${baseUrl}/opennms/rest/timeline/header/${startTime}/${endTime}/${width}`" :data-imgsrc="`/opennms/rest/timeline/header/${startTime}/${endTime}/`">
+            </div>
           </div>
         </div>
+
 
         <template v-for="service of ipinterface.services">
           <div class="flex-container">
