@@ -5,11 +5,11 @@ const importMap = new ImportMapWebpackPlugin({
     },
     transformKeys: filename => {
         if (filename === 'app.js') {
-            return '@opennms/nodes';
+            return '@opennms/main';
         }
     },
     fileName: 'import-map.json',
-    baseUrl: 'assets/ui/nodes/'
+    baseUrl: 'assets/ui/main/'
 });
 
 module.exports = {

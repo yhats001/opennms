@@ -3,7 +3,7 @@
   "private": true,
   "workspaces": [
     "navbar",
-    "nodes",
+    "main",
     "root-config"
   ],
   "scripts": {

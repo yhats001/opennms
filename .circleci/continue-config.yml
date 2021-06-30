@@ -55,7 +55,7 @@ commands:
           paths:
             - web/node_modules
             - web/navbar/node_modules
-            - web/nodes/node_modules
+            - web/main/node_modules
             - web/root-config/node_modules
   dockerhub-login:
     description: "Connect to DockerHub"

@@ -47,7 +47,7 @@
 <%
   final String baseHref = Util.calculateUrlBase(request);
   final String prefix = request.getSession().getServletContext().getRealPath("assets");
-  final List<String> importMapFiles = Arrays.asList("/ui/navbar/import-map.json", "/ui/nodes/import-map.json");
+  final List<String> importMapFiles = Arrays.asList("/ui/navbar/import-map.json", "/ui/main/import-map.json");
   final Map<String, String> imports = new LinkedHashMap<>();
   for (String importMapFile : importMapFiles) {
       Gson gson = new Gson();

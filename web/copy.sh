@@ -5,7 +5,7 @@ if [ -n "$1" ]; then
 fi
 
 echo "Copy new UI structure in: $UI_PATH"
-mkdir -p ${UI_PATH}/navbar ${UI_PATH}/nodes
+mkdir -p ${UI_PATH}/navbar ${UI_PATH}/main
 cp -Rv root-config/dist/* "${UI_PATH}/"
 cp -Rv navbar/dist/* "${UI_PATH}/navbar"
-cp -Rv nodes/dist/* "${UI_PATH}/nodes"
+cp -Rv main/dist/* "${UI_PATH}/main"

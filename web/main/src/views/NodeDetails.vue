@@ -22,10 +22,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import EventsTable from '@/components/EventsTable.vue'
-import OutagesTable from '@/components/OutagesTable.vue'
-import InterfacesTabsVue from '@/components/InterfacesTabs.vue'
-import NodeAvailabilityGraphVue from '@/components/NodeAvailabilityGraph.vue'
+import EventsTable from '@/components/nodes/EventsTable.vue'
+import OutagesTable from '@/components/nodes/OutagesTable.vue'
+import InterfacesTabsVue from '@/components/nodes/InterfacesTabs.vue'
+import NodeAvailabilityGraphVue from '@/components/nodes/NodeAvailabilityGraph.vue'
 import Breadcrumb from 'primevue/breadcrumb';
 import Panel from 'primevue/panel'
 

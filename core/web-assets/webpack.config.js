@@ -573,8 +573,8 @@ function createConfig(options) {
       to: 'ui/navbar'
     },
     {
-      from: path.join('..', '..', 'web', 'nodes', 'dist'),
-      to: 'ui/nodes'
+      from: path.join('..', '..', 'web', 'main', 'dist'),
+      to: 'ui/main'
     }
   ]));
 

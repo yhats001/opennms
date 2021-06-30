@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import NodesTable from '@/components/NodesTable.vue'
+import NodesTable from '@/components/nodes/NodesTable.vue'
 
 export default defineComponent({
   name: 'Nodes',
