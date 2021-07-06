@@ -7,6 +7,7 @@ import {
   NodeAvailability,
   OutagesApiResponse } from '@/types'
 import { queryParametersHandler } from './serviceHelpers'
+import { orderBy } from 'lodash'
 
 const endpoint = '/nodes'
 
@@ -86,7 +87,8 @@ const getNodeIpInterfaces = async (id: string, queryParameters?: QueryParameters
 
 const getNodeAvailabilityPercentage = async (id: string): Promise<NodeAvailability | false> => {
   try {
-    const resp = await rest.get(`/availability/nodes/${id}`)
+    const resp: { data: NodeAvailability } = await rest.get(`/availability/nodes/${id}`)
+    resp.data.ipinterfaces = orderBy(resp.data.ipinterfaces, 'address')
 
     return resp.data
   } catch (err) {

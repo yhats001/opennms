@@ -151,7 +151,7 @@ export interface SortProps {
 export interface NodeAvailability {
   availability: number
   id: number
-  ipinterfaces: [{
+  ipinterfaces: {
     address: string
     availability: number
     id: number
@@ -160,7 +160,7 @@ export interface NodeAvailability {
       name: string, 
       availability: number
     }]
-  }]
+  }[]
   'service-count': number
   'service-down-count': number
 }

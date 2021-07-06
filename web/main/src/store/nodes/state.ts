@@ -26,4 +26,4 @@ const state: State = {
   outagesTotalCount: 0
 }
 
-export default () => state
+export default state

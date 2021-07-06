@@ -10,4 +10,4 @@ const state: State = {
   totalCount: 0
 }
 
-export default () => state
+export default state

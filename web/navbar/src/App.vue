@@ -1,26 +1,34 @@
 <template>
-  <Menubar>
-    <template #start>
+  <div class="menubar">
+    <div>
       <Logo @click="returnHomeHandler" />
-    </template>
-
-    <template #end>
-      <Button @click="returnHandler" class="p-button-sm">Return to previous UI</Button>
-    </template>
-  </Menubar>
+    </div>
+    <div>
+      <InputText placeholder="Search" type="text" class="search" />
+    </div>
+    <div>
+      <Button @click="returnHandler" class="p-button-md">Return to previous UI</Button>
+    </div>
+  </div>
+  <div class="sidebar">
+    <Link to="/#/inventory">Inventory</Link>
+    <Link to="/">Nodes</Link>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Menubar from 'primevue/menubar'
+import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import Logo from './assets/LogoDarkBG.vue'
+import Link from './components/Link.vue'
 
 export default defineComponent({
   components: {
-    Menubar,
+    InputText,
     Button,
-    Logo
+    Logo,
+    Link
   },
   setup() {
     const returnHandler = () => window.location.href = '/opennms/'
@@ -35,18 +43,33 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  .p-menubar {
-    background: #0A0C1B !important;
-    border: none !important;
-    border-radius: 0px !important;
-    height: 65px !important;
+  $linkColor: #14D1DF;
+  $menuColor: #0A0C1B;
+  .menubar {
+    display: flex;
+    justify-content: space-between;
+    background: $menuColor;
+    height: 65px;
+    padding: 12px
+  }
+  .sidebar {
+    height: 100vh;
+    width: 230px;
+    background: grey;
+    position: relative;
+    float: left;
+    background: $menuColor;
+    color: rgba($color: $linkColor, $alpha: 0.8);
+  }
+  .search {
+    width: 500px
   }
   .p-button {
-    background: rgba($color: #14D1DF, $alpha: 0.5);
+    background: rgba($color: $linkColor, $alpha: 0.5);
     border: none;
 
     &:hover {
-      background: rgba($color: #14D1DF, $alpha: 0.8) !important;
+      background: rgba($color: $linkColor, $alpha: 0.8) !important;
     }
   }
 </style>
