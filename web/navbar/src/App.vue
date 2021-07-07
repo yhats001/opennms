@@ -64,12 +64,4 @@ export default defineComponent({
   .search {
     width: 500px
   }
-  .p-button {
-    background: rgba($color: $linkColor, $alpha: 0.5);
-    border: none;
-
-    &:hover {
-      background: rgba($color: $linkColor, $alpha: 0.8) !important;
-    }
-  }
 </style>
