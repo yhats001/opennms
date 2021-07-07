@@ -8,7 +8,7 @@
     </template>
     <template v-slot:footer>
       <div class="p-grid p-nogutter p-justify-between">
-        <Button label="Back" @click="$emit('prev-page', { pageIndex: 2 })" icon="pi pi-angle-left" />
+        <Button class="p-button-primary" label="Back" @click="$emit('prev-page', { pageIndex: 2 })" icon="pi pi-angle-left" />
         <Button label="Complete" @click="$emit('complete')" icon="pi pi-check" iconPos="right" class="p-button-success"/>
       </div>
     </template>

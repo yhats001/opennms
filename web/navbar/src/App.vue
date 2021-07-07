@@ -7,7 +7,7 @@
       <InputText placeholder="Search" type="text" class="search" />
     </div>
     <div>
-      <Button @click="returnHandler" class="p-button-md">Return to previous UI</Button>
+      <Button @click="returnHandler" class="p-button-md p-button-primary">Return to previous UI</Button>
     </div>
   </div>
   <div class="sidebar">

@@ -5,6 +5,12 @@
 <style lang="scss">
   $primary-blue: rgba($color: #0081AD, $alpha: 1);
   $primary-green: rgba($color: #85D9A5, $alpha: 1);
+  $primary-dark-blue: rgba($color: #131736 , $alpha: 1);
+
+  $primary-sky-blue: rgba($color: #14D1DF, $alpha: 1);
+  $secondary-sky-blue: rgba($color: $primary-sky-blue, $alpha: 0.5);
+  $tertiary-sky-blue: rgba($color: $primary-sky-blue, $alpha: 0.25);
+
 
   h1, h2, h3, h4, h5, h6 {
     font-family: "Segoe UI", Roboto, Helvetica;
@@ -42,8 +48,10 @@
 
 
   // Button theme
-  .p-button {
+  .p-button-primary, 
+  .p-fileupload-buttonbar > .p-button {
     background: $primary-blue !important;
+    border: none !important;
     &:hover {
       background: rgba($color: $primary-blue, $alpha: 0.8) !important;
     }
@@ -54,5 +62,13 @@
     &:hover {
       background: rgba($color: $primary-green, $alpha: 0.8) !important;
     }
+  }
+  .p-button-raised,
+  .p-button-text {
+    color: $primary-dark-blue !important;
+  }
+
+  .selected {
+    background: $tertiary-sky-blue !important;
   }
 </style>

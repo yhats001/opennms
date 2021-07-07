@@ -8,8 +8,8 @@
     </template>
     <template v-slot:footer>
       <div class="p-grid p-nogutter p-justify-between">
-        <Button label="Back" @click="$emit('prev-page', { pageIndex: 1 })" icon="pi pi-angle-left" />
-        <Button label="Next" @click="$emit('next-page', { pageIndex: 1 })" icon="pi pi-angle-right" iconPos="right" />
+        <Button class="p-button-primary" label="Back" @click="$emit('prev-page', { pageIndex: 1 })" icon="pi pi-angle-left" />
+        <Button class="p-button-primary" label="Next" @click="$emit('next-page', { pageIndex: 1 })" icon="pi pi-angle-right" iconPos="right" />
       </div>
     </template>
   </Card>
