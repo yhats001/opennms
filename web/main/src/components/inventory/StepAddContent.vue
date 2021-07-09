@@ -36,6 +36,18 @@
         label="Controller API"
         @click="selectController"/>
     </div>
+
+    <div v-if="deviceImportOption === byManual">
+      <StepAddContentManual />
+    </div>
+
+    <div v-else-if="deviceImportOption === byImport">
+      <StepAddContentCtrl />
+    </div>
+
+    <div v-else-if="deviceImportOption === byController">
+      <StepAddContentDNS />
+    </div>
   </div>
 
   <div v-else-if="deviceEntryOption === findDevice">
@@ -55,18 +67,14 @@
         label="Use Passive Discovery"
         @click="selectPassiveDiscovery"/>
     </div>
-  </div>
 
-  <div v-if="deviceImportOption === byManual">
-    <StepAddContentManual />
-  </div>
+    <div v-if="deviceFindOption === byIPRange">
+      <StepAddContentIpRange />
+    </div>
 
-  <div v-else-if="deviceImportOption === byImport">
-    <StepAddContentCtrl />
-  </div>
-
-  <div v-else-if="deviceImportOption === byController">
-    <StepAddContentDNS />
+    <div v-if="deviceFindOption === byPassiveDiscovery">
+      <StepAddContentPassiveDiscovery />
+    </div>
   </div>
 
 </template>
@@ -77,13 +85,17 @@ import Button from 'primevue/button'
 import StepAddContentManual from './StepAddContentManual.vue'
 import StepAddContentCtrl from './StepAddContentCtrl.vue'
 import StepAddContentDNS from './StepAddContentDNS.vue'
+import StepAddContentIpRange from './StepAddContentIpRange.vue'
+import StepAddContentPassiveDiscovery from './StepAddContentPassiveDiscovery.vue'
 
 export default defineComponent({
   components: {
     Button,
     StepAddContentManual,
     StepAddContentCtrl,
-    StepAddContentDNS
+    StepAddContentDNS,
+    StepAddContentIpRange,
+    StepAddContentPassiveDiscovery
   },
   setup() {
     const enterDevice = 'enter'

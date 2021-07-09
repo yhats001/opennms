@@ -4,7 +4,7 @@
       <Logo @click="returnHomeHandler" />
     </div>
     <div>
-      <InputText placeholder="Search" type="text" class="search" />
+      <Search />
     </div>
     <div>
       <Button @click="returnHandler" class="p-button-md p-button-primary">Return to previous UI</Button>
@@ -18,15 +18,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import Logo from './assets/LogoDarkBG.vue'
 import Link from './components/Link.vue'
+import Search from './components/Search.vue'
 
 export default defineComponent({
   components: {
-    InputText,
     Button,
+    Search,
     Logo,
     Link
   },
@@ -60,8 +60,5 @@ export default defineComponent({
     float: left;
     background: $menuColor;
     color: rgba($color: $linkColor, $alpha: 0.8);
-  }
-  .search {
-    width: 500px
   }
 </style>

@@ -1,6 +1,7 @@
 import { h, createApp } from 'vue'
 import singleSpaVue from 'single-spa-vue'
 import PrimeVue from 'primevue/config'
+import store from './store'
 
 import 'primevue/resources/themes/saga-blue/theme.css'
 import 'primevue/resources/primevue.min.css'
@@ -17,6 +18,7 @@ const vueLifecycles = singleSpaVue({
   },
   handleInstance: (app) => {
     app.use(PrimeVue)
+    app.use(store)
   }
 })
 
