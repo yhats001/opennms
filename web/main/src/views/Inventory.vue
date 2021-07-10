@@ -8,13 +8,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import Steps from '../components/inventory/Steps.vue'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'Node Inventory',
   components: {
     Steps
+  },
+  setup() {
+    const store = useStore()
+    onMounted(() => {
+      store.dispatch('locationsModule/getLocations')
+    })
   }
 })
 </script>

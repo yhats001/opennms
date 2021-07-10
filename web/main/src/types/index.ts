@@ -31,6 +31,10 @@ export interface OutagesApiResponse extends ApiResponse {
   outage: Outage[]
 }
 
+export interface LocationsApiResponse extends ApiResponse {
+  location: MonitoringLocation[]
+}
+
 export interface IfServiceApiResponse extends ApiResponse {
   "monitored-service": IfService[]
 }
@@ -170,4 +174,14 @@ export interface NodeAvailability {
   }[]
   'service-count': number
   'service-down-count': number
+}
+
+export interface MonitoringLocation {
+  geolocation: any
+  latitude: any
+  longitude: any
+  priority: 100
+  tags: any[]
+  "location-name": string
+  "monitoring-area": string
 }

@@ -42,7 +42,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   $linkColor: #14D1DF;
   $menuColor: #0A0C1B;
   .menubar {
@@ -60,5 +60,8 @@ export default defineComponent({
     float: left;
     background: $menuColor;
     color: rgba($color: $linkColor, $alpha: 0.8);
+  }
+  input.p-dropdown-label {
+   cursor: auto !important;
   }
 </style>

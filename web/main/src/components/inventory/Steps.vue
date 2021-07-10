@@ -59,7 +59,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-::v-deep(.p-card-body) {
+:deep(.p-card-body) {
   padding: 2rem;
 }
 .steps-container {

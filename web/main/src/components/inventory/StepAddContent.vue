@@ -42,11 +42,11 @@
     </div>
 
     <div v-else-if="deviceImportOption === byImport">
-      <StepAddContentCtrl />
-    </div>
-
-    <div v-else-if="deviceImportOption === byController">
       <StepAddContentDNS />
+    </div>
+    
+    <div v-else-if="deviceImportOption === byController">
+      <StepAddContentCtrl />
     </div>
   </div>
 
@@ -143,6 +143,13 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+  :deep(.input) {
+    margin-top: 5px;
+    width: 370px;
+  }
+  :deep(.first) {
+    margin-top: 30px;
+  }
   .button {
     margin-right: 10px;
     height: 100px;

@@ -10,14 +10,14 @@
     placeholder="Search"
     type="text"
     class="search"
-    :editable="true"
     @input="search"
     @change="selectItem"
-    :loading="loading">
+    :loading="loading"
+    editable>
 
     <template #optiongroup="slotProps">
         <div>
-            <div>{{slotProps.option.label}}</div>
+          <div>{{slotProps.option.label}}</div>
         </div>
     </template>
   </Dropdown>
