@@ -1,12 +1,12 @@
 <template>
   <div class="p-flex-row first input">
-    <LocationsDropdown @setLocation="setLocation" />
+    <LocationsDropdown @setLocation="setLocation"/>
   </div>
   <div class="p-flex-row">
-    <InputText id="host" type="text" v-model="host" placeholder="Host" class="input" />
+    <InputText id="host" type="text" v-model="host" placeholder="Host" class="input" @input="setValues"/>
   </div>
   <div class="p-flex-row">
-    <InputText id="zone" type="text" v-model="zone" placeholder="Zone" class="input" />
+    <InputText id="zone" type="text" v-model="zone" placeholder="Zone" class="input" @input="setValues" />
   </div>
 </template>
 
@@ -21,17 +21,23 @@ export default defineComponent({
     InputText,
     LocationsDropdown
   },
-  setup() {
+  emits: ['set-values'],
+  setup(_, context) {
     const host = ref()
     const zone = ref()
+    const location = ref()
 
-    const setLocation = (location: MonitoringLocation) => {
-      console.log(location)
+    const setLocation = (selectedLocation: MonitoringLocation) => {
+      location.value = selectedLocation
+      setValues()
     }
+
+    const setValues = () => context.emit('set-values', { host, zone, location })
 
     return {
       host,
       zone,
+      setValues,
       setLocation
     }
   }

@@ -5,17 +5,23 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref } from 'vue'
 import { MonitoringLocation } from '@/types'
-import { defineComponent } from 'vue'
 import LocationsDropdown from './LocationsDropdown.vue'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   components: {
     LocationsDropdown
   },
   setup() {
-    const setLocation = (location: MonitoringLocation) => {
-      console.log(location)
+    const store = useStore()
+    const location = ref()
+
+    const setLocation = (selectedLocation: MonitoringLocation) => {
+      location.value = selectedLocation
+      // display next btn if testing successful
+      store.dispatch('inventoryModule/showAddStepNextButton', true)
     }
 
     return {

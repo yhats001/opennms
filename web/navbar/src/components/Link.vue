@@ -1,8 +1,8 @@
 <template>
   <h3 class="link">
-    <a :href="to">
+    <router-link :to="to">
       <slot></slot>
-    </a>
+    </router-link>
   </h3>
 </template>
 

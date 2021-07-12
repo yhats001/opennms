@@ -29,12 +29,14 @@ import { defineComponent, ref, computed } from 'vue'
 import { debounce } from 'lodash'
 import { useStore } from 'vuex'
 import Dropdown from 'primevue/dropdown'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
     Dropdown
   },
   setup() {
+    const router = useRouter()
     const store = useStore()
 
     // data
@@ -48,7 +50,7 @@ export default defineComponent({
     const selectItem = ({ value }: { value: { url: string } }) => {
       // parse selected item url and redirect
       const path = value.url.split('?')[1].split('=')
-      window.location.href = `/#/${path[0]}/${path[1]}` 
+      router.push(`/${path[0]}/${path[1]}`)
     }
 
     const search = debounce(async (e) => {

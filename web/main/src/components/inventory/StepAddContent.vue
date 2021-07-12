@@ -42,11 +42,11 @@
     </div>
 
     <div v-else-if="deviceImportOption === byImport">
-      <StepAddContentDNS />
+      <StepAddContentDNSContainer />
     </div>
     
     <div v-else-if="deviceImportOption === byController">
-      <StepAddContentCtrl />
+      <StepAddContentCtrlContainer />
     </div>
   </div>
 
@@ -69,7 +69,7 @@
     </div>
 
     <div v-if="deviceFindOption === byIPRange">
-      <StepAddContentIpRange />
+      <StepAddContentIpRangeContainer />
     </div>
 
     <div v-if="deviceFindOption === byPassiveDiscovery">
@@ -83,18 +83,18 @@
 import { defineComponent, ref } from 'vue'
 import Button from 'primevue/button'
 import StepAddContentManual from './StepAddContentManual.vue'
-import StepAddContentCtrl from './StepAddContentCtrl.vue'
-import StepAddContentDNS from './StepAddContentDNS.vue'
-import StepAddContentIpRange from './StepAddContentIpRange.vue'
+import StepAddContentDNSContainer from './StepAddContentDNSContainer.vue'
+import StepAddContentCtrlContainer from './StepAddContentCtrlContainer.vue'
+import StepAddContentIpRangeContainer from './StepAddContentIpRangeContainer.vue'
 import StepAddContentPassiveDiscovery from './StepAddContentPassiveDiscovery.vue'
 
 export default defineComponent({
   components: {
     Button,
     StepAddContentManual,
-    StepAddContentCtrl,
-    StepAddContentDNS,
-    StepAddContentIpRange,
+    StepAddContentDNSContainer,
+    StepAddContentCtrlContainer,
+    StepAddContentIpRangeContainer,
     StepAddContentPassiveDiscovery
   },
   setup() {

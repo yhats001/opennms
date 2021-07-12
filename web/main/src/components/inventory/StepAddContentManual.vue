@@ -17,15 +17,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import FileUpload from 'primevue/fileupload';
+import { defineComponent } from 'vue'
+import FileUpload from 'primevue/fileupload'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   components: {
-    FileUpload,
+    FileUpload
   },
   setup() {
-    const onUpload = () => {}
+    const store = useStore()
+
+    const onUpload = () => {
+      store.dispatch('inventoryModule/showAddStepNextButton', true)
+    }
 
     return { 
       onUpload 

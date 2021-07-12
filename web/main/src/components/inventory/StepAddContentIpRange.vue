@@ -3,10 +3,10 @@
     <LocationsDropdown @setLocation="setLocation" />
   </div>
   <div class="p-flex-row">
-    <InputText id="start" type="text" v-model="start" placeholder="Start" class="input" />
+    <InputText id="start" type="text" v-model="start" placeholder="Start" class="input" @input="setValues" />
   </div>
   <div class="p-flex-row">
-    <InputText id="end" type="text" v-model="end" placeholder="End" class="input" />
+    <InputText id="end" type="text" v-model="end" placeholder="End" class="input" @input="setValues" />
   </div>
 </template>
 
@@ -21,16 +21,22 @@ export default defineComponent({
     InputText,
     LocationsDropdown
   },
-  setup() {
+  emits: ['set-values'],
+  setup(_, context) {
     const start = ref()
     const end = ref()
+    const location = ref()
 
-    const setLocation = (location: MonitoringLocation) => {
-      console.log(location)
+    const setLocation = (selectedLocation: MonitoringLocation) => {
+      location.value = selectedLocation
+      setValues()
     }
+
+    const setValues = () => context.emit('set-values', { start, end, location })
 
     return {
       setLocation,
+      setValues,
       start,
       end
     }

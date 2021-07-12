@@ -8,6 +8,7 @@ import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
 
 import App from './App.vue'
+import router from './router'
 
 const vueLifecycles = singleSpaVue({
   createApp,
@@ -19,6 +20,7 @@ const vueLifecycles = singleSpaVue({
   handleInstance: (app) => {
     app.use(PrimeVue)
     app.use(store)
+    app.use(router)
   }
 })
 
