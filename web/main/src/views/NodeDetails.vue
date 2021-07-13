@@ -3,7 +3,7 @@
     <div class="p-col-12">
       <Breadcrumb :home="home" :model="items">
         <template #item="{item}">
-          <a :href="item.to">{{item.label}}</a>
+          <router-link :to="item.to">{{item.label}}</router-link>
         </template>
       </Breadcrumb>
     </div>
@@ -45,7 +45,7 @@ export default defineComponent({
         to: '/',
     });
     const items = ref([
-      {label: 'Node Details'},
+      {label: 'Node Details', to: '#'},
     ]);
 
     return { home, items }

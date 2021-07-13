@@ -3,10 +3,10 @@
     <LocationsDropdown @setLocation="setLocation" />
   </div>
   <div class="p-flex-row">
-    <InputText id="start" type="text" v-model="start" placeholder="Start" class="input" @input="setValues" />
+    <InputText type="text" v-model="start" placeholder="Start" class="input" @input="setValues" />
   </div>
   <div class="p-flex-row">
-    <InputText id="end" type="text" v-model="end" placeholder="End" class="input" @input="setValues" />
+    <InputText type="text" v-model="end" placeholder="End" class="input" @input="setValues" />
   </div>
 </template>
 

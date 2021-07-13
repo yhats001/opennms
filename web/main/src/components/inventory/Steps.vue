@@ -44,7 +44,6 @@ export default defineComponent({
       router.push(items.value[event.pageIndex - 1].to);
     }
     const complete = () => {
-      console.log('complete')
       router.push('/')
     }
 

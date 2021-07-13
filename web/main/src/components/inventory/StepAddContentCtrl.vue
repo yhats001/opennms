@@ -6,13 +6,13 @@
     <TypesDropdown @setType="setType" />
   </div>
   <div class="p-flex-row">
-    <InputText id="endpoint" type="text" v-model="endpoint" placeholder="Endpoint" class="input" @input="setValues" />
+    <InputText type="text" v-model="endpoint" placeholder="Endpoint" class="input" @input="setValues" />
   </div>
   <div class="p-flex-row">
-    <InputText id="key" type="text" v-model="key" placeholder="Key" class="input" @input="setValues" />
+    <InputText type="text" v-model="key" placeholder="Key" class="input" @input="setValues" />
   </div>
   <div class="p-flex-row">
-    <InputText id="secret" type="text" v-model="secret" placeholder="Secret" class="input" @input="setValues"  />
+    <InputText type="text" v-model="secret" placeholder="Secret" class="input" @input="setValues"  />
   </div>
 </template>
 

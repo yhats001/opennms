@@ -1,8 +1,8 @@
 <template>
   <Button 
     :label="serviceName"
-    class="p-button-raised p-button-text button"
-    :class="{'selected' : selected}"
+    class="p-button-raised p-button-text service"
+    :class="{'selected' : selectedServices.includes(serviceName)}"
     @click="$emit('select-service', serviceName)"
   />
 </template>
@@ -21,13 +21,17 @@ export default defineComponent({
       type: String,
       required: true
     },
-    selected: {
-      type: Boolean,
+    selectedServices: {
+      type: Array,
       required: true,
-      default: false
+      default: []
     }
   }
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .service {
+    margin-right: 10px;
+  }
+</style>

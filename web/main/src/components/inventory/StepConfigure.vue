@@ -4,7 +4,12 @@
       What services do you want to find/monitor?
     </template>
     <template v-slot:content>
-      Test content
+      <div class="p-d-flex p-flex-column p-flex-md-row">
+        <StepConfigureServiceBtnContainer />
+      </div>
+      <div class="p-d-flex p-flex-column p-flex-md-row">
+        
+      </div>
     </template>
     <template v-slot:footer>
       <div class="p-grid p-nogutter p-justify-between">
@@ -19,17 +24,17 @@
 import { defineComponent } from 'vue'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
+import StepConfigureServiceBtnContainer from './StepConfigureServiceBtnContainer.vue'
 
 export default defineComponent({
   components: {
     Card,
-    Button
+    Button,
+    StepConfigureServiceBtnContainer
   },
   emits: ['next-page', 'prev-page']
 })
 
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

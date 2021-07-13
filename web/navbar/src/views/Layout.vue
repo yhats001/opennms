@@ -22,6 +22,7 @@ import Button from 'primevue/button'
 import Logo from '../assets/LogoDarkBG.vue'
 import Link from '../components/Link.vue'
 import Search from '../components/Search.vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -31,8 +32,9 @@ export default defineComponent({
     Link
   },
   setup() {
+    const router = useRouter()
     const returnHandler = () => window.location.href = '/opennms/'
-    const returnHomeHandler = () => window.location.href = '/'
+    const returnHomeHandler = () => router.push('/')
 
     return {
       returnHandler,
