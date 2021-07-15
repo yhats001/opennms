@@ -2,13 +2,13 @@
   <div class="p-d-flex p-flex-column p-flex-md-row">
     <Button 
       class="p-button-raised p-button-text button"
-      :class="{'selected' : deviceEntryOption === enterDevice}"
+      :class="{'bg-tertiaty-sky-blue' : deviceEntryOption === enterDevice}"
       label="I have formatted device data" 
       @click="selectEnterDeviceData"/>
         
     <Button 
       class="p-button-raised p-button-text button"
-      :class="{'selected' : deviceEntryOption === findDevice}"
+      :class="{'bg-tertiaty-sky-blue' : deviceEntryOption === findDevice}"
       label="Let OpenNMS find devices for me"
       @click="selectFindDevice"/>
   </div>
@@ -20,19 +20,19 @@
     <div class="p-d-flex p-flex-column p-flex-md-row">
       <Button
         class="p-button-raised p-button-text button"
-        :class="{'selected' : deviceImportOption === byManual}"
+        :class="{'bg-tertiaty-sky-blue' : deviceImportOption === byManual}"
         label="Manually" 
         @click="selectManually"/>
           
       <Button
         class="p-button-raised p-button-text button"
-        :class="{'selected' : deviceImportOption === byImport}"
+        :class="{'bg-tertiaty-sky-blue' : deviceImportOption === byImport}"
         label="DNS Import"
         @click="selectImport"/>
 
       <Button
         class="p-button-raised p-button-text button"
-        :class="{'selected' : deviceImportOption === byController}"
+        :class="{'bg-tertiaty-sky-blue' : deviceImportOption === byController}"
         label="Controller API"
         @click="selectController"/>
     </div>
@@ -57,13 +57,13 @@
     <div class="p-d-flex p-flex-column p-flex-md-row">
       <Button
         class="p-button-raised p-button-text button"
-        :class="{'selected' : deviceFindOption === byIPRange}"
+        :class="{'bg-tertiaty-sky-blue' : deviceFindOption === byIPRange}"
         label="By IP Range"
         @click="selectIpRange"/>
 
       <Button
         class="p-button-raised p-button-text button"
-        :class="{'selected' : deviceFindOption === byPassiveDiscovery}"
+        :class="{'bg-tertiaty-sky-blue' : deviceFindOption === byPassiveDiscovery}"
         label="Use Passive Discovery"
         @click="selectPassiveDiscovery"/>
     </div>
@@ -143,13 +143,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-  :deep(.input) {
-    margin-top: 5px;
-    width: 370px;
-  }
-  :deep(.first) {
-    margin-top: 30px;
-  }
   .button {
     margin-right: 10px;
     height: 100px;

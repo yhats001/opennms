@@ -3,6 +3,7 @@
 </template>
 
 <style lang="scss">
+  // theme colours
   $primary-blue: rgba($color: #0081AD, $alpha: 1);
   $primary-green: rgba($color: #85D9A5, $alpha: 1);
   $primary-dark-blue: rgba($color: #131736 , $alpha: 1);
@@ -11,6 +12,10 @@
   $secondary-sky-blue: rgba($color: $primary-sky-blue, $alpha: 0.5);
   $tertiary-sky-blue: rgba($color: $primary-sky-blue, $alpha: 0.25);
 
+  // utility classes
+  .bg-primary-green { background: $primary-green !important }
+  .bg-primary-blue { background: $primary-blue !important }
+  .bg-tertiaty-sky-blue { background: $tertiary-sky-blue !important }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: "Segoe UI", Roboto, Helvetica;
@@ -46,7 +51,6 @@
     color: white !important;
   }
 
-
   // Button theme
   .p-button-primary, 
   .p-fileupload-buttonbar > .p-button {
@@ -66,9 +70,5 @@
   .p-button-raised,
   .p-button-text {
     color: $primary-dark-blue !important;
-  }
-
-  .selected {
-    background: $tertiary-sky-blue !important;
   }
 </style>

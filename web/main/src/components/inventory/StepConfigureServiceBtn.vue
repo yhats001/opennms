@@ -2,14 +2,19 @@
   <Button 
     :label="serviceName"
     class="p-button-raised p-button-text service"
-    :class="{'selected' : selectedServices.includes(serviceName)}"
+    :class="[
+      {'bg-tertiaty-sky-blue' : (selectedServices.includes(serviceName) && !completedServices.includes(serviceName))}, 
+      {'bg-primary-green' : completedServices.includes(serviceName)}
+    ]"
+    :disabled="disableService"
     @click="$emit('select-service', serviceName)"
   />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import Button from 'primevue/button'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   components: {
@@ -25,6 +30,18 @@ export default defineComponent({
       type: Array,
       required: true,
       default: []
+    },
+    disableService: {
+      type: Boolean,
+      required: true
+    }
+  },
+  setup() {
+    const store = useStore()
+    const completedServices = computed(() => store.state.inventoryModule.completedServices)
+
+    return {
+      completedServices
     }
   }
 })

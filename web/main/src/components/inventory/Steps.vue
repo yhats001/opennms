@@ -58,6 +58,13 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+:deep(.input) {
+  margin-top: 5px;
+  width: 370px;
+}
+:deep(.first) {
+  margin-top: 30px;
+}
 :deep(.p-card-body) {
   padding: 2rem;
 }
