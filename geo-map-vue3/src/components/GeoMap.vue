@@ -85,9 +85,7 @@ export default {
 
 <style scoped>
 .geo-map {
-  height: 100vh; 
-  width: 97vw;
-  margin: 0 auto;
+  height: 65vh; 
 }
 </style>
 

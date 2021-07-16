@@ -1,6 +1,7 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
+  <div id="nav" >
+    <img id="logo" src="require('./assets/opennms-horizon-logo.svg')" alt=" OpenNMS Horizon Logo" width="auto" height="22px" />
+    <router-link to="/" >Home</router-link> |
     <router-link to="/map">Map</router-link>
   </div>
   <router-view />
@@ -16,15 +17,18 @@
 }
 
 #nav {
-  padding: 30px;
+  padding: 1.25%;
+  background: #0a0c1b;
 }
 
 #nav a {
+  font-family: Arial;
+  font-size: 15px;
   font-weight: bold;
-  color: #2c3e50;
+  color: #B4B6C8;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #E9EBF9;
 }
 </style>

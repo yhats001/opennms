@@ -16,9 +16,5 @@ export default {
 </script>
 
 <style scoped>
-.map {
-  height: 100vh; 
-  width: 100vw;
-  margin: 0 auto;
-}
+
 </style>
