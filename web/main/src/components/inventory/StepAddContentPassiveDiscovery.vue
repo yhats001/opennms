@@ -1,7 +1,7 @@
 <template>
-  <div class="p-flex-row first input">
-    <LocationsDropdown @setLocation="setLocation" />
-  </div>
+  <Row label="Location" first><LocationsDropdown @setLocation="setLocation" /></Row>
+  <Row label="Send device traps and syslogs to 192.168.1.1 in order for OpenNMS to discover." />
+  
 </template>
 
 <script lang="ts">
@@ -9,9 +9,11 @@ import { defineComponent, ref } from 'vue'
 import { MonitoringLocation } from '@/types'
 import LocationsDropdown from './LocationsDropdown.vue'
 import { useStore } from 'vuex'
+import Row from '@/components/common/Row.vue'
 
 export default defineComponent({
   components: {
+    Row,
     LocationsDropdown
   },
   setup() {

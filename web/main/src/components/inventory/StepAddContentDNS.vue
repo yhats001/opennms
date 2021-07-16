@@ -1,13 +1,7 @@
 <template>
-  <div class="p-flex-row first input">
-    <LocationsDropdown @setLocation="setLocation"/>
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="host" placeholder="Host" class="input" @input="setValues"/>
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="zone" placeholder="Zone" class="input" @input="setValues" />
-  </div>
+  <Row label="Location" first><LocationsDropdown @setLocation="setLocation"/></Row>
+  <Row label="Host"><InputText v-model="host" class="input" @input="setValues"/></Row>
+  <Row label="Zone"><InputText v-model="zone" class="input" @input="setValues" /></Row>
 </template>
 
 <script lang="ts">
@@ -15,9 +9,11 @@ import { defineComponent, ref } from 'vue'
 import InputText from 'primevue/inputtext'
 import LocationsDropdown from './LocationsDropdown.vue'
 import { MonitoringLocation } from '@/types'
+import Row from '@/components/common/Row.vue'
 
 export default defineComponent({
   components: {
+    Row,
     InputText,
     LocationsDropdown
   },

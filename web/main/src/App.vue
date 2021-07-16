@@ -1,6 +1,16 @@
 <template>
-  <router-view/>
+  <div id="layout">
+    <router-view/>
+  </div>
 </template>
+
+<style lang="scss" scoped>
+  #layout {
+    padding: 30px;
+    height: calc(100vh - 65px);
+    overflow-y: scroll;
+  }
+</style>
 
 <style lang="scss">
   // theme colours
@@ -42,6 +52,9 @@
   .page {
     max-width: 2400px;
     margin: auto
+  }
+  .pointer {
+    cursor: pointer !important;
   }
 
   // header theme

@@ -14,7 +14,7 @@
   </div>
 
   <div v-if="deviceEntryOption === enterDevice">
-    <div class="p-d-flex p-flex-column p-flex-md-row" >
+    <div class="p-d-flex p-flex-column p-flex-md-row">
       <h3>How would you like to import devices on your network?</h3>
     </div>
     <div class="p-d-flex p-flex-column p-flex-md-row">
@@ -42,11 +42,11 @@
     </div>
 
     <div v-else-if="deviceImportOption === byImport">
-      <StepAddContentDNSContainer />
+      <StepAddContentContainer contains="StepAddContentDNS" />
     </div>
     
     <div v-else-if="deviceImportOption === byController">
-      <StepAddContentCtrlContainer />
+      <StepAddContentContainer contains="StepAddContentCtrl" />
     </div>
   </div>
 
@@ -69,7 +69,7 @@
     </div>
 
     <div v-if="deviceFindOption === byIPRange">
-      <StepAddContentIpRangeContainer />
+      <StepAddContentContainer contains="StepAddContentIpRange" />
     </div>
 
     <div v-if="deviceFindOption === byPassiveDiscovery">
@@ -83,18 +83,14 @@
 import { defineComponent, ref } from 'vue'
 import Button from 'primevue/button'
 import StepAddContentManual from './StepAddContentManual.vue'
-import StepAddContentDNSContainer from './StepAddContentDNSContainer.vue'
-import StepAddContentCtrlContainer from './StepAddContentCtrlContainer.vue'
-import StepAddContentIpRangeContainer from './StepAddContentIpRangeContainer.vue'
+import StepAddContentContainer from './StepAddContentContainer.vue'
 import StepAddContentPassiveDiscovery from './StepAddContentPassiveDiscovery.vue'
 
 export default defineComponent({
   components: {
     Button,
     StepAddContentManual,
-    StepAddContentDNSContainer,
-    StepAddContentCtrlContainer,
-    StepAddContentIpRangeContainer,
+    StepAddContentContainer,
     StepAddContentPassiveDiscovery
   },
   setup() {

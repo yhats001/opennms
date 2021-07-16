@@ -1,25 +1,34 @@
 <template>
-  <div class="p-flex-row first input">
-    <h3>SNMP</h3>
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="v1v2" placeholder="v1/v2c community string" class="input" @input="setValues"/>
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="timeout" placeholder="Timeout" class="input" @input="setValues" />
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="retry" placeholder="Retry" class="input" @input="setValues" />
-  </div>
+  <Row first><h3>SNMP</h3></Row>
+  <Row label="v1/v2c community string"><InputText type="text" v-model="v1v2" class="input" @input="setValues"/></Row>
+  <Row label="Timeout"><InputText type="text" v-model="timeout" class="input" @input="setValues" /></Row>
+  <Row label="Retry"><InputText type="text" v-model="retry" class="input" @input="setValues" /></Row>
+
+  <ShowHideBox label="Advanced options">
+    <Row first label="Security level">
+      <Dropdown v-model="securityLevel" @change="setValues" class="input" :options="['noAuthNoPriv','authNoPriv', 'authPriv']"/>
+    </Row>
+
+    <!-- add filter -->
+    <ServiceFilter @setValues="setValues" />
+  </ShowHideBox>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import InputText from 'primevue/inputtext'
+import Dropdown from 'primevue/dropdown'
+import Row from '@/components/common/Row.vue'
+import ShowHideBox from '@/components/common/ShowHideBox.vue'
+import ServiceFilter from './ServiceFilter.vue'
 
 export default defineComponent({
   components: {
-    InputText
+    Row,
+    Dropdown,
+    InputText,
+    ShowHideBox,
+    ServiceFilter
   },
   emits: ['set-values'],
   props: {
@@ -29,18 +38,28 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    // advanced options
+    const securityLevel = ref('noAuthNoPriv')
+
+    // form
     const v1v2 = ref()
     const timeout = ref()
     const retry = ref()
 
-    const data = ref({ timeout, retry, v1v2 })
+    const data = computed(() => ({ 
+      timeout: timeout.value, 
+      retry: retry.value, 
+      v1v2: v1v2.value,
+      securityLevel: securityLevel.value
+    }))
 
-    const setValues = () => context.emit('set-values', { index: props.index, data })
+    const setValues = (filterValues: any) => context.emit('set-values', { index: props.index, data: {...data.value, ...filterValues} })
 
     return {
       v1v2,
       retry,
       timeout,
+      securityLevel,
       setValues
     }
   }

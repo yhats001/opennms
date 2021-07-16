@@ -1,22 +1,30 @@
 <template>
-  <div class="p-flex-row first input">
-    <h3>ICMP</h3>
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="timeout" placeholder="Timeout" class="input" @input="setValues" />
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="retry" placeholder="Retry" class="input" @input="setValues" />
-  </div>
+  <Row first ><h3>ICMP</h3></Row>
+  <Row label="Timeout"><InputText type="text" v-model="timeout" class="input" @input="setValues" /></Row>
+  <Row label="Retry"><InputText type="text" v-model="retry" class="input" @input="setValues" /></Row>
+
+  <ShowHideBox label="Advanced options">
+    <!-- Advanced options -->
+    <Row first label="DSCP"><InputText type="text" v-model="dscp" class="input" @input="setValues" /></Row>
+
+    <!-- add filter -->
+    <ServiceFilter @setValues="setValues" />
+  </ShowHideBox>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import InputText from 'primevue/inputtext'
+import Row from '@/components/common/Row.vue'
+import ShowHideBox from '@/components/common/ShowHideBox.vue'
+import ServiceFilter from './ServiceFilter.vue'
 
 export default defineComponent({
   components: {
-    InputText
+    Row,
+    InputText,
+    ShowHideBox,
+    ServiceFilter
   },
   emits: ['set-values'],
   props: {
@@ -26,14 +34,23 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    // advanced options
+    const dscp = ref()
+
+    // form
     const timeout = ref()
     const retry = ref()
 
-    const data = ref({ timeout, retry })
+    const data = computed(() => ({
+      timeout: timeout.value, 
+      retry: retry.value, 
+      dscp: dscp.value
+    }))
 
-    const setValues = () => context.emit('set-values', { index: props.index, data })
+    const setValues = (filterValues: any) => context.emit('set-values', { index: props.index, data: {...data.value, ...filterValues} })
 
     return {
+      dscp,
       retry,
       timeout,
       setValues

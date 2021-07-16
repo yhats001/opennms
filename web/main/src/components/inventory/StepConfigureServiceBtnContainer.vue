@@ -9,6 +9,7 @@
         @selectService="selectService(service)"
       />
     </template>
+    <!-- <i class="pi pi-replay pointer" v-if="showReset" @click="resetServiceSelection" /> -->
   </div>
   <div class="p-flex-row first" v-if="showConfigureServicesBtn">
     <Button
@@ -31,6 +32,7 @@ export default defineComponent({
   },
   emits: ['configure-services'],
   setup(_, context) {
+    const showReset = ref(false)
     const showConfigureServicesBtn = ref(false)
     const disableServiceSelection = ref(false)
     const selectedServices = ref([] as string[])
@@ -58,13 +60,27 @@ export default defineComponent({
       context.emit('configure-services', selectedServices.value)
       showConfigureServicesBtn.value = false
       disableServiceSelection.value = true
+      showReset.value = true
+    }
+    
+    const resetServiceSelection = () => {
+      // reset services
+      selectedServices.value = []
+      context.emit('configure-services', selectedServices.value)
+
+      // hide btns
+      showReset.value = false
+      showConfigureServicesBtn.value = false
+      disableServiceSelection.value = false
     }
 
     return {
       services,
+      showReset,
       selectedServices,
       showConfigureServicesBtn,
       disableServiceSelection,
+      resetServiceSelection,
       configureServices,
       selectService
     }
@@ -72,4 +88,9 @@ export default defineComponent({
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss">
+ .pi-replay {
+   margin-top: 10px;
+   font-weight: bold;
+ }
+</style>

@@ -1,28 +1,33 @@
 <template>
-  <div class="p-flex-row first input">
-    <h3>HTTP/S</h3>
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="port" placeholder="Port" class="input" @input="setValues"/>
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="url" placeholder="URL" class="input" @input="setValues" />
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="timeout" placeholder="Timeout" class="input" @input="setValues" />
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="retry" placeholder="Retry" class="input" @input="setValues" />
-  </div>
+  <Row first><h3>HTTP/S</h3></Row>
+  <Row label="Port"><InputText v-model="port" class="input" @input="setValues"/></Row>
+  <Row label="URL"><InputText v-model="url" class="input" @input="setValues" /></Row>
+  <Row label="Use HTTPS"><Checkbox v-model="useHttps" :binary="true" class="input" @change="setValues" /></Row>
+  <Row label="Timeout"><InputText v-model="timeout" class="input" @input="setValues" /></Row>
+  <Row label="Retry"><InputText v-model="retry" class="input" @input="setValues" /></Row>
+
+  <ShowHideBox label="Add return code">
+    <Row label="Return code"><InputText v-model="returnCode" class="input" @input="setValues" /></Row>
+  </ShowHideBox>
+
+  <ServiceFilter @setValues="setValues" />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import InputText from 'primevue/inputtext'
+import Checkbox from 'primevue/checkbox'
+import Row from '@/components/common/Row.vue'
+import ShowHideBox from '@/components/common/ShowHideBox.vue'
+import ServiceFilter from './ServiceFilter.vue'
 
 export default defineComponent({
   components: {
-    InputText
+    Row,
+    Checkbox,
+    InputText,
+    ShowHideBox,
+    ServiceFilter
   },
   emits: ['set-values'],
   props: {
@@ -32,20 +37,34 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    // advaced options
+    const returnCode = ref()
+
+    // form
+    const useHttps = ref()
     const port = ref()
     const url = ref()
     const timeout = ref()
     const retry = ref()
 
-    const data = ref({ port, url, timeout, retry })
+    const data = computed(() => ({ 
+      port: port.value, 
+      url: url.value, 
+      timeout: timeout.value, 
+      retry: retry.value,
+      useHttps: useHttps.value,
+      returnCode: returnCode.value
+    }))
 
-    const setValues = () => context.emit('set-values', { index: props.index, data })
+    const setValues = (filterValues: any) => context.emit('set-values', { index: props.index, data: {...data.value, ...filterValues} })
 
     return {
       port,
       url,
       retry,
       timeout,
+      useHttps,
+      returnCode,
       setValues
     }
   }

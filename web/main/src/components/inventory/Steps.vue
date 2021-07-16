@@ -2,13 +2,11 @@
   <div class="steps-container">
     <Steps :model="items" :readonly="true" />
   </div>
-  <div class="router-container">
-    <router-view v-slot="{Component}" @prevPage="prevPage($event)" @nextPage="nextPage($event)" @complete="complete">
-    <keep-alive>
-      <component :is="Component" />
-    </keep-alive>
-    </router-view>
-  </div>
+  <router-view v-slot="{Component}" @prevPage="prevPage($event)" @nextPage="nextPage($event)" @complete="complete">
+  <keep-alive>
+    <component :is="Component" />
+  </keep-alive>
+  </router-view>
 </template>
 
 <script lang="ts">
@@ -70,9 +68,6 @@ export default defineComponent({
 }
 .steps-container {
   max-width: 500px;
-  padding: 20px;
-}
-.router-container {
-  padding: 20px;
+  margin-bottom: 20px;
 }
 </style>

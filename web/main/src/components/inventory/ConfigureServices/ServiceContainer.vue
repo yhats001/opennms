@@ -65,7 +65,7 @@ export default defineComponent({
     const showNextBtn = ref(false)
 
     const addForm = () => forms.value.push(forms.value.length)
-    const setValues = (form: any) => formsValues.value[form.index] = form.data
+    const setValues = (form: any) => {formsValues.value[form.index] = form.data; console.log(form.data)}
 
     const test = () => {
       if (props.lastService) {

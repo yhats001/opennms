@@ -1,19 +1,9 @@
 <template>
-  <div class="p-flex-row first input">
-    <LocationsDropdown @setLocation="setLocation" />
-  </div>
-  <div class="p-flex-row input">
-    <TypesDropdown @setType="setType" />
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="endpoint" placeholder="Endpoint" class="input" @input="setValues" />
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="key" placeholder="Key" class="input" @input="setValues" />
-  </div>
-  <div class="p-flex-row">
-    <InputText type="text" v-model="secret" placeholder="Secret" class="input" @input="setValues"  />
-  </div>
+  <Row label="Location" first><LocationsDropdown @setLocation="setLocation" /></Row>
+  <Row label="Type"><TypesDropdown @setType="setType" /></Row>
+  <Row label="Endpoint"><InputText v-model="endpoint" class="input" @input="setValues" /></Row>
+  <Row label="Key"><InputText v-model="key" class="input" @input="setValues" /></Row>
+  <Row label="Secret"><InputText v-model="secret" class="input" @input="setValues" /></Row>
 </template>
 
 <script lang="ts">
@@ -22,9 +12,11 @@ import InputText from 'primevue/inputtext'
 import TypesDropdown from './TypeDropdown.vue'
 import LocationsDropdown from './LocationsDropdown.vue'
 import { MonitoringLocation } from '@/types'
+import Row from '@/components/common/Row.vue'
 
 export default defineComponent({
   components: {
+    Row,
     InputText,
     TypesDropdown,
     LocationsDropdown
