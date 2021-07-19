@@ -186,9 +186,17 @@ public class Snmp4jTrapReceiverIT extends MockSnmpAgentITCase implements Command
         assertEquals(0, m_trapCount);
         LOG.debug("ONMS: Register for Traps");
         final TestTrapListener trapListener = new TestTrapListener();
-        SnmpV3User user = new SnmpV3User("opennmsUser", "SHA-256", "0p3nNMSv3", "DES", "0p3nNMSv3");
+        SnmpV3User user = new SnmpV3User("opennmsUser", "SHA-256", "0p3nNMSv1", "DES", "0p3nNMSv3");
+        SnmpV3User user1 = new SnmpV3User("opennmsUser", "SHA-256", "0p3nNMSv2", "DES", "0p3nNMSv3");
+        SnmpV3User user2 = new SnmpV3User("opennmsUser", "SHA-256", "0p3nNMSv3", "DES", "0p3nNMSv3");
+        SnmpV3User user3 = new SnmpV3User("opennmsUser", "SHA-256", "0p3nNMSv4", "DES", "0p3nNMSv3");
+        List<SnmpV3User> firstList = new ArrayList<>();
+        firstList.add(user);
+        firstList.add(user1);
+        firstList.add(user2);
+        firstList.add(user3);
         try {
-            strategy.registerForTraps(trapListener, getAgentAddress(), 9162, Collections.singletonList(user));
+            strategy.registerForTraps(trapListener, getAgentAddress(), 9162, firstList);
             sendTraps(strategy, "SHA-256", SnmpConfiguration.AUTH_PRIV);
             await().atMost(5, SECONDS).until(() -> m_trapCount, equalTo(2));
         } catch (final IOException e) {

@@ -34,13 +34,16 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -48,6 +51,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.opennms.core.logging.Logging;
 import org.opennms.core.sysprops.SystemProperties;
@@ -79,6 +86,7 @@ import org.snmp4j.SNMP4JSettings;
 import org.snmp4j.ScopedPDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.TransportMapping;
+import org.snmp4j.User;
 import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.event.ResponseListener;
 import org.snmp4j.mp.MPv1;
@@ -99,6 +107,8 @@ import org.snmp4j.smi.SMIConstants;
 import org.snmp4j.smi.UdpAddress;
 import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
+
+import com.google.common.collect.Sets;
 
 
 public class Snmp4JStrategy implements SnmpStrategy {
@@ -556,55 +566,59 @@ public class Snmp4JStrategy implements SnmpStrategy {
 
     @Override
     public void registerForTraps(final TrapNotificationListener listener, InetAddress address, int snmpTrapPort, List<SnmpV3User> snmpUsers) throws IOException {
-    	final RegistrationInfo info = new RegistrationInfo(listener, address, snmpTrapPort);
-        
-    	final Snmp4JTrapNotifier trapNotifier = new Snmp4JTrapNotifier(listener);
-        info.setHandler(trapNotifier);
 
-        final UdpAddress udpAddress;
-        if (address == null) {
-        	udpAddress = new UdpAddress(snmpTrapPort);
-        } else {
-        	udpAddress = new UdpAddress(address, snmpTrapPort);
-        }
+    	List<Set<SnmpV3User>> distinctUsers = getListOfDistintSnmpV3Users(snmpUsers);
+    	if(distinctUsers.size() > 1) {
 
-        // Set socket option SO_REUSEADDR so that we can bind to the port even if it
-        // has recently been closed by passing 'true' as the second argument here.
-        final DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping(udpAddress, true);
-        // Increase the receive buffer for the socket
-        LOG.debug("Attempting to set receive buffer size to {}", Integer.MAX_VALUE);
-        transport.setReceiveBufferSize(Integer.MAX_VALUE);
-        LOG.debug("Actual receive buffer size is {}", transport.getReceiveBufferSize());
+            for(int i =0; i < distinctUsers.size(); i++) {
+                final RegistrationInfo info = new RegistrationInfo(listener, address, snmpTrapPort);
+    	        Set<SnmpV3User> users = distinctUsers.get(i);
+                final Snmp4JTrapNotifier trapNotifier = new Snmp4JTrapNotifier(listener);
+                info.setHandler(trapNotifier);
+                final UdpAddress udpAddress;
+                if (address == null) {
+                    udpAddress = new UdpAddress(snmpTrapPort);
+                } else {
+                    udpAddress = new UdpAddress(address, snmpTrapPort);
+                }
+                // Set socket option SO_REUSEADDR so that we can bind to the port even if it
+                // has recently been closed by passing 'true' as the second argument here.
+                final DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping(udpAddress, true);
+                // Increase the receive buffer for the socket
+                LOG.debug("Attempting to set receive buffer size to {}", Integer.MAX_VALUE);
+                transport.setReceiveBufferSize(Integer.MAX_VALUE);
+                LOG.debug("Actual receive buffer size is {}", transport.getReceiveBufferSize());
 
-        info.setTransportMapping(transport);
+                info.setTransportMapping(transport);
 
-        MessageDispatcher dispatcher = new MessageDispatcherImpl();
-        // add message processing models
-        dispatcher.addMessageProcessingModel(new MPv1());
-        dispatcher.addMessageProcessingModel(new MPv2c());
-        dispatcher.addMessageProcessingModel(new MPv3(getLocalEngineID()));
-        Snmp snmp = new Snmp(dispatcher, transport);
-        m_usm = new USM(SecurityProtocols.getInstance(), new OctetString(getLocalEngineID()), 0);
-        SecurityModels.getInstance().addSecurityModel(m_usm);
+                MessageDispatcher dispatcher = new MessageDispatcherImpl();
 
+                Snmp snmp = new Snmp(dispatcher, transport);
 
-        if (snmpUsers != null) {
-            for (SnmpV3User user : snmpUsers) {
-                SnmpAgentConfig config = new SnmpAgentConfig();
-                config.setVersion(SnmpConfiguration.VERSION3);
-                config.setSecurityName(user.getSecurityName());
-                config.setAuthProtocol(user.getAuthProtocol());
-                config.setAuthPassPhrase(user.getAuthPassPhrase());
-                config.setPrivProtocol(user.getPrivProtocol());
-                config.setPrivPassPhrase(user.getPrivPassPhrase());
-                Snmp4JAgentConfig agentConfig = new Snmp4JAgentConfig(config);
-                UsmUser usmUser = new UsmUser(
-                        agentConfig.getSecurityName(),
-                        agentConfig.getAuthProtocol(),
-                        agentConfig.getAuthPassPhrase(),
-                        agentConfig.getPrivProtocol(),
-                        agentConfig.getPrivPassPhrase()
-                );
+                // add message processing models
+                dispatcher.addMessageProcessingModel(new MPv1());
+                dispatcher.addMessageProcessingModel(new MPv2c());
+                USM usm = new USM(SecurityProtocols.getInstance(), new OctetString(getLocalEngineID(i)), 0);
+                //SecurityModels.getInstance().addSecurityModel(usm);
+                dispatcher.addMessageProcessingModel(new MPv3(usm));
+
+                if (users != null) {
+                    for (SnmpV3User user : users) {
+                        SnmpAgentConfig config = new SnmpAgentConfig();
+                        config.setVersion(SnmpConfiguration.VERSION3);
+                        config.setSecurityName(user.getSecurityName());
+                        config.setAuthProtocol(user.getAuthProtocol());
+                        config.setAuthPassPhrase(user.getAuthPassPhrase());
+                        config.setPrivProtocol(user.getPrivProtocol());
+                        config.setPrivPassPhrase(user.getPrivPassPhrase());
+                        Snmp4JAgentConfig agentConfig = new Snmp4JAgentConfig(config);
+                        UsmUser usmUser = new UsmUser(
+                                agentConfig.getSecurityName(),
+                                agentConfig.getAuthProtocol(),
+                                agentConfig.getAuthPassPhrase(),
+                                agentConfig.getPrivProtocol(),
+                                agentConfig.getPrivPassPhrase()
+                        );
                 /* This doesn't work as expected. Basically SNMP4J is ignoring the engineId
                 if (user.getEngineId() == null) {
                     snmp.getUSM().addUser(agentConfig.getSecurityName(), usmUser);
@@ -612,18 +626,111 @@ public class Snmp4JStrategy implements SnmpStrategy {
                     snmp.getUSM().addUser(agentConfig.getSecurityName(), new OctetString(user.getEngineId()), usmUser);
                 }
                 */
-                snmp.getUSM().addUser(agentConfig.getSecurityName(), usmUser);
+                        snmp.getUSM().addUser(agentConfig.getSecurityName(), usmUser);
+                    }
+                }
+                Snmp4JStrategy.trackSession(snmp);
+                snmp.addCommandResponder(trapNotifier);
+                info.setSession(snmp);
+
+                s_registrations.put(listener, info);
+
+                snmp.listen();
             }
+        } else {
+            final RegistrationInfo info = new RegistrationInfo(listener, address, snmpTrapPort);
+            final Snmp4JTrapNotifier trapNotifier = new Snmp4JTrapNotifier(listener);
+            info.setHandler(trapNotifier);
+            final UdpAddress udpAddress;
+            if (address == null) {
+                udpAddress = new UdpAddress(snmpTrapPort);
+            } else {
+                udpAddress = new UdpAddress(address, snmpTrapPort);
+            }
+            // Set socket option SO_REUSEADDR so that we can bind to the port even if it
+            // has recently been closed by passing 'true' as the second argument here.
+            final DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping(udpAddress, true);
+            // Increase the receive buffer for the socket
+            LOG.debug("Attempting to set receive buffer size to {}", Integer.MAX_VALUE);
+            transport.setReceiveBufferSize(Integer.MAX_VALUE);
+            LOG.debug("Actual receive buffer size is {}", transport.getReceiveBufferSize());
+
+            info.setTransportMapping(transport);
+
+            MessageDispatcher dispatcher = new MessageDispatcherImpl();
+            // add message processing models
+            dispatcher.addMessageProcessingModel(new MPv1());
+            dispatcher.addMessageProcessingModel(new MPv2c());
+            dispatcher.addMessageProcessingModel(new MPv3(getLocalEngineID()));
+            Snmp snmp = new Snmp(dispatcher, transport);
+            m_usm = new USM(SecurityProtocols.getInstance(), new OctetString(getLocalEngineID()), 0);
+            SecurityModels.getInstance().addSecurityModel(m_usm);
+
+
+            if (snmpUsers != null) {
+                for (SnmpV3User user : snmpUsers) {
+                    SnmpAgentConfig config = new SnmpAgentConfig();
+                    config.setVersion(SnmpConfiguration.VERSION3);
+                    config.setSecurityName(user.getSecurityName());
+                    config.setAuthProtocol(user.getAuthProtocol());
+                    config.setAuthPassPhrase(user.getAuthPassPhrase());
+                    config.setPrivProtocol(user.getPrivProtocol());
+                    config.setPrivPassPhrase(user.getPrivPassPhrase());
+                    Snmp4JAgentConfig agentConfig = new Snmp4JAgentConfig(config);
+                    UsmUser usmUser = new UsmUser(
+                            agentConfig.getSecurityName(),
+                            agentConfig.getAuthProtocol(),
+                            agentConfig.getAuthPassPhrase(),
+                            agentConfig.getPrivProtocol(),
+                            agentConfig.getPrivPassPhrase()
+                    );
+                /* This doesn't work as expected. Basically SNMP4J is ignoring the engineId
+                if (user.getEngineId() == null) {
+                    snmp.getUSM().addUser(agentConfig.getSecurityName(), usmUser);
+                } else {
+                    snmp.getUSM().addUser(agentConfig.getSecurityName(), new OctetString(user.getEngineId()), usmUser);
+                }
+                */
+                    snmp.getUSM().addUser(agentConfig.getSecurityName(), usmUser);
+                }
+            }
+            Snmp4JStrategy.trackSession(snmp);
+            snmp.addCommandResponder(trapNotifier);
+            info.setSession(snmp);
+
+            s_registrations.put(listener, info);
+
+            snmp.listen();
         }
-        Snmp4JStrategy.trackSession(snmp);
-        snmp.addCommandResponder(trapNotifier);
-        info.setSession(snmp);
-        
-        s_registrations.put(listener, info);
-        
-        snmp.listen();
     }
-    
+
+    static List<Set<SnmpV3User>> getListOfDistintSnmpV3Users(List<SnmpV3User> snmpV3Users) {
+        List<Set<SnmpV3User>> setList = new ArrayList<>();
+        addUniqueSet(setList, snmpV3Users);
+        return setList;
+    }
+
+    static void addUniqueSet(List<Set<SnmpV3User>> setList, List<SnmpV3User> users) {
+        Set<SnmpV3User> uniqueElements = users.stream().filter((distinctByKey(SnmpV3User::getSecurityName))).collect(Collectors.toSet());
+        List<SnmpV3User> remainingElements = users.stream().filter(user -> !uniqueElements.contains(user)).collect(Collectors.toList());
+        setList.add(uniqueElements);
+        if(remainingElements.size() > 1) {
+            addUniqueSet(setList, remainingElements);
+        } else if(remainingElements.size() == 1){
+            Set<SnmpV3User> finalSet = new HashSet<>();
+            finalSet.add(remainingElements.get(0));
+            setList.add(finalSet);
+        }
+    }
+
+    public static <T> Predicate<T> distinctByKey(
+            Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
+
     @Override
     public void registerForTraps(final TrapNotificationListener listener, InetAddress address, int snmpTrapPort) throws IOException {
         registerForTraps(listener, address, snmpTrapPort, null);
@@ -779,13 +886,32 @@ public class Snmp4JStrategy implements SnmpStrategy {
         return new OctetString(instanceId);
     }
 
+    public static OctetString createPersistentInstanceId(int index) {
+        String instanceId = SystemInfoUtils.getInstanceId();
+        int indexLength = Integer.toString(index).length();
+        // Limit this instance to 23 bytes.
+        if (instanceId.length() > 24 - indexLength) {
+            instanceId = instanceId.substring(0, 23 - indexLength);
+        }
+        instanceId = instanceId + index;
+        return new OctetString(instanceId);
+    }
+
     public static OctetString createLocalEngineId() {
         return new OctetString(MPv3.createLocalEngineID(createPersistentInstanceId()));
+    }
+
+    public static OctetString createLocalEngineId(int index) {
+        return new OctetString(MPv3.createLocalEngineID(createPersistentInstanceId(index)));
     }
 
     @Override
     public byte[] getLocalEngineID() {
         return createLocalEngineId().getValue();
+    }
+
+    public byte[] getLocalEngineID(int index) {
+        return createLocalEngineId(index).getValue();
     }
 
         private static void assertTrackingInitialized() {
