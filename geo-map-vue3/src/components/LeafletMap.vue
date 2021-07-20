@@ -11,22 +11,30 @@
       ></l-tile-layer>
       <l-control-layers />
 
-      <l-marker :lat-lng="markerlatlng">
+      <l-marker :lat-lng="marker1latlng">
         <l-icon :icon-url="iconUrl" :icon-size="iconSize" />
         <l-popup>
-          popup
+          popup1
         </l-popup>
         <l-tooltip>
-          tooltip
+          tooltip1
+        </l-tooltip>
+      </l-marker>
+
+      <l-marker :lat-lng="marker2latlng">
+        <l-icon :icon-url="iconUrl" :icon-size="iconSize" />
+        <l-popup>
+          popup2
+        </l-popup>
+        <l-tooltip>
+          tooltip2
         </l-tooltip>
       </l-marker>
 
       <l-polyline
         :lat-lngs="[
           [35.849613, -78.794882],
-          [47.342596, -1.328731],
-          [47.241487, -1.190568],
-          [47.234787, -1.358337],
+          [40.714847, -74.048383],
         ]"
         color="blue"
         :weight="3"
@@ -75,8 +83,11 @@ export default {
     iconSize() {
       return [this.iconWidth, this.iconHeight];
     },
-    markerlatlng(){
+    marker1latlng(){
       return [35.849613, -78.794882]
+    },
+    marker2latlng(){
+      return [40.714847, -74.048383]
     }
   },
   methods: {
