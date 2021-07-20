@@ -1,16 +1,16 @@
 <template>
   <div class="map">
-    <GeoMap/>
+    <LeafletMap/>
   </div>
 </template>
 
 <script>
-import GeoMap from "@/components/GeoMap.vue";
+import LeafletMap from "@/components/LeafletMap.vue";
 
 export default {
   name: "Map",
   components: {
-    GeoMap,
+    LeafletMap,
   },
 };
 </script>

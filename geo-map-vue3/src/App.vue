@@ -1,8 +1,8 @@
 <template>
   <div id="nav" >
-    <img id="logo" src="require('./assets/opennms-horizon-logo.svg')" alt=" OpenNMS Horizon Logo" width="auto" height="22px" />
     <router-link to="/" >Home</router-link> |
-    <router-link to="/map">Map</router-link>
+    <router-link to="/nodes">Nodes </router-link>
+    <router-link to="/map">Map</router-link>    
   </div>
   <router-view />
 </template>
@@ -17,8 +17,9 @@
 }
 
 #nav {
-  padding: 1.25%;
+  padding: 1.2%;
   background: #0a0c1b;
+  text-align: right;
 }
 
 #nav a {
