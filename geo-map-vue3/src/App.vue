@@ -1,8 +1,7 @@
 <template>
-  <div id="nav" >
-    <router-link to="/" >Home</router-link> |
-    <router-link to="/nodes">Nodes </router-link>
-    <router-link to="/map">Map</router-link>    
+  <div id="nav">
+    <router-link to="/">Home</router-link> |
+    <router-link to="/map">Map</router-link>
   </div>
   <router-view />
 </template>
@@ -26,10 +25,10 @@
   font-family: Arial;
   font-size: 15px;
   font-weight: bold;
-  color: #B4B6C8;
+  color: #b4b6c8;
 }
 
 #nav a.router-link-exact-active {
-  color: #E9EBF9;
+  color: #e9ebf9;
 }
 </style>
