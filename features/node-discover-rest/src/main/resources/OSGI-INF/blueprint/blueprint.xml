@@ -1,0 +1,33 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.3.0"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                https://osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                
+                http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.3.0
+                http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.3.0.xsd
+">
+
+    <cm:property-placeholder persistent-id="org.opennms.features.datachoices.cfg">
+        <cm:default-properties>
+            <!-- The Oracle JDK does not currently recognize the Let's Encrypt Certificate Chain
+                 in default installations (the 'ISRG Root X1' root certificate in particular)
+                 so we resort to using HTTP. -->
+            <cm:property name="url" value="http://stats.opennms.org/datachoices/"/>
+            <cm:property name="interval" value="86400000"/> <!-- 24 hours -->
+            <cm:property name="useSystemProxy" value="false"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <!--<reference id="snmpInterfaceDao" interface="org.opennms.netmgt.dao.api.SnmpInterfaceDao" availability="mandatory"/>-->
+
+    <!-- The state manager will manually pull properties from the configuration file -->
+    <bean id="nodeDiscoverRestService" class="org.opennms.features.nodediscover.rest.impl.NodeDiscoverServiceImpl">
+    </bean>
+    <service interface="org.opennms.features.nodediscover.rest.NodeDiscoverRestService" ref="nodeDiscoverRestService">
+        <service-properties>
+            <entry key="application-path" value="/rest"/>
+        </service-properties>
+    </service>
+</blueprint>
