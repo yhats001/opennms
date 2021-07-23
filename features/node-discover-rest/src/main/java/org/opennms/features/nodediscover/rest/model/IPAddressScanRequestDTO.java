@@ -26,26 +26,34 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.nodediscover.rest;
+package org.opennms.features.nodediscover.rest.model;
 
-import java.util.List;
+public class IPAddressScanRequestDTO {
+    private String location;
+    private String startIP;
+    private String endIP;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.UriInfo;
+    public String getLocation() {
+        return location;
+    }
 
-import org.opennms.features.nodediscover.rest.model.DiscoveryResultDTO;
-import org.opennms.features.nodediscover.rest.model.IPAddressScanRequestDTO;
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-@Path("/nodediscover")
-public interface NodeDiscoverRestService {
-    @POST
-    @Path("/scan")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    List<DiscoveryResultDTO> discoverByRange(@Context UriInfo uriInfo, List<IPAddressScanRequestDTO> ipRangeList);
+    public String getStartIP() {
+        return startIP;
+    }
+
+    public void setStartIP(String startIP) {
+        this.startIP = startIP;
+    }
+
+    public String getEndIP() {
+        return endIP;
+    }
+
+    public void setEndIP(String endIP) {
+        this.endIP = endIP;
+    }
 }

@@ -28,20 +28,70 @@
 
 package org.opennms.features.nodediscover.rest.impl;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import javax.ws.rs.core.UriInfo;
 
 import org.opennms.features.nodediscover.rest.NodeDiscoverRestService;
 import org.opennms.features.nodediscover.rest.model.DiscoveryResultDTO;
+import org.opennms.features.nodediscover.rest.model.IPAddressScanRequestDTO;
 import org.opennms.features.nodediscover.rest.model.IPScanResult;
+import org.opennms.netmgt.icmp.proxy.LocationAwarePingClient;
+import org.opennms.netmgt.icmp.proxy.PingSweepSummary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
+    private static Logger LOG = LoggerFactory.getLogger(NodeDiscoverServiceImpl.class);
+    private final LocationAwarePingClient locationAwarePingClient;
+
+    public NodeDiscoverServiceImpl(LocationAwarePingClient locationAwarePingClient) {
+        this.locationAwarePingClient = locationAwarePingClient;
+    }
+
     @Override
-    public DiscoveryResultDTO discoverByRange() {
-        List<IPScanResult> ipResults = new ArrayList<>();
-        ipResults.add(new IPScanResult("host1.mynetwork", "192.168.1.1", 123.546f));
-        ipResults.add(new IPScanResult("host2.mynetwork", "192.168.1.2", 223.546f));
-        DiscoveryResultDTO result = new DiscoveryResultDTO("default", ipResults);
-        return result;
+    public List<DiscoveryResultDTO> discoverByRange(final UriInfo uriInfo, List<IPAddressScanRequestDTO> ipRangeList) {
+        List<DiscoveryResultDTO> results = new ArrayList<>();
+
+        ipRangeList.forEach(ipRange -> {
+            try {
+                CompletableFuture<PingSweepSummary> future = locationAwarePingClient.sweep().withRange(InetAddress.getByName(ipRange.getStartIP()), InetAddress.getByName(ipRange.getEndIP()))
+                        .withLocation(ipRange.getLocation())
+                        .execute();
+                while (true) {
+                    try {
+                        try {
+                            PingSweepSummary summary = future.get(1, TimeUnit.SECONDS);
+                            if (!summary.getResponses().isEmpty()) {
+                                List<IPScanResult> scanResults = new ArrayList<>();
+                                summary.getResponses().forEach((address, rtt) -> scanResults.add(new IPScanResult(address.getHostName(), address.getHostAddress(), rtt)));
+                                DiscoveryResultDTO resultDTO = new DiscoveryResultDTO(ipRange.getLocation(), scanResults);
+                                results.add(resultDTO);
+                            } else {
+                                LOG.debug("No response from any IP address in the range");
+                            }
+                        } catch (InterruptedException e) {
+
+                        } catch (ExecutionException e) {
+                            LOG.error("IP range scan failed with location {} start IP {} and end {}", ipRange.getLocation(), ipRange.getStartIP(), ipRange.getEndIP());
+                        }
+                        break;
+                    } catch (TimeoutException e) {
+                        // continue
+                    }
+                }
+
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        });
+        return results;
     }
 }

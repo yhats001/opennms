@@ -31,9 +31,9 @@ package org.opennms.features.nodediscover.rest.model;
 public class IPScanResult {
     private String hostname;
     private String ipAddress;
-    private float rtt;
+    private double rtt;
 
-    public IPScanResult(String hostname, String ipAddress, float rtt) {
+    public IPScanResult(String hostname, String ipAddress, double rtt) {
         this.hostname = hostname;
         this.ipAddress = ipAddress;
         this.rtt = rtt;
@@ -55,11 +55,11 @@ public class IPScanResult {
         this.ipAddress = ipAddress;
     }
 
-    public float getRtt() {
+    public double getRtt() {
         return rtt;
     }
 
-    public void setRtt(float rtt) {
+    public void setRtt(double rtt) {
         this.rtt = rtt;
     }
 }

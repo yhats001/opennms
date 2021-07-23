@@ -20,10 +20,11 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <!--<reference id="snmpInterfaceDao" interface="org.opennms.netmgt.dao.api.SnmpInterfaceDao" availability="mandatory"/>-->
+    <reference id="locationAwarePingClient" interface="org.opennms.netmgt.icmp.proxy.LocationAwarePingClient" availability="mandatory"/>
 
     <!-- The state manager will manually pull properties from the configuration file -->
     <bean id="nodeDiscoverRestService" class="org.opennms.features.nodediscover.rest.impl.NodeDiscoverServiceImpl">
+        <argument ref="locationAwarePingClient" />
     </bean>
     <service interface="org.opennms.features.nodediscover.rest.NodeDiscoverRestService" ref="nodeDiscoverRestService">
         <service-properties>
