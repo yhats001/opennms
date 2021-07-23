@@ -5,17 +5,17 @@
         <LeafletMap />
       </div>
     </pane>
-    <pane>
-      <div class="nodes-grid">
-        <NodesGrid />
-      </div>
+    <pane id="map-pane-under">
+      <router-link :to="{ name: 'MapAlarms' }">Alarms</router-link>
+      |
+      <router-link :to="{ name: 'MapNodes' }">Nodes</router-link>   
+      <router-view />
     </pane>
   </splitpanes>
 </template>
 
 <script>
 import LeafletMap from "@/components/LeafletMap.vue";
-import NodesGrid from "@/components/NodesGrid.vue";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 
@@ -25,10 +25,25 @@ export default {
     LeafletMap,
     Splitpanes,
     Pane,
-    NodesGrid,
+
   },
 };
 </script>
 
 <style scoped>
+#map-pane-under {
+
+  text-align: left;
+}
+
+#map-pane-under a {
+  font-family: Arial;
+  font-size: 15px;
+  /* font-weight: bold; */
+  color: #7E8198;
+}
+
+#map-pane-under a.router-link-exact-active {
+  color: #131736;
+}
 </style>

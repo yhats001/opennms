@@ -25,7 +25,7 @@ export default {
       columnDefs: null,
       rowData: null,
       defaultColDef: null,
-      gridColumnApi: null
+      gridColumnApi: null,
     };
   },
 
@@ -49,32 +49,78 @@ export default {
   beforeMount() {
     this.gridOptions = {};
     this.defaultColDef = {
-    //   width: 200,
       filter: "agTextColumnFilter",
       resizable: true,
+      enableBrowserTooltips: true,
     };
     this.columnDefs = [
-      { headerName: "ID", field: "id", sortable: true},
-      { headerName: "FOREIGN SOURCE", field: "foreignSource" },
-      { headerName: "FOREIGN ID", field: "foreignId" },
-      { headerName: "LABLE", field: "lable", sortable: true },
-      { headerName: "LABLE SOURCE", field: "lableSource" },
+      { headerName: "ID", field: "id", sortable: true, headerTooltip: "ID" },
+      {
+        headerName: "FOREIGN SOURCE",
+        field: "foreignSource",
+        sortable: true,
+        headerTooltip: "Foreign Source",
+      },
+      {
+        headerName: "FOREIGN ID",
+        field: "foreignId",
+        sortable: true,
+        headerTooltip: "Foreign ID",
+      },
+      {
+        headerName: "LABLE",
+        field: "lable",
+        sortable: true,
+        headerTooltip: "Lable",
+      },
+      {
+        headerName: "LABLE SOURCE",
+        field: "lableSource",
+        sortable: true,
+        headerTooltip: "Lable Source",
+      },
       {
         headerName: "LAST CAPABILITIES SCAN",
         field: "lastCapabilitiesScan",
+        sortable: true,
+        headerTooltip: "Last Capabilities Scan",
       },
       {
         headerName: "PRIMARY INTERFACE",
         field: "primaryInterface",
+        sortable: true,
+        headerTooltip: "Primary Interface",
       },
-      { headerName: "SYSOBJECTID", field: "sysObjectid" },
-      { headerName: "SYSNAME", field: "sysName" },
+      {
+        headerName: "SYSOBJECTID",
+        field: "sysObjectid",
+        sortable: true,
+        headerTooltip: "Sys Object ID",
+      },
+      {
+        headerName: "SYSNAME",
+        field: "sysName",
+        sortable: true,
+        headerTooltip: "Sys Name",
+      },
       {
         headerName: "SYSDESCRIPTION",
         field: "sysDescription",
+        sortable: true,
+        headerTooltip: "Sys Description",
       },
-      { headerName: "SYSCONTACT", field: "sysContact" },
-      { headerName: "SYSLOCATION", field: "sysLocation" },
+      {
+        headerName: "SYSCONTACT",
+        field: "sysContact",
+        sortable: true,
+        headerTooltip: "Sys Contact",
+      },
+      {
+        headerName: "SYSLOCATION",
+        field: "sysLocation",
+        sortable: true,
+        headerTooltip: "Sys Location",
+      },
     ];
 
     this.rowData = [
@@ -87,7 +133,7 @@ export default {
         lastCapabilitiesScan: null,
         primaryInterface: null,
         sysObjectid: null,
-        sysName: null,
+        sysName: "sys name1",
         sysDescription: null,
         sysContact: null,
         sysLocation: null,
@@ -96,12 +142,12 @@ export default {
         id: "2",
         foreignSource: null,
         foreignId: null,
-        lable: "jie-mb",
+        lable: "jie-mbt",
         lableSource: "H",
         lastCapabilitiesScan: null,
         primaryInterface: null,
         sysObjectid: null,
-        sysName: null,
+        sysName: "sys name2",
         sysDescription: null,
         sysContact: null,
         sysLocation: null,
