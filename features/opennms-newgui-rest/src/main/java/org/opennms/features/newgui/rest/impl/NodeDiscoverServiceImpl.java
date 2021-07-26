@@ -37,12 +37,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.ws.rs.core.UriInfo;
-
 import org.opennms.features.newgui.rest.NodeDiscoverRestService;
 import org.opennms.features.newgui.rest.model.DiscoveryResultDTO;
 import org.opennms.features.newgui.rest.model.IPAddressScanRequestDTO;
 import org.opennms.features.newgui.rest.model.IPScanResult;
+import org.opennms.features.newgui.rest.model.SNMPFitRequestDTO;
+import org.opennms.features.newgui.rest.model.SNMPFitResultDTO;
 import org.opennms.netmgt.icmp.proxy.LocationAwarePingClient;
 import org.opennms.netmgt.icmp.proxy.PingSweepSummary;
 import org.slf4j.Logger;
@@ -57,7 +57,7 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
     }
 
     @Override
-    public List<DiscoveryResultDTO> discoverByRange(final UriInfo uriInfo, List<IPAddressScanRequestDTO> ipRangeList) {
+    public List<DiscoveryResultDTO> discoverByRange(List<IPAddressScanRequestDTO> ipRangeList) {
         List<DiscoveryResultDTO> results = new ArrayList<>();
 
         ipRangeList.forEach(ipRange -> {
@@ -91,6 +91,31 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
+        });
+        return results;
+    }
+
+    @Override
+    public List<SNMPFitResultDTO> fitSNMP(List<SNMPFitRequestDTO> requestList) {
+        List<SNMPFitResultDTO> results = new ArrayList<>();
+        int[] counter = new int[] {0};
+        requestList.forEach(request -> {
+            request.getIpAddresses().forEach(ip -> {
+                try {
+                    InetAddress ipAddress = InetAddress.getByName(ip);
+                    request.getConfigurations().forEach(config -> {
+                        SNMPFitResultDTO result = new SNMPFitResultDTO();
+                        result.setLocation(request.getLocation());
+                        result.setSysOID("test oid" + counter[0]++);
+                        result.setIpAddress(ipAddress.getHostAddress());
+                        result.setHostname(ipAddress.getHostName());
+                        result.setCommunityString(config.getCommunityString());
+                        results.add(result);
+                    });
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+            });
         });
         return results;
     }

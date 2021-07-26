@@ -26,29 +26,52 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.newgui.rest;
+package org.opennms.features.newgui.rest.model;
 
-import java.util.List;
+public class SNMPFitResultDTO {
+    private String location;
+    private String hostname;
+    private String ipAddress;
+    private String sysOID;
+    private String communityString;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+    public String getLocation() {
+        return location;
+    }
 
-import org.opennms.features.newgui.rest.model.DiscoveryResultDTO;
-import org.opennms.features.newgui.rest.model.IPAddressScanRequestDTO;
-import org.opennms.features.newgui.rest.model.SNMPFitRequestDTO;
-import org.opennms.features.newgui.rest.model.SNMPFitResultDTO;
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-@Path("/nodediscover")
-public interface NodeDiscoverRestService {
-    @POST
-    @Path("/scan")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    List<DiscoveryResultDTO> discoverByRange(List<IPAddressScanRequestDTO> ipRangeList);
+    public String getHostname() {
+        return hostname;
+    }
 
-    @POST
-    @Path("/detect")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    List<SNMPFitResultDTO> fitSNMP(List<SNMPFitRequestDTO> requestList);
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public String getSysOID() {
+        return sysOID;
+    }
+
+    public void setSysOID(String sysOID) {
+        this.sysOID = sysOID;
+    }
+
+    public String getCommunityString() {
+        return communityString;
+    }
+
+    public void setCommunityString(String communityString) {
+        this.communityString = communityString;
+    }
 }

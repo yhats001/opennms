@@ -26,29 +26,36 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.newgui.rest;
+package org.opennms.features.newgui.rest.model;
 
 import java.util.List;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+public class SNMPFitRequestDTO {
+    private String location;
+    private List<String> ipAddresses;
+    private List<SNMConfigDTO> configurations;
 
-import org.opennms.features.newgui.rest.model.DiscoveryResultDTO;
-import org.opennms.features.newgui.rest.model.IPAddressScanRequestDTO;
-import org.opennms.features.newgui.rest.model.SNMPFitRequestDTO;
-import org.opennms.features.newgui.rest.model.SNMPFitResultDTO;
+    public String getLocation() {
+        return location;
+    }
 
-@Path("/nodediscover")
-public interface NodeDiscoverRestService {
-    @POST
-    @Path("/scan")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    List<DiscoveryResultDTO> discoverByRange(List<IPAddressScanRequestDTO> ipRangeList);
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-    @POST
-    @Path("/detect")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    List<SNMPFitResultDTO> fitSNMP(List<SNMPFitRequestDTO> requestList);
+    public List<String> getIpAddresses() {
+        return ipAddresses;
+    }
+
+    public void setIpAddresses(List<String> ipAddresses) {
+        this.ipAddresses = ipAddresses;
+    }
+
+    public List<SNMConfigDTO> getConfigurations() {
+        return configurations;
+    }
+
+    public void setConfigurations(List<SNMConfigDTO> configurations) {
+        this.configurations = configurations;
+    }
 }

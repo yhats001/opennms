@@ -26,29 +26,43 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.newgui.rest;
+package org.opennms.features.newgui.rest.model;
 
-import java.util.List;
+public class SNMConfigDTO {
+    private String communityString;
+    private int timeout;
+    private int retry;
+    private String securityLevel;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+    public String getCommunityString() {
+        return communityString;
+    }
 
-import org.opennms.features.newgui.rest.model.DiscoveryResultDTO;
-import org.opennms.features.newgui.rest.model.IPAddressScanRequestDTO;
-import org.opennms.features.newgui.rest.model.SNMPFitRequestDTO;
-import org.opennms.features.newgui.rest.model.SNMPFitResultDTO;
+    public void setCommunityString(String communityString) {
+        this.communityString = communityString;
+    }
 
-@Path("/nodediscover")
-public interface NodeDiscoverRestService {
-    @POST
-    @Path("/scan")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    List<DiscoveryResultDTO> discoverByRange(List<IPAddressScanRequestDTO> ipRangeList);
+    public int getTimeout() {
+        return timeout;
+    }
 
-    @POST
-    @Path("/detect")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    List<SNMPFitResultDTO> fitSNMP(List<SNMPFitRequestDTO> requestList);
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
+    public int getRetry() {
+        return retry;
+    }
+
+    public void setRetry(int retry) {
+        this.retry = retry;
+    }
+
+    public String getSecurityLevel() {
+        return securityLevel;
+    }
+
+    public void setSecurityLevel(String securityLevel) {
+        this.securityLevel = securityLevel;
+    }
 }
