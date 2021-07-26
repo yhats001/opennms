@@ -26,40 +26,34 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.nodediscover.rest.model;
+package org.opennms.features.newgui.rest.model;
 
-public class IPScanResult {
-    private String hostname;
-    private String ipAddress;
-    private double rtt;
+public class IPAddressScanRequestDTO {
+    private String location;
+    private String startIP;
+    private String endIP;
 
-    public IPScanResult(String hostname, String ipAddress, double rtt) {
-        this.hostname = hostname;
-        this.ipAddress = ipAddress;
-        this.rtt = rtt;
+    public String getLocation() {
+        return location;
     }
 
-    public String getHostname() {
-        return hostname;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
+    public String getStartIP() {
+        return startIP;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
+    public void setStartIP(String startIP) {
+        this.startIP = startIP;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public String getEndIP() {
+        return endIP;
     }
 
-    public double getRtt() {
-        return rtt;
-    }
-
-    public void setRtt(double rtt) {
-        this.rtt = rtt;
+    public void setEndIP(String endIP) {
+        this.endIP = endIP;
     }
 }

@@ -8,9 +8,9 @@
         <version>29.0.0-SNAPSHOT</version>
     </parent>
     <groupId>org.opennms.features</groupId>
-    <artifactId>node-discover-rest</artifactId>
+    <artifactId>newgui-rest</artifactId>
     <packaging>bundle</packaging>
-    <name>OpenNMS :: Features :: Node Discover REST</name>
+    <name>OpenNMS :: Features :: New GUI REST</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

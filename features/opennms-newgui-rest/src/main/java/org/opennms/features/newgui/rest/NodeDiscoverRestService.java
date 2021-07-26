@@ -26,33 +26,24 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.nodediscover.rest.model;
+package org.opennms.features.newgui.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class DiscoveryResultDTO {
-    private String location;
-    private List<IPScanResult> scanResults = new ArrayList<>();
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
-    public DiscoveryResultDTO(String location, List<IPScanResult> scanResults) {
-        this.location = location;
-        this.scanResults = scanResults;
-    }
+import org.opennms.features.newgui.rest.model.DiscoveryResultDTO;
+import org.opennms.features.newgui.rest.model.IPAddressScanRequestDTO;
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public List<IPScanResult> getScanResults() {
-        return scanResults;
-    }
-
-    public void setScanResults(List<IPScanResult> scanResults) {
-        this.scanResults = scanResults;
-    }
+@Path("/nodediscover")
+public interface NodeDiscoverRestService {
+    @POST
+    @Path("/scan")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    List<DiscoveryResultDTO> discoverByRange(@Context UriInfo uriInfo, List<IPAddressScanRequestDTO> ipRangeList);
 }

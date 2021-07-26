@@ -26,12 +26,18 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.nodediscover.rest.model;
+package org.opennms.features.newgui.rest.model;
 
-public class IPAddressScanRequestDTO {
+import java.util.List;
+
+public class DiscoveryResultDTO {
     private String location;
-    private String startIP;
-    private String endIP;
+    private List<IPScanResult> scanResults;
+
+    public DiscoveryResultDTO(String location, List<IPScanResult> scanResults) {
+        this.location = location;
+        this.scanResults = scanResults;
+    }
 
     public String getLocation() {
         return location;
@@ -41,19 +47,11 @@ public class IPAddressScanRequestDTO {
         this.location = location;
     }
 
-    public String getStartIP() {
-        return startIP;
+    public List<IPScanResult> getScanResults() {
+        return scanResults;
     }
 
-    public void setStartIP(String startIP) {
-        this.startIP = startIP;
-    }
-
-    public String getEndIP() {
-        return endIP;
-    }
-
-    public void setEndIP(String endIP) {
-        this.endIP = endIP;
+    public void setScanResults(List<IPScanResult> scanResults) {
+        this.scanResults = scanResults;
     }
 }

@@ -12,7 +12,7 @@
   <modules>
 
     <!--Rest API for new UI node discover -->
-    <module>node-discover-rest</module>
+    <module>opennms-newgui-rest</module>
 
     <!-- Enlinkd -->
     <module>enlinkd</module>

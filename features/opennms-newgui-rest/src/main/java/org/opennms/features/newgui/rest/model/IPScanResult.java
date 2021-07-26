@@ -26,26 +26,40 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.nodediscover.rest;
+package org.opennms.features.newgui.rest.model;
 
-import java.util.List;
+public class IPScanResult {
+    private String hostname;
+    private String ipAddress;
+    private double rtt;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.UriInfo;
+    public IPScanResult(String hostname, String ipAddress, double rtt) {
+        this.hostname = hostname;
+        this.ipAddress = ipAddress;
+        this.rtt = rtt;
+    }
 
-import org.opennms.features.nodediscover.rest.model.DiscoveryResultDTO;
-import org.opennms.features.nodediscover.rest.model.IPAddressScanRequestDTO;
+    public String getHostname() {
+        return hostname;
+    }
 
-@Path("/nodediscover")
-public interface NodeDiscoverRestService {
-    @POST
-    @Path("/scan")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    List<DiscoveryResultDTO> discoverByRange(@Context UriInfo uriInfo, List<IPAddressScanRequestDTO> ipRangeList);
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public double getRtt() {
+        return rtt;
+    }
+
+    public void setRtt(double rtt) {
+        this.rtt = rtt;
+    }
 }

@@ -9,24 +9,24 @@
                 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.3.0.xsd
 ">
 
-    <cm:property-placeholder persistent-id="org.opennms.features.datachoices.cfg">
+    <!--<cm:property-placeholder persistent-id="org.opennms.features.datachoices.cfg">
         <cm:default-properties>
-            <!-- The Oracle JDK does not currently recognize the Let's Encrypt Certificate Chain
+            &lt;!&ndash; The Oracle JDK does not currently recognize the Let's Encrypt Certificate Chain
                  in default installations (the 'ISRG Root X1' root certificate in particular)
-                 so we resort to using HTTP. -->
+                 so we resort to using HTTP. &ndash;&gt;
             <cm:property name="url" value="http://stats.opennms.org/datachoices/"/>
-            <cm:property name="interval" value="86400000"/> <!-- 24 hours -->
+            <cm:property name="interval" value="86400000"/> &lt;!&ndash; 24 hours &ndash;&gt;
             <cm:property name="useSystemProxy" value="false"/>
         </cm:default-properties>
-    </cm:property-placeholder>
+    </cm:property-placeholder>-->
 
     <reference id="locationAwarePingClient" interface="org.opennms.netmgt.icmp.proxy.LocationAwarePingClient" availability="mandatory"/>
 
     <!-- The state manager will manually pull properties from the configuration file -->
-    <bean id="nodeDiscoverRestService" class="org.opennms.features.nodediscover.rest.impl.NodeDiscoverServiceImpl">
+    <bean id="nodeDiscoverRestService" class="org.opennms.features.newgui.rest.impl.NodeDiscoverServiceImpl">
         <argument ref="locationAwarePingClient" />
     </bean>
-    <service interface="org.opennms.features.nodediscover.rest.NodeDiscoverRestService" ref="nodeDiscoverRestService">
+    <service interface="org.opennms.features.newgui.rest.NodeDiscoverRestService" ref="nodeDiscoverRestService">
         <service-properties>
             <entry key="application-path" value="/rest"/>
         </service-properties>

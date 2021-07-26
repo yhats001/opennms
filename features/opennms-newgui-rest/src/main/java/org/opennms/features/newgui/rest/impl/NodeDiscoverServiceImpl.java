@@ -26,7 +26,7 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.nodediscover.rest.impl;
+package org.opennms.features.newgui.rest.impl;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -39,10 +39,10 @@ import java.util.concurrent.TimeoutException;
 
 import javax.ws.rs.core.UriInfo;
 
-import org.opennms.features.nodediscover.rest.NodeDiscoverRestService;
-import org.opennms.features.nodediscover.rest.model.DiscoveryResultDTO;
-import org.opennms.features.nodediscover.rest.model.IPAddressScanRequestDTO;
-import org.opennms.features.nodediscover.rest.model.IPScanResult;
+import org.opennms.features.newgui.rest.NodeDiscoverRestService;
+import org.opennms.features.newgui.rest.model.DiscoveryResultDTO;
+import org.opennms.features.newgui.rest.model.IPAddressScanRequestDTO;
+import org.opennms.features.newgui.rest.model.IPScanResult;
 import org.opennms.netmgt.icmp.proxy.LocationAwarePingClient;
 import org.opennms.netmgt.icmp.proxy.PingSweepSummary;
 import org.slf4j.Logger;
