@@ -71,7 +71,7 @@ RUN echo "installing packages for build ${REVISION} (${BUILD_DATE})"; \
     if [[ "$(ls -1 /tmp/tarball/*.tar.gz 2>/dev/null | wc -l)" != 0 ]]; then \
         mkdir -p /opt/opennms && \
         tar -xzf /tmp/tarball/opennms-*.tar.gz -C /opt/opennms && \
-        chown -R 0:0 /opt/opennms && \
+        chown -R 10001:10001 /opt/opennms && \
         cp -r /opt/opennms/etc /opt/opennms/share/etc-pristine; \
     elif [[ "$(ls -1 /tmp/rpms/*.rpm 2>/dev/null | wc -l)" != 0 ]]; then \
         echo "installing local RPMs from filesystem" && \
@@ -118,20 +118,16 @@ RUN echo "installing packages for build ${REVISION} (${BUILD_DATE})"; \
                          /opt/opennms-overlay \
                          /opt/opennms-etc-overlay \
                          /opt/opennms-jetty-webinf-overlay && \
-    chgrp -R 0 /opt/opennms \
-               /opennms-data \
-               /opt/opennms-overlay \
-               /opt/opennms-etc-overlay \
-               /opt/opennms-jetty-webinf-overlay && \
     chmod -R g=u /opt/opennms \
                  /opennms-data \
                  /opt/opennms-overlay \
                  /opt/opennms-etc-overlay \
-                 /opt/opennms-jetty-webinf-overlay
+                 /opt/opennms-jetty-webinf-overlay && \
+    /opt/opennms/bin/fix-permissions
 
 # Add templates replaced at runtime and entrypoint
-COPY --chown=10001:0 ./container-fs/confd /etc/confd
-COPY --chown=10001:0 ./container-fs/entrypoint.sh /
+COPY --chown=10001:10001 ./container-fs/confd /etc/confd
+COPY --chown=10001:10001 ./container-fs/entrypoint.sh /
 
 # Arguments for labels should not invalidate caches
 ARG VERSION

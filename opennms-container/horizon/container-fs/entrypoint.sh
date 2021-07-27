@@ -23,7 +23,7 @@ OPENNMS_OVERLAY_JETTY_WEBINF="/opt/opennms-jetty-webinf-overlay"
 E_ILLEGAL_ARGS=126
 E_INIT_CONFIG=127
 
-RSYNC=("rsync" "--chown=opennms:opennms" "-K" "-rl")
+RSYNC=("rsync" "--chmod=ug+rw" "--chown=opennms:opennms" "-K" "-rl")
 
 # Help function used in error messages and -h option
 usage() {
@@ -81,7 +81,7 @@ initConfigWhenEmpty() {
 
   if [ ! "$(ls --ignore .git --ignore .gitignore -A ${OPENNMS_HOME}/etc)"  ]; then
     echo "No existing configuration in ${OPENNMS_HOME}/etc found. Initialize from etc-pristine."
-    cp -r ${OPENNMS_HOME}/share/etc-pristine/* ${OPENNMS_HOME}/etc/ || exit ${E_INIT_CONFIG}
+    "${RSYNC[@]}" ${OPENNMS_HOME}/share/etc-pristine/* ${OPENNMS_HOME}/etc/ || exit ${E_INIT_CONFIG}
   fi
 
   if [[ ! -d /opennms-data/mibs ]]; then
