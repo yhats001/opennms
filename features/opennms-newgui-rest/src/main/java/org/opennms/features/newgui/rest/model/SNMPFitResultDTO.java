@@ -28,13 +28,14 @@
 
 package org.opennms.features.newgui.rest.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class SNMPFitResultDTO {
     private String location;
     private String hostname;
     private String ipAddress;
     private String sysOID;
     private String communityString;
-    private boolean hasSNMPService;
 
     public String getLocation() {
         return location;
@@ -77,10 +78,6 @@ public class SNMPFitResultDTO {
     }
 
     public boolean isHasSNMPService() {
-        return hasSNMPService;
-    }
-
-    public void setHasSNMPService(boolean hasSNMPService) {
-        this.hasSNMPService = hasSNMPService;
+        return StringUtils.isNotEmpty(sysOID);
     }
 }

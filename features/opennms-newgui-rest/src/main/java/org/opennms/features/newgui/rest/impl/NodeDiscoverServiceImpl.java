@@ -37,6 +37,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.opennms.features.newgui.rest.NodeDiscoverRestService;
 import org.opennms.features.newgui.rest.model.DiscoveryResultDTO;
 import org.opennms.features.newgui.rest.model.IPAddressScanRequestDTO;
@@ -119,8 +120,10 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
                     request.getConfigurations().forEach(config -> {
                         final SnmpAgentConfig agentConfig = new SnmpAgentConfig();
                         agentConfig.setAddress(inetAddress);
-                        agentConfig.setWriteCommunity(config.getCommunityString());
-                        agentConfig.setReadCommunity(config.getCommunityString());
+                        if(StringUtils.isNotEmpty(config.getCommunityString())) {
+                            agentConfig.setWriteCommunity(config.getCommunityString());
+                            agentConfig.setReadCommunity(config.getCommunityString());
+                        }
                         agentConfig.setSecurityLevel(SnmpAgentConfig.DEFAULT_SECURITY_LEVEL);
                         agentConfig.setRetries(config.getRetry());
                         agentConfig.setTimeout(config.getTimeout());
@@ -131,7 +134,6 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
                         SNMPFitResultDTO resultDTO = new SNMPFitResultDTO();
                         resultDTO.setHostname(inetAddress.getHostName());
                         resultDTO.setIpAddress(inetAddress.getHostAddress());
-                        resultDTO.setSysOID(objId.toString());
                         resultDTO.setLocation(request.getLocation());
                         resultDTO.setCommunityString(config.getCommunityString());
                         results.add(resultDTO);
@@ -140,7 +142,7 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
                                 try {
                                     SnmpValue snmpValue = snmpResult.get(1, TimeUnit.SECONDS);
                                     if(snmpValue != null && !snmpValue.isError()) {
-                                        resultDTO.setHasSNMPService(true);
+                                        resultDTO.setSysOID(snmpValue.toString());
                                     }
                                 } catch (InterruptedException e) {
                                     //do nothing
