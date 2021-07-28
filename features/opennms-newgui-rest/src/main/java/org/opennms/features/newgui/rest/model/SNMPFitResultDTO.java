@@ -34,6 +34,7 @@ public class SNMPFitResultDTO {
     private String ipAddress;
     private String sysOID;
     private String communityString;
+    private boolean hasSNMPService;
 
     public String getLocation() {
         return location;
@@ -73,5 +74,13 @@ public class SNMPFitResultDTO {
 
     public void setCommunityString(String communityString) {
         this.communityString = communityString;
+    }
+
+    public boolean isHasSNMPService() {
+        return hasSNMPService;
+    }
+
+    public void setHasSNMPService(boolean hasSNMPService) {
+        this.hasSNMPService = hasSNMPService;
     }
 }

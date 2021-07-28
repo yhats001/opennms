@@ -44,7 +44,6 @@ import org.opennms.features.newgui.rest.model.IPScanResult;
 import org.opennms.features.newgui.rest.model.SNMPFitRequestDTO;
 import org.opennms.features.newgui.rest.model.SNMPFitResultDTO;
 import org.opennms.netmgt.config.api.SnmpAgentConfigFactory;
-import org.opennms.netmgt.config.snmp.SnmpProfile;
 import org.opennms.netmgt.icmp.proxy.LocationAwarePingClient;
 import org.opennms.netmgt.icmp.proxy.PingSweepSummary;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
@@ -118,33 +117,41 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
                 try {
                     InetAddress inetAddress = InetAddress.getByName(ip);
                     request.getConfigurations().forEach(config -> {
-                        SnmpProfile profile = new SnmpProfile();
-                        profile.setReadCommunity(config.getCommunityString());
-                        profile.setWriteCommunity(config.getCommunityString());
-                        profile.setAuthProtocol(config.getSecurityLevel());
-                        profile.setTimeout(config.getTimeout());
-                        profile.setRetry(config.getRetry());
-                        final SnmpAgentConfig agentConfig = snmpAgentConfigFactory.getAgentConfigFromProfile(profile, inetAddress);
+                        final SnmpAgentConfig agentConfig = new SnmpAgentConfig();
+                        agentConfig.setAddress(inetAddress);
+                        agentConfig.setWriteCommunity(config.getCommunityString());
+                        agentConfig.setReadCommunity(config.getCommunityString());
+                        agentConfig.setSecurityLevel(SnmpAgentConfig.DEFAULT_SECURITY_LEVEL);
+                        agentConfig.setRetries(config.getRetry());
+                        agentConfig.setTimeout(config.getTimeout());
                         CompletableFuture<SnmpValue> snmpResult = locationAwareSnmpClient.get(agentConfig, objId)
                                 .withLocation(request.getLocation())
                                 .execute();
 
-                        snmpResult.whenComplete((((snmpValue, throwable) -> {
-                            if(throwable == null) {
-                                if(snmpValue !=null && !snmpValue.isError()) {
-                                    SNMPFitResultDTO resultDTO = new SNMPFitResultDTO();
-                                    resultDTO.setHostname(inetAddress.getHostName());
-                                    resultDTO.setIpAddress(inetAddress.getHostAddress());
-                                    resultDTO.setSysOID(objId.toString());
-                                    resultDTO.setLocation(request.getLocation());
-                                    resultDTO.setCommunityString(config.getCommunityString());
-                                } else {
-                                    LOG.info("Couldn't find SNMP service with OID {} and location {}", objId, request.getLocation());
+                        SNMPFitResultDTO resultDTO = new SNMPFitResultDTO();
+                        resultDTO.setHostname(inetAddress.getHostName());
+                        resultDTO.setIpAddress(inetAddress.getHostAddress());
+                        resultDTO.setSysOID(objId.toString());
+                        resultDTO.setLocation(request.getLocation());
+                        resultDTO.setCommunityString(config.getCommunityString());
+                        results.add(resultDTO);
+                        while (true) {
+                            try {
+                                try {
+                                    SnmpValue snmpValue = snmpResult.get(1, TimeUnit.SECONDS);
+                                    if(snmpValue != null && !snmpValue.isError()) {
+                                        resultDTO.setHasSNMPService(true);
+                                    }
+                                } catch (InterruptedException e) {
+                                    //do nothing
+                                } catch (ExecutionException e) {
+                                    LOG.error("Couldn't find SNMP service at {} ", inetAddress.getHostAddress());
                                 }
-                            } else {
-                                LOG.info("Exception while doing SNMP get on OID '{}' with location '{}'", objId, request.getLocation());
+                                break;
+                            } catch (TimeoutException e) {
+                                //continue
                             }
-                        })));
+                        }
                     });
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
