@@ -10,6 +10,7 @@ import {
 import { getEvents } from './eventsService'
 import { getNodeIfServices } from './ifService'
 import { getLocations } from './locationsService'
+import { scanIPRanges, detectSNMPAvailable } from './inventoryService'
 
 export default {
   getNodes,
@@ -20,5 +21,7 @@ export default {
   getNodeIfServices,
   getNodeIpInterfaces,
   getNodeSnmpInterfaces,
-  getNodeAvailabilityPercentage
+  getNodeAvailabilityPercentage,
+  scanIPRanges,
+  detectSNMPAvailable
 }

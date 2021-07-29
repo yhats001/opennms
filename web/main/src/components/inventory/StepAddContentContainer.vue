@@ -1,5 +1,5 @@
 <template>
-  <template v-for="index in forms">
+  <template v-for="index in forms" :key="contains + index">
     <component :is="contains" :index="index" @setValues="setValues"></component>
   </template>
 
@@ -49,10 +49,13 @@ export default defineComponent({
     const addForm = () => forms.value.push(forms.value.length)
     const setValues = (form: any) => {formsValues.value[form.index] = form.data; console.log(form.data)}
 
-    const test = () => { 
-      // send controller api form values for testing
-      // display next btn if testing successful
-      store.dispatch('inventoryModule/showAddStepNextButton', true)
+    const test = async () => {
+      const success = await store.dispatch('inventoryModule/scanIPRanges', formsValues.value)
+
+      if (success) {
+        // display next btn if testing successful
+        store.dispatch('inventoryModule/showAddStepNextButton', true)
+      }
     }
 
     return {

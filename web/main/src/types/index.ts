@@ -185,3 +185,42 @@ export interface MonitoringLocation {
   "location-name": string
   "monitoring-area": string
 }
+
+export interface IPRange {
+  location: string
+  startIP: string
+  endIP: string
+}
+
+export interface IPRangeResponse {
+  location: string
+  scanResults: IPRangeResponseObject[]
+}
+
+interface IPRangeResponseObject {
+  hostname: string
+  ipAddress: string
+  rtt: number
+}
+
+export interface SNMPDetectRequest {
+  location: string
+  ipAddresses: string[]
+  configurations: SNMPDetectResquestConfig[]
+}
+
+interface SNMPDetectResquestConfig {
+  communityString: string
+  timeout: number
+  retry: number
+  securityLevel: string
+}
+
+export interface SNMPDetectResponse {
+  location: string
+  hostname: string
+  ipAddress: string
+  sysOID: string
+  communityString: string
+  hasSNMPService: boolean
+}
