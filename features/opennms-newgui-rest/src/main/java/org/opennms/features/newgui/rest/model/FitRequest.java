@@ -1,7 +1,5 @@
 package org.opennms.features.newgui.rest.model;
 
-import java.util.Objects;
-
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
@@ -30,10 +28,16 @@ import java.util.Objects;
  *     http://www.opennms.com/
  *******************************************************************************/
 
-public class IPAddressScanRequestDTO {
+public class FitRequest {
     private String location;
-    private String startIP;
-    private String endIP;
+    private String ipAddress;
+    private SNMConfigDTO config;
+
+    public FitRequest(String location, String ipAddress, SNMConfigDTO config) {
+        this.location = location;
+        this.ipAddress = ipAddress;
+        this.config = config;
+    }
 
     public String getLocation() {
         return location;
@@ -43,32 +47,19 @@ public class IPAddressScanRequestDTO {
         this.location = location;
     }
 
-    public String getStartIP() {
-        return startIP;
+    public String getIpAddress() {
+        return ipAddress;
     }
 
-    public void setStartIP(String startIP) {
-        this.startIP = startIP;
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
-    public String getEndIP() {
-        return endIP;
+    public SNMConfigDTO getConfig() {
+        return config;
     }
 
-    public void setEndIP(String endIP) {
-        this.endIP = endIP;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        IPAddressScanRequestDTO that = (IPAddressScanRequestDTO) o;
-        return location.equals(that.location) && startIP.equals(that.startIP) && endIP.equals(that.endIP);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(location, startIP, endIP);
+    public void setConfig(SNMConfigDTO config) {
+        this.config = config;
     }
 }

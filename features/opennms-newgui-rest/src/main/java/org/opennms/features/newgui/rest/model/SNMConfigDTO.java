@@ -1,3 +1,5 @@
+package org.opennms.features.newgui.rest.model;
+
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
@@ -26,13 +28,11 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.newgui.rest.model;
-
 public class SNMConfigDTO {
     private String communityString;
     private int timeout;
     private int retry;
-    private String securityLevel;
+    private int securityLevel;
 
     public String getCommunityString() {
         return communityString;
@@ -58,11 +58,11 @@ public class SNMConfigDTO {
         this.retry = retry;
     }
 
-    public String getSecurityLevel() {
+    public int getSecurityLevel() {
         return securityLevel;
     }
 
-    public void setSecurityLevel(String securityLevel) {
+    public void setSecurityLevel(int securityLevel) {
         this.securityLevel = securityLevel;
     }
 }
