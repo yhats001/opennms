@@ -10,13 +10,11 @@
 
     <reference id="locationAwareSnmpClient" interface="org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient" availability="mandatory"/>
     <reference id="locationAwarePingClient" interface="org.opennms.netmgt.icmp.proxy.LocationAwarePingClient" availability="mandatory"/>
-    <reference id="snmpAgentConfigFactory" interface="org.opennms.netmgt.config.api.SnmpAgentConfigFactory" availability="mandatory"/>
 
     <!-- The state manager will manually pull properties from the configuration file -->
     <bean id="nodeDiscoverRestService" class="org.opennms.features.newgui.rest.impl.NodeDiscoverServiceImpl">
         <argument ref="locationAwarePingClient" />
         <argument ref="locationAwareSnmpClient" />
-        <argument ref="snmpAgentConfigFactory"/>
     </bean>
     <service interface="org.opennms.features.newgui.rest.NodeDiscoverRestService" ref="nodeDiscoverRestService">
         <service-properties>

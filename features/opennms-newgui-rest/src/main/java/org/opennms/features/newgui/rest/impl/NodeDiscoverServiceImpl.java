@@ -1,9 +1,5 @@
 package org.opennms.features.newgui.rest.impl;
 
-
-
-
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -90,7 +86,7 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
             }
         });
 
-        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureMap.values().toArray(new CompletableFuture[futureMap.size()]));
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureMap.values().toArray(new CompletableFuture[0]));
         while(true) {
             try {
                 try {
@@ -141,7 +137,7 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
             }
         });
 
-        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureMap.values().toArray(new CompletableFuture[futureMap.size()]));
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureMap.values().toArray(new CompletableFuture[0]));
         while(true) {
             try {
                 try {
@@ -164,6 +160,7 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
                 }
                 break;
             }  catch (TimeoutException e) {
+                //continue
             }
         }
         return results;
@@ -171,11 +168,7 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
 
     private List<FitRequest> buildRequestFromDTO(List<SNMPFitRequestDTO> requestData) {
         List<FitRequest> list = new ArrayList<>();
-        requestData.forEach(r -> {
-            r.getIpAddresses().forEach(ip -> {
-                r.getConfigurations().forEach(config-> list.add(new FitRequest(r.getLocation(), ip, config)));
-            });
-        });
+        requestData.forEach(r -> r.getIpAddresses().forEach(ip -> r.getConfigurations().forEach(config-> list.add(new FitRequest(r.getLocation(), ip, config)))));
         return list;
     }
 }
