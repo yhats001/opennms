@@ -1,6 +1,8 @@
 <template>
   <div id="nav">
     <router-link :to="{ name: 'Home'}">Home</router-link> |
+    <router-link :to="{ name: 'Alarms'}">Alarms</router-link> |
+    <router-link :to="{ name: 'Nodes'}">Nodes</router-link> |
     <router-link :to="{ name: 'MapNodes'}">Map</router-link>
   </div>
   <router-view />
@@ -29,6 +31,6 @@
 }
 
 #nav a.router-link-exact-active {
-  color: #e9ebf9;
+  font-size: 15px;
 }
 </style>

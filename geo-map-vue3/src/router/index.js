@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
+import Nodes from "../views/Nodes.vue";
+import Alarms from "../views/Alarms.vue";
 import Map from "../views/Map.vue";
-import MapNodes from "../views/map/Nodes.vue";
-import MapAlarms from "../views/map/Alarms.vue";
+import MapNodes from "../views/map/MapNodes.vue";
+import MapAlarms from "../views/map/MapAlarms.vue";
 
 const routes = [
   {
@@ -26,6 +28,16 @@ const routes = [
         component: MapAlarms
       }
     ]
+  },
+  {
+    path: "/",
+    name: "Nodes",
+    component: Nodes,
+  },
+  {
+    path: "/",
+    name: "Alarms",
+    component: Alarms,
   },
 ];
 
