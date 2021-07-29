@@ -67,15 +67,19 @@ export default defineComponent({
     const addForm = () => forms.value.push(forms.value.length)
     const setValues = (form: any) => {formsValues.value[form.index] = form.data; console.log(form.data)}
 
-    const test = () => {
-      if (props.lastService) {
-        store.dispatch('inventoryModule/showConfigureServiceStepNextButton', true)
-      } else {
-        showNextBtn.value = true
-      }
+    const test = async () => {
+      const success = await store.dispatch('inventoryModule/detectSNMPAvailable', formsValues.value)
 
-      // changes color of service btn to green
-      store.dispatch('inventoryModule/addCompletedService', props.service)
+      if (success) {
+        if (props.lastService) {
+          store.dispatch('inventoryModule/showConfigureServiceStepNextButton', true)
+        } else {
+          showNextBtn.value = true
+        }
+
+        // changes color of service btn to green
+        store.dispatch('inventoryModule/addCompletedService', props.service)
+      }
     }
 
     const next = () => {

@@ -1,34 +1,58 @@
 <template>
-  <Row label="Location" first><LocationsDropdown @setLocation="setLocation" /></Row>
-  <Row label="Start"><InputText v-model="start" class="input" @input="setValues" /></Row>
-  <Row label="End"><InputText v-model="end" class="input" @input="setValues" /></Row>
+<div class="p-grid">
+	<div class="p-col">
+    <Row label="Location" first><LocationsDropdown @setLocation="setLocation" /></Row>
+    <Row label="Start"><InputText v-model="start" class="input" @input="setValues" /></Row>
+    <Row label="End"><InputText v-model="end" class="input" @input="setValues" /></Row>
+  </div>
+	<div class="p-col">
+    <StepAddResponseTables />
+  </div>
+</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import InputText from 'primevue/inputtext'
 import LocationsDropdown from './LocationsDropdown.vue'
 import { MonitoringLocation } from '@/types'
 import Row from '@/components/common/Row.vue'
+import StepAddResponseTables from './StepAddResponseTables.vue'
 
 export default defineComponent({
   components: {
     Row,
     InputText,
-    LocationsDropdown
+    LocationsDropdown,
+    StepAddResponseTables
   },
   emits: ['set-values'],
-  setup(_, context) {
+  props: {
+    index: {
+      type: Number,
+      required: true
+    }
+  },
+  setup(props, context) {
     const start = ref()
     const end = ref()
     const location = ref()
 
     const setLocation = (selectedLocation: MonitoringLocation) => {
-      location.value = selectedLocation
+      location.value = selectedLocation['location-name']
       setValues()
     }
 
-    const setValues = () => context.emit('set-values', { start, end, location })
+    const data = computed(() => ({ 
+      location: location.value,
+      start: start.value, 
+      end: end.value 
+    }))
+
+    const setValues = () => context.emit('set-values', { 
+      index: props.index, 
+      data: {...data.value } 
+    })
 
     return {
       setLocation,

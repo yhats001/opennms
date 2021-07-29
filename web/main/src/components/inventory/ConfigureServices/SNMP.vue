@@ -1,17 +1,24 @@
 <template>
-  <Row first><h3>SNMP</h3></Row>
-  <Row label="v1/v2c community string"><InputText type="text" v-model="v1v2" class="input" @input="setValues"/></Row>
-  <Row label="Timeout"><InputText type="text" v-model="timeout" class="input" @input="setValues" /></Row>
-  <Row label="Retry"><InputText type="text" v-model="retry" class="input" @input="setValues" /></Row>
+<div class="p-grid">
+  <div class="p-col">
+    <Row first><h3>SNMP</h3></Row>
+    <Row label="v1/v2c community string"><InputText type="text" v-model="v1v2" class="input" @input="setValues"/></Row>
+    <Row label="Timeout"><InputText type="text" v-model="timeout" class="input" @input="setValues" /></Row>
+    <Row label="Retry"><InputText type="text" v-model="retry" class="input" @input="setValues" /></Row>
 
-  <ShowHideBox label="Advanced options">
-    <Row first label="Security level">
-      <Dropdown v-model="securityLevel" @change="setValues" class="input" :options="['noAuthNoPriv','authNoPriv', 'authPriv']"/>
-    </Row>
+    <ShowHideBox label="Advanced options">
+      <Row first label="Security level">
+        <Dropdown v-model="securityLevel" @change="setValues" class="input" :options="['noAuthNoPriv','authNoPriv', 'authPriv']"/>
+      </Row>
 
-    <!-- add filter -->
-    <ServiceFilter @setValues="setValues" />
-  </ShowHideBox>
+      <!-- add filter -->
+      <ServiceFilter @setValues="setValues" />
+    </ShowHideBox>
+  </div>
+  <div class="p-col">
+    <ResponseTable />
+  </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -21,6 +28,7 @@ import Dropdown from 'primevue/dropdown'
 import Row from '@/components/common/Row.vue'
 import ShowHideBox from '@/components/common/ShowHideBox.vue'
 import ServiceFilter from './ServiceFilter.vue'
+import ResponseTable from './ResponseTable.vue'
 
 export default defineComponent({
   components: {
@@ -28,7 +36,8 @@ export default defineComponent({
     Dropdown,
     InputText,
     ShowHideBox,
-    ServiceFilter
+    ServiceFilter,
+    ResponseTable
   },
   emits: ['set-values'],
   props: {

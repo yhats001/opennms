@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, computed, ref, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import Dropdown from 'primevue/dropdown'
 
@@ -17,10 +17,12 @@ export default defineComponent({
     Dropdown
   },
   emits: ['set-location'],
-  setup() {
+  setup(_, context) {
     const store = useStore()
     const locations = computed(() => [...store.state.locationsModule.locations, { 'location-name': 'All' }])
     const location = ref(locations.value[0])
+
+    watchEffect(() => context.emit('set-location', locations.value[0]))
 
     return {
       location,
