@@ -206,10 +206,10 @@ interface IPRangeResponseObject {
 export interface SNMPDetectRequest {
   location: string
   ipAddresses: string[]
-  configurations: SNMPDetectResquestConfig[]
+  configurations: SNMPDetectRequestConfig[]
 }
 
-interface SNMPDetectResquestConfig {
+export interface SNMPDetectRequestConfig {
   communityString: string
   timeout: number
   retry: number
