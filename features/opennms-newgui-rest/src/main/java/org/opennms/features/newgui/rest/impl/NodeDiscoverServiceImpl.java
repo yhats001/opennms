@@ -99,7 +99,7 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
                 combinedFuture.get(1, TimeUnit.SECONDS);
                 for (IPAddressScanRequestDTO key : futureMap.keySet()) {
                     PingSweepSummary summary = futureMap.get(key).get();
-                    if (!summary.getResponses().isEmpty()) {
+                    if (summary!=null && !summary.getResponses().isEmpty()) {
                         List<IPScanResult> scanResults = new ArrayList<>();
                         summary.getResponses().forEach((address, rtt) -> scanResults.add(new IPScanResult(address.getHostName(), address.getHostAddress(), rtt)));
                         DiscoveryResultDTO resultDTO = new DiscoveryResultDTO(key.getLocation(), scanResults);
