@@ -10,14 +10,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef } from "vue"
+import { computed } from "vue"
 import { useStore } from "vuex"
-import { IPRangeResponse } from "../../types"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 
 const store = useStore();
-const ipRangeResponses: ComputedRef<IPRangeResponse[]> = computed(
+const ipRangeResponses = computed(
   () => store.state.inventoryModule.ipRangeResponses
 )
 </script>   

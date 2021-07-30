@@ -10,14 +10,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef } from "vue"
-import { useStore } from "vuex";
-import { SNMPDetectResponse } from "@/types"
+import { computed } from "vue"
+import { useStore } from "vuex"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 
 const store = useStore();
-const snmpDetectResponses: ComputedRef<SNMPDetectResponse[]> = computed(
+const snmpDetectResponses = computed(
   () => store.state.inventoryModule.snmpDetectResponses
 )
 </script>   
