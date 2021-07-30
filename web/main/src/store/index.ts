@@ -6,6 +6,7 @@ import eventsModule from './events'
 import inventoryModule from './inventory'
 import locationsModule from './locations'
 import ifServicesModule from './ifServices'
+import spinnerModule from './spinner'
 
 export default createStore({
   modules: {
@@ -14,5 +15,6 @@ export default createStore({
     inventoryModule,
     locationsModule,
     ifServicesModule,
+    spinnerModule
   }
 })

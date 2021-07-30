@@ -22,13 +22,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, ComputedRef } from 'vue'
 import InputText from 'primevue/inputtext'
 import Dropdown from 'primevue/dropdown'
 import Row from '@/components/common/Row.vue'
 import ShowHideBox from '@/components/common/ShowHideBox.vue'
 import ServiceFilter from './ServiceFilter.vue'
 import ResponseTable from './ResponseTable.vue'
+import { SNMPDetectRequestConfig } from '@/types'
 
 export default defineComponent({
   components: {
@@ -55,10 +56,10 @@ export default defineComponent({
     const timeout = ref()
     const retry = ref()
 
-    const data = computed(() => ({ 
+    const data: ComputedRef<SNMPDetectRequestConfig> = computed(() => ({ 
       timeout: timeout.value, 
       retry: retry.value, 
-      v1v2: v1v2.value,
+      communityString: v1v2.value,
       securityLevel: securityLevel.value
     }))
 
