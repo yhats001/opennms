@@ -1,7 +1,3 @@
-package org.opennms.features.newgui.rest.model;
-
-import java.util.Objects;
-
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
@@ -29,6 +25,10 @@ import java.util.Objects;
  *     http://www.opennms.org/
  *     http://www.opennms.com/
  *******************************************************************************/
+
+package org.opennms.features.newgui.rest.model;
+
+import java.util.Objects;
 
 public class IPAddressScanRequestDTO {
     private String location;

@@ -1,5 +1,3 @@
-package org.opennms.features.newgui.rest.model;
-
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
@@ -27,6 +25,8 @@ package org.opennms.features.newgui.rest.model;
  *     http://www.opennms.org/
  *     http://www.opennms.com/
  *******************************************************************************/
+
+package org.opennms.features.newgui.rest.model;
 
 public class SNMConfigDTO {
     private String communityString;
