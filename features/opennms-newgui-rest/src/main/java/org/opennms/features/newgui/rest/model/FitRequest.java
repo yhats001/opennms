@@ -28,41 +28,38 @@
 
 package org.opennms.features.newgui.rest.model;
 
-public class SNMConfigDTO {
-    private String communityString;
-    private int timeout;
-    private int retry;
-    private int securityLevel;
+public class FitRequest {
+    private String location;
+    private String ipAddress;
+    private SNMConfigDTO config;
 
-    public String getCommunityString() {
-        return communityString;
+    public FitRequest(String location, String ipAddress, SNMConfigDTO config) {
+        this.location = location;
+        this.ipAddress = ipAddress;
+        this.config = config;
     }
 
-    public void setCommunityString(String communityString) {
-        this.communityString = communityString;
+    public String getLocation() {
+        return location;
     }
 
-    public int getTimeout() {
-        return timeout;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
+    public String getIpAddress() {
+        return ipAddress;
     }
 
-    public int getRetry() {
-        return retry;
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
-    public void setRetry(int retry) {
-        this.retry = retry;
+    public SNMConfigDTO getConfig() {
+        return config;
     }
 
-    public int getSecurityLevel() {
-        return securityLevel;
-    }
-
-    public void setSecurityLevel(int securityLevel) {
-        this.securityLevel = securityLevel;
+    public void setConfig(SNMConfigDTO config) {
+        this.config = config;
     }
 }

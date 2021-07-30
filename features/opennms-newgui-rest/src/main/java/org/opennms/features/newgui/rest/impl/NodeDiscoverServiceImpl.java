@@ -31,7 +31,9 @@ package org.opennms.features.newgui.rest.impl;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -40,11 +42,11 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.StringUtils;
 import org.opennms.features.newgui.rest.NodeDiscoverRestService;
 import org.opennms.features.newgui.rest.model.DiscoveryResultDTO;
+import org.opennms.features.newgui.rest.model.FitRequest;
 import org.opennms.features.newgui.rest.model.IPAddressScanRequestDTO;
 import org.opennms.features.newgui.rest.model.IPScanResult;
 import org.opennms.features.newgui.rest.model.SNMPFitRequestDTO;
 import org.opennms.features.newgui.rest.model.SNMPFitResultDTO;
-import org.opennms.netmgt.config.api.SnmpAgentConfigFactory;
 import org.opennms.netmgt.icmp.proxy.LocationAwarePingClient;
 import org.opennms.netmgt.icmp.proxy.PingSweepSummary;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
@@ -55,57 +57,65 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
-    private static Logger LOG = LoggerFactory.getLogger(NodeDiscoverServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NodeDiscoverServiceImpl.class);
     private final LocationAwarePingClient locationAwarePingClient;
     private final LocationAwareSnmpClient locationAwareSnmpClient;
-    private final SnmpAgentConfigFactory snmpAgentConfigFactory;
 
     private static final String DEFAULT_SYS_OBJECTID_INSTANCE = ".1.3.6.1.2.1.1.2.0";
 
     public NodeDiscoverServiceImpl(LocationAwarePingClient locationAwarePingClient,
-                                   LocationAwareSnmpClient locationAwareSnmpClient,
-                                   SnmpAgentConfigFactory snmpAgentConfigFactory) {
+                                   LocationAwareSnmpClient locationAwareSnmpClient) {
         this.locationAwarePingClient = locationAwarePingClient;
         this.locationAwareSnmpClient = locationAwareSnmpClient;
-        this.snmpAgentConfigFactory = snmpAgentConfigFactory;
     }
 
     @Override
     public List<DiscoveryResultDTO> discoverByRange(List<IPAddressScanRequestDTO> ipRangeList) {
         List<DiscoveryResultDTO> results = new ArrayList<>();
+        Map<IPAddressScanRequestDTO, CompletableFuture<PingSweepSummary>> futureMap = new HashMap<>();
 
         ipRangeList.forEach(ipRange -> {
             try {
+
                 CompletableFuture<PingSweepSummary> future = locationAwarePingClient.sweep().withRange(InetAddress.getByName(ipRange.getStartIP()), InetAddress.getByName(ipRange.getEndIP()))
                         .withLocation(ipRange.getLocation())
-                        .execute();
-                while (true) {
-                    try {
-                        try {
-                            PingSweepSummary summary = future.get(1, TimeUnit.SECONDS);
-                            if (!summary.getResponses().isEmpty()) {
-                                List<IPScanResult> scanResults = new ArrayList<>();
-                                summary.getResponses().forEach((address, rtt) -> scanResults.add(new IPScanResult(address.getHostName(), address.getHostAddress(), rtt)));
-                                DiscoveryResultDTO resultDTO = new DiscoveryResultDTO(ipRange.getLocation(), scanResults);
-                                results.add(resultDTO);
-                            } else {
-                                LOG.debug("No response from any IP address in the range");
+                        .execute().handle((v, t) -> {
+                            if(t != null) {
+                                LOG.debug("Error happened during scan ip range from {}, {} with location {}",
+                                        ipRange.getStartIP(), ipRange.getEndIP(), ipRange.getLocation());
                             }
-                        } catch (InterruptedException e) {
-
-                        } catch (ExecutionException e) {
-                            LOG.error("IP range scan failed with location {} start IP {} and end {}", ipRange.getLocation(), ipRange.getStartIP(), ipRange.getEndIP());
-                        }
-                        break;
-                    } catch (TimeoutException e) {
-                        // continue
-                    }
-                }
+                            return v;
+                        });
+                futureMap.put(ipRange, future);
 
             } catch (UnknownHostException e) {
-                e.printStackTrace();
+                LOG.error("Invalid IP range start {}, end {}", ipRange.getStartIP(), ipRange.getEndIP());
             }
         });
+
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureMap.values().toArray(new CompletableFuture[0]));
+        while (true) {
+            try {
+                combinedFuture.get(1, TimeUnit.SECONDS);
+                for (IPAddressScanRequestDTO key : futureMap.keySet()) {
+                    PingSweepSummary summary = futureMap.get(key).get();
+                    if (!summary.getResponses().isEmpty()) {
+                        List<IPScanResult> scanResults = new ArrayList<>();
+                        summary.getResponses().forEach((address, rtt) -> scanResults.add(new IPScanResult(address.getHostName(), address.getHostAddress(), rtt)));
+                        DiscoveryResultDTO resultDTO = new DiscoveryResultDTO(key.getLocation(), scanResults);
+                        results.add(resultDTO);
+                    } else {
+                        LOG.info("No response from any IP address in the range of {} to {}", key.getStartIP(), key.getEndIP());
+                    }
+                }
+                break;
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Error happened during the IP scanning", e);
+                break;
+            } catch (TimeoutException e) {
+                // continue
+            }
+        }
         return results;
     }
 
@@ -113,53 +123,66 @@ public class NodeDiscoverServiceImpl implements NodeDiscoverRestService {
     public List<SNMPFitResultDTO> fitSNMP(List<SNMPFitRequestDTO> requestList) {
         List<SNMPFitResultDTO> results = new ArrayList<>();
         SnmpObjId objId = SnmpObjId.get(DEFAULT_SYS_OBJECTID_INSTANCE);
-        requestList.forEach(request -> {
-            request.getIpAddresses().forEach(ip -> {
-                try {
-                    InetAddress inetAddress = InetAddress.getByName(ip);
-                    request.getConfigurations().forEach(config -> {
-                        final SnmpAgentConfig agentConfig = new SnmpAgentConfig();
-                        agentConfig.setAddress(inetAddress);
-                        if(StringUtils.isNotEmpty(config.getCommunityString())) {
-                            agentConfig.setWriteCommunity(config.getCommunityString());
-                            agentConfig.setReadCommunity(config.getCommunityString());
-                        }
-                        agentConfig.setSecurityLevel(SnmpAgentConfig.DEFAULT_SECURITY_LEVEL);
-                        agentConfig.setRetries(config.getRetry());
-                        agentConfig.setTimeout(config.getTimeout());
-                        CompletableFuture<SnmpValue> snmpResult = locationAwareSnmpClient.get(agentConfig, objId)
-                                .withLocation(request.getLocation())
-                                .execute();
-
-                        SNMPFitResultDTO resultDTO = new SNMPFitResultDTO();
-                        resultDTO.setHostname(inetAddress.getHostName());
-                        resultDTO.setIpAddress(inetAddress.getHostAddress());
-                        resultDTO.setLocation(request.getLocation());
-                        resultDTO.setCommunityString(config.getCommunityString());
-                        results.add(resultDTO);
-                        while (true) {
-                            try {
-                                try {
-                                    SnmpValue snmpValue = snmpResult.get(1, TimeUnit.SECONDS);
-                                    if(snmpValue != null && !snmpValue.isError()) {
-                                        resultDTO.setSysOID(snmpValue.toString());
-                                    }
-                                } catch (InterruptedException e) {
-                                    //do nothing
-                                } catch (ExecutionException e) {
-                                    LOG.error("Couldn't find SNMP service at {} ", inetAddress.getHostAddress());
-                                }
-                                break;
-                            } catch (TimeoutException e) {
-                                //continue
-                            }
-                        }
-                    });
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
+        Map<FitRequest, CompletableFuture<SnmpValue>> futureMap = new HashMap<>();
+        buildRequestFromDTO(requestList).forEach(r -> {
+            try {
+                InetAddress inetAddress = InetAddress.getByName(r.getIpAddress());
+                SnmpAgentConfig agentConfig = new SnmpAgentConfig();
+                agentConfig.setAddress(inetAddress);
+                if(StringUtils.isNotEmpty(r.getConfig().getCommunityString())) {
+                    agentConfig.setWriteCommunity(r.getConfig().getCommunityString());
+                    agentConfig.setReadCommunity(r.getConfig().getCommunityString());
                 }
-            });
+                agentConfig.setSecurityLevel(SnmpAgentConfig.DEFAULT_SECURITY_LEVEL);
+                agentConfig.setRetries(r.getConfig().getRetry());
+                agentConfig.setTimeout(r.getConfig().getTimeout());
+                CompletableFuture<SnmpValue> future = locationAwareSnmpClient.get(agentConfig, objId)
+                        .withLocation(r.getLocation())
+                        .execute().handle((v, t)-> {
+                            if(t != null) {
+                                LOG.debug("Error happened when detect SNMP: location {}, IP {}, community string {}, " +
+                                        "security Leve {}", r.getLocation(), r.getIpAddress(),
+                                        r.getConfig().getCommunityString(), r.getConfig().getSecurityLevel());
+                            }
+                            return v;
+                        });
+                futureMap.put(r, future);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
         });
+
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureMap.values().toArray(new CompletableFuture[0]));
+        while (true) {
+            try {
+                combinedFuture.get(1, TimeUnit.SECONDS);
+                for (FitRequest request : futureMap.keySet()) {
+                    InetAddress inetAddress = InetAddress.getByName(request.getIpAddress());
+                    SNMPFitResultDTO resultDTO = new SNMPFitResultDTO();
+                    resultDTO.setHostname(inetAddress.getHostName());
+                    resultDTO.setIpAddress(inetAddress.getHostAddress());
+                    resultDTO.setLocation(request.getLocation());
+                    resultDTO.setCommunityString(request.getConfig().getCommunityString());
+                    results.add(resultDTO);
+                    SnmpValue snmpValue = futureMap.get(request).get();
+                    if (snmpValue != null && !snmpValue.isError()) {
+                        resultDTO.setSysOID(snmpValue.toString());
+                    }
+                }
+                break;
+            } catch (InterruptedException | ExecutionException | UnknownHostException e) {
+                LOG.error("Couldn't find SNMP service", e);
+                break;
+            } catch (TimeoutException e) {
+                //continue
+            }
+        }
         return results;
+    }
+
+    private List<FitRequest> buildRequestFromDTO(List<SNMPFitRequestDTO> requestData) {
+        List<FitRequest> list = new ArrayList<>();
+        requestData.forEach(r -> r.getIpAddresses().forEach(ip -> r.getConfigurations().forEach(config -> list.add(new FitRequest(r.getLocation(), ip, config)))));
+        return list;
     }
 }

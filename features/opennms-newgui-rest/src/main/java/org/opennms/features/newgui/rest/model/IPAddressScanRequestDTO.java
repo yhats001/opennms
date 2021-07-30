@@ -28,6 +28,8 @@
 
 package org.opennms.features.newgui.rest.model;
 
+import java.util.Objects;
+
 public class IPAddressScanRequestDTO {
     private String location;
     private String startIP;
@@ -55,5 +57,18 @@ public class IPAddressScanRequestDTO {
 
     public void setEndIP(String endIP) {
         this.endIP = endIP;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IPAddressScanRequestDTO that = (IPAddressScanRequestDTO) o;
+        return location.equals(that.location) && startIP.equals(that.startIP) && endIP.equals(that.endIP);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(location, startIP, endIP);
     }
 }
