@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, ComputedRef } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import InputText from 'primevue/inputtext'
 import Dropdown from 'primevue/dropdown'
 import Row from '@/components/common/Row.vue'
@@ -56,7 +56,7 @@ export default defineComponent({
     const timeout = ref()
     const retry = ref()
 
-    const data: ComputedRef<SNMPDetectRequestConfig> = computed(() => ({ 
+    const data = computed(() => ({ 
       timeout: timeout.value, 
       retry: retry.value, 
       communityString: v1v2.value,

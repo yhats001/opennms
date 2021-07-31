@@ -29,8 +29,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, ComputedRef, computed } from 'vue'
-import { IPRangeResponse, SNMPDetectRequest } from '@/types'
+import { defineComponent, ref } from 'vue'
+import { SNMPDetectRequest } from '@/types'
 import { useStore } from 'vuex'
 import Button from 'primevue/button'
 import WinRM from './WinRM.vue'
@@ -68,36 +68,36 @@ export default defineComponent({
     const addForm = () => forms.value.push(forms.value.length)
     const setValues = (form: any) => {formsValues.value[form.index] = form.data; console.log(form.data)}
 
-    const ipRangeResponses: ComputedRef<IPRangeResponse[]> = computed(
-      () => store.state.inventoryModule.ipRangeResponses
-    )
+    // const ipRangeResponses: ComputedRef<IPRangeResponse[]> = computed(
+    //   () => store.state.inventoryModule.ipRangeResponses
+    // )
 
-    const locations = computed(() => {
-      const locations = {} as any
-      for (const range of ipRangeResponses.value) {
-        locations[range.location] = []
-        for (const result of range.scanResults) {
-          locations[range.location].push(result.ipAddress)
-        }
-      }
+    // const locations = computed(() => {
+    //   const locations = {} as any
+    //   for (const range of ipRangeResponses.value) {
+    //     locations[range.location] = []
+    //     for (const result of range.scanResults) {
+    //       locations[range.location].push(result.ipAddress)
+    //     }
+    //   }
 
-      return locations
-    })
+    //   return locations
+    // })
 
     const test = async () => {
-      store.dispatch('spinnerModule/setSpinnerState', true)
+      // store.dispatch('spinnerModule/setSpinnerState', true)
       const request: SNMPDetectRequest[] = []
 
-      for (const key in locations.value) {
-        request.push({
-          location: key,
-          ipAddresses: locations.value[key],
-          configurations: formsValues.value
-        })
-      }
+      // for (const key in locations.value) {
+      //   request.push({
+      //     location: key,
+      //     ipAddresses: locations.value[key],
+      //     configurations: formsValues.value
+      //   })
+      // }
 
       const success = await store.dispatch('inventoryModule/detectSNMPAvailable', request)
-      store.dispatch('spinnerModule/setSpinnerState', false)
+      // store.dispatch('spinnerModule/setSpinnerState', false)
 
       if (success) {
         if (props.lastService) {

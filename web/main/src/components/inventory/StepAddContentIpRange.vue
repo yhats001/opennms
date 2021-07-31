@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, ComputedRef } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import InputText from 'primevue/inputtext'
 import LocationsDropdown from './LocationsDropdown.vue'
 import { IPRange, MonitoringLocation } from '@/types'
@@ -43,7 +43,7 @@ export default defineComponent({
       setValues()
     }
 
-    const data: ComputedRef<IPRange> = computed(() => ({ 
+    const data = computed(() => ({ 
       location: location.value,
       startIP: start.value, 
       endIP: end.value 

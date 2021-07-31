@@ -1,13 +1,13 @@
 <template>
   <div id="layout">
     <router-view/>
-    <Spinner />
+    <!-- <Spinner /> -->
   </div>
 </template>
 
-<script setup lang="ts">
+<!-- <script setup lang="ts">
   import Spinner from '@/components/common/Spinner.vue'
-</script>
+</script> -->
 
 <style lang="scss" scoped>
   #layout {

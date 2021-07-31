@@ -50,9 +50,9 @@ export default defineComponent({
     const setValues = (form: any) => {formsValues.value[form.index] = form.data; console.log(form.data)}
 
     const test = async () => {
-      store.dispatch('spinnerModule/setSpinnerState', true)
+      // store.dispatch('spinnerModule/setSpinnerState', true)
       const success = await store.dispatch('inventoryModule/scanIPRanges', formsValues.value)
-      store.dispatch('spinnerModule/setSpinnerState', false)
+      // store.dispatch('spinnerModule/setSpinnerState', false)
 
       if (success) {
         // display next btn if testing successful
