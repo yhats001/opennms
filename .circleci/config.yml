@@ -31,27 +31,27 @@ defaults: &defaults
     previous_branch:
       description: the previous branch, if any
       type: string
-      default: foundation-2021
+      default: release-28.x
     previous_branch_label:
       description: the previous branch, if any (escaped, no slashes)
       type: string
-      default: foundation-2021
+      default: release-28.x
     main_branch:
       description: the auto-merge main branch
       type: string
-      default: release-28.x
+      default: develop
     main_branch_label:
       description: the auto-merge main branch (escaped, no slashes)
       type: string
-      default: release-28.x
+      default: develop
     next_branch:
       description: the auto-merge target branch
       type: string
-      default: develop
+      default: ""
     next_branch_label:
       description: the auto-merge target branch (escaped, no slashes)
       type: string
-      default: develop
+      default: ""
 
 aliases:
   - &setup_dct_env
@@ -59,7 +59,7 @@ aliases:
     command: |
       case "${CIRCLE_BRANCH}" in
         "master-"*)
-           MINION_IMAGE_VERSION="$(../pom2version.py ../../pom.xml)"
+           MINION_IMAGE_VERSION="$(~/project/.circleci/scripts/pom2version.sh ~/project/pom.xml)"
           ;;
         "release-"*)
            MINION_IMAGE_VERSION="release-candidate"
@@ -581,13 +581,13 @@ workflows:
           context: "docker-content-trust"
           requires:
             - tarball-assembly
+            - smoke-test-minion
           filters:
             branches:
               only:
-                - ranger/backport-dct
                 - develop
-                - /^master-/
-                - /^release-/
+                - /^master-.*/
+                - /^release-.*/
       - minion-image-multi-arch:
           context: "docker-content-trust"
           requires:
@@ -595,10 +595,9 @@ workflows:
           filters:
             branches:
               only:
-                - ranger/backport-dct
                 - develop
-                - /^master-/
-                - /^release-/
+                - /^master-.*/
+                - /^release-.*/
       - horizon-rpm-build:
           requires:
             - build
@@ -713,40 +712,22 @@ workflows:
             - integration-test
           filters:
             branches:
-              only:
-                - develop
-                - /^master-.*/
-                - /^release-.*/
-                - /^foundation.*/
-                - /^features.*/
-                - /.*smoke.*/
-                - /.*debian.*/
+              ignore:
+                - /^merge-foundation.*/
       - minion-deb-build:
           requires:
             - integration-test
           filters:
             branches:
-              only:
-                - develop
-                - /^master-.*/
-                - /^release-.*/
-                - /^foundation.*/
-                - /^features.*/
-                - /.*smoke.*/
-                - /.*debian.*/
+              ignore:
+                - /^merge-foundation.*/
       - sentinel-deb-build:
           requires:
             - integration-test
           filters:
             branches:
-              only:
-                - develop
-                - /^master-.*/
-                - /^release-.*/
-                - /^foundation.*/
-                - /^features.*/
-                - /.*smoke.*/
-                - /.*debian.*/
+              ignore:
+                - /^merge-foundation.*/
       - create-merge-foundation-branch:
           # technically only requires the RPM/deb builds, but only publish
           # if everything passes
@@ -995,6 +976,8 @@ jobs:
     environment:
       DOCKER_CLI_EXPERIMENTAL: enabled
     steps:
+      - attach_workspace:
+          at: ~/
       - dockerhub-login
       - run: *setup_dct_env
       - run: *setup_dct_key
