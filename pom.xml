@@ -1215,6 +1215,8 @@
     <argLineMemory>-Xmx1536m</argLineMemory>
     <argLine>${argLineMemory} -Djava.security.egd=/dev/./urandom</argLine>
     <skipITs>true</skipITs>
+    
+    <sonar.projectKey>Test</sonar.projectKey>
 
     <!--
       This is on by default now that root is not required for pinging.
